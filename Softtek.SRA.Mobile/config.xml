@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<widget xmlns   = "http://www.w3.org/ns/widgets"
+    xmlns:gap   = "http://phonegap.com/ns/1.0"
+    id="Softtek.SRA.Mobile" 
+    version="1.0.0.0">
+  <name>Softtek SRA</name>
+  <description>
+    Aplicação para apontamento de horas para funcionários da Softtek (SRA).
+  </description>
+  <author href="http://www.softtek.com" email="gustavo.denis@softtek.com">
+    Gustavo Denis
+  </author>
+  <content src="index.html" />
+  <access origin="*" />
+  <preference name="phonegap-version" value="3.1.0" />
+  <preference name="splashScreen" value="screen" />
+  <preference name="fullscreen" value="true" />
+  <preference name="orientation" value="portrait" />
+  <preference name="target-device" value="universal" />
+  <preference name="webviewbounce" value="true" />
+  <preference name="prerendered-icon" value="true" />
+  <preference name="stay-in-webview" value="false" />
+  <preference name="ios-statusbarstyle" value="black-opaque" />
+  <preference name="detect-data-types" value="true" />
+  <preference name="exit-on-suspend" value="false" />
+  <preference name="show-splash-screen-spinner" value="true" />
+  <preference name="auto-hide-splash-screen" value="true" />
+  <preference name="disable-cursor" value="false" />
+  <preference name="android-minSdkVersion" value="7" />
+  <preference name="android-installLocation" value="auto" />
+  <feature name="http://api.phonegap.com/1.0/network" />
+  
+  <gap:plugin name="org.apache.cordova.globalization" version="0.3.1" />
+  <gap:plugin name="org.apache.cordova.network-information" version="0.2.12" />
+  
+  <gap:platform name="ios" />
+  <gap:platform name="android" />
+  <gap:platform name="winphone" />
+
+  <icon src="images/icon.png" />
+  <icon src="App_Resources/Android/drawable-ldpi/icon.png"          gap:platform="android"  gap:density="ldpi" />
+  <icon src="App_Resources/Android/drawable-mdpi/icon.png"          gap:platform="android"  gap:density="mdpi" />
+  <icon src="App_Resources/Android/drawable-hdpi/icon.png"          gap:platform="android"  gap:density="hdpi" />
+  <icon src="App_Resources/Android/drawable-xhdpi/icon.png"         gap:platform="android"  gap:density="xhdpi" />
+  <icon src="App_Resources/iOS/icon-Small-50.png"                   gap:platform="ios"      width="50" height="50" />
+  <icon src="App_Resources/iOS/icon-Small-57.png"                   gap:platform="ios"      width="57" height="57" />
+  <icon src="App_Resources/iOS/icon-72.png"                         gap:platform="ios"      width="72" height="72" />
+  <icon src="App_Resources/iOS/icon-76.png"                         gap:platform="ios"      width="76" height="76" />
+  <icon src="App_Resources/iOS/icon-Small-50@2x.png"                gap:platform="ios"      width="110" height="110" />
+  <icon src="App_Resources/iOS/icon-Small-60@2x.png"                gap:platform="ios"      width="120" height="120" />
+  <icon src="App_Resources/iOS/icon-72@2x.png"                      gap:platform="ios"      width="144" height="144" />
+  <icon src="App_Resources/iOS/icon-152.png"                        gap:platform="ios"      width="152" height="152" />
+  <icon src="App_Resources/winphone/icon.png"                       gap:platform="winphone" />
+  <icon src="App_Resources/winphone/tileicon.png"                   gap:platform="winphone" gap:role="background" />
+
+  <gap:splash src="App_Resources/Android/drawable-ldpi/splash.png"  gap:platform="android"  gap:density="ldpi" />
+  <gap:splash src="App_Resources/Android/drawable-mdpi/splash.png"  gap:platform="android"  gap:density="mdpi" />
+  <gap:splash src="App_Resources/Android/drawable-hdpi/splash.png"  gap:platform="android"  gap:density="hdpi" />
+  <gap:splash src="App_Resources/Android/drawable-xhdpi/splash.png" gap:platform="android"  gap:density="xhdpi" />
+  <gap:splash src="App_Resources/iOS/Default.png"                   gap:platform="ios"      width="320" height="480" />
+  <gap:splash src="App_Resources/iOS/Default@2x.png"                gap:platform="ios"      width="640" height="960" />
+  <gap:splash src="App_Resources/iOS/Default-Portrait.png"          gap:platform="ios"      width="768" height="1024" />
+  <gap:splash src="App_Resources/iOS/Default-Landscape.png"         gap:platform="ios"      width="1024" height="768" />
+  <gap:splash src="App_Resources/iOS/Default-Landscape@2x.png"      gap:platform="ios"      width="2048" height="1496" />
+  <gap:splash src="App_Resources/iOS/Default-Portrait@2x.png"       gap:platform="ios"      width="1536" height="2008" />
+  <gap:splash src="App_Resources/winphone/splash.png"               gap:platform="winphone" />
+
+  <access origin="*" />
+  <access origin="*.softtek.com" />
+  <access origin="https://control.softtek.com" subdomains="true" />
+  <access origin="http://127.0.0.1*"/>
+
+</widget>
