@@ -22,7 +22,7 @@
             <a href="#settingPage" data-transition="slide" style="margin-left: 10px; margin-top: 10px; margin-bottom: 15px; float: left;" class="ui-btn header-button-right ui-btn-icon-right ui-btn-icon-notext ui-shadow ui-corner-all ui-icon-gear"></a>
         </div>
         <div data-role="content">
-            <img class="logo-splash" src="images/logo-splash.png" width="45%" height="45%">
+            <!--<img class="logo-splash" src="images/logo-splash.png" width="45%" height="45%">-->
         </div>
         <div data-role="footer" data-theme="b" data-position="fixed" data-tap-toggle="false">
             <div data-role="navbar" data-iconpos="bottom">
@@ -97,14 +97,27 @@
                 </li>
             </ul>
         </div>
+
+        <div data-role="popup" id="popupAddHours" data-theme="a" class="ui-corner-all">
+            <form>
+                <div style="padding:10px 20px;">
+                    <h3>Horas</h3>
+                    <label for="vl" class="ui-hidden-accessible">Valor:</label>
+                    <input type="text" name="valor" id="un" value="" placeholder="valor" data-theme="a">
+                    <label for="pw" class="ui-hidden-accessible">Data:</label>
+                    <input type="text" name="data" id="pw" value="" placeholder="data" data-theme="a">
+                    <button type="submit" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-check">Gravar</button>
+                </div>
+            </form>
+        </div>
+
         <div data-role="footer" data-theme="b" data-position="fixed" data-tap-toggle="false">
             <div data-role="navbar" data-iconpos="bottom">
                 <ul>
-                    <li><a href="#" id="addhrNormal" data-transition="slide" data-icon="plus">Adicionar</a></li>
+                    <li><a id="btnpopupAddHours" href="#popupAddHours" data-rel="popup" data-position-to="window" data-transition="pop" data-icon="plus">Adicionar</a></li>
                 </ul>
             </div>
         </div>
-
     </div>
 
     <!-- Adicionais page -->
@@ -173,5 +186,9 @@
 
         //var stk_App = new stkApp();
         //stk_App.run();
+        $('btnpopupAddHours').click(function () {
+            $("#popupAddHours").popup("open");
+        })
+        
     });
 </script>

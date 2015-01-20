@@ -107,6 +107,21 @@ stkApp.prototype = function () {
             return false;
         });
 
+        if (!$.mobile.support.touch) {
+            $("#listHours").removeClass("touch");
+        }
+
+        $("#listHours li").on("swipeleft swiperight", function (event) {
+            var listitem = $(this),
+                dir = event.type === "swipeleft" ? "left" : "right",
+                transition = $.support.cssTransform3d ? dir : false;
+            if (confirm('Deseja Exluir o lançamento?'))
+            {
+                $("#listHours").listview("refresh");
+                alert('hehe touch!');
+            }
+        });
+
         $('#fulldataBtn').click(function () {
             erro = '';
             if ($('#tfirstname').val() == '')

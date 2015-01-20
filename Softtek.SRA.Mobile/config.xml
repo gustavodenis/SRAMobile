@@ -67,7 +67,7 @@
 
   <access origin="*" />
   <access origin="*.softtek.com" />
-  <access origin="https://control.softtek.com" subdomains="true" />
+  <access origin="https://intrasoft.softtek.com" subdomains="true" />
   <access origin="http://127.0.0.1*"/>
 
 </widget>
