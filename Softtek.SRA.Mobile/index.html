@@ -122,18 +122,81 @@
 
     <!-- Adicionais page -->
     <div id="aditionalPage" data-role="page" data-mini="true">
+        <div data-role="header" data-theme="a" data-position="fixed" data-tap-toggle="false">
+            <a href="#home" data-rel="back" style="margin-left: 10px; margin-top: 10px; margin-bottom: 15px; float: left;" class="ui-btn-left ui-btn ui-icon-home ui-btn-icon-notext ui-shadow ui-corner-all" data-role="button" role="button">Home</a>
+            <img style="margin-left: 70px; margin-top: 10px; margin-bottom: 15px; float: left;" class="logo" alt="img" src="images/logo.png" width="240">
+            <a href="#settingPage" data-transition="slide" style="margin-left: 10px; margin-top: 10px; margin-bottom: 15px; float: left;" class="ui-btn header-button-right ui-btn-icon-right ui-btn-icon-notext ui-shadow ui-corner-all ui-icon-gear"></a>
+        </div>
+        <div data-role="content">
+            <span>Semana:</span>
+            <select name="select-native-2" id="select-native-2" data-mini="true">
+                <option value="1">35</option>
+                <option value="2">36</option>
+                <option value="3">37</option>
+                <option value="4">38</option>
+            </select>
+            <hr />
+            <ul id="listHours" class="touch" data-role="listview" data-icon="false" data-split-icon="edit">
+                <li>
+                    <a href="#">
+                        <h3>05/01/15</h3>
+                        <p class="topic"><strong>PEVEN02</strong> Especificação Técnica</p>
+                        <p class="ui-li-aside"><strong>8 Horas</strong></p>
+                    </a>
+                    <a href="#" class="btnEditHN"></a>
+                </li>
+                <li>
+                    <a href="#">
+                        <h3>06/01/15</h3>
+                        <p class="topic"><strong>PEVEN02</strong> Especificação Técnica</p>
+                        <p class="ui-li-aside"><strong>8 Horas</strong></p>
+                    </a>
+                    <a href="#" class="btnEditHN"></a>
+                </li>
+                <li>
+                    <a href="#">
+                        <h3>Total Horas</h3>
+                        <p class="ui-li-aside"><strong>30 Horas</strong></p>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div data-role="footer" data-theme="b" data-position="fixed" data-tap-toggle="false">
+            <div data-role="navbar" data-iconpos="bottom">
+                <ul>
+                    <li><a id="btnpopupAddHours" href="#popupAddHours" data-rel="popup" data-position-to="window" data-transition="pop" data-icon="plus">Adicionar</a></li>
+                </ul>
+            </div>
+        </div>
     </div>
 
     <!-- Aprovação page -->
     <div id="aprovePage" data-role="page" data-mini="true">
+        <div data-role="header" data-theme="a" data-position="fixed" data-tap-toggle="false">
+            <a href="#home" data-rel="back" style="margin-left: 10px; margin-top: 10px; margin-bottom: 15px; float: left;" class="ui-btn-left ui-btn ui-icon-home ui-btn-icon-notext ui-shadow ui-corner-all" data-role="button" role="button">Home</a>
+            <img style="margin-left: 70px; margin-top: 10px; margin-bottom: 15px; float: left;" class="logo" alt="img" src="images/logo.png" width="240">
+            <a href="#settingPage" data-transition="slide" style="margin-left: 10px; margin-top: 10px; margin-bottom: 15px; float: left;" class="ui-btn header-button-right ui-btn-icon-right ui-btn-icon-notext ui-shadow ui-corner-all ui-icon-gear"></a>
+        </div>
+
     </div>
 
     <!-- Ausência page -->
     <div id="faultPage" data-role="page" data-mini="true">
+        <div data-role="header" data-theme="a" data-position="fixed" data-tap-toggle="false">
+            <a href="#home" data-rel="back" style="margin-left: 10px; margin-top: 10px; margin-bottom: 15px; float: left;" class="ui-btn-left ui-btn ui-icon-home ui-btn-icon-notext ui-shadow ui-corner-all" data-role="button" role="button">Home</a>
+            <img style="margin-left: 70px; margin-top: 10px; margin-bottom: 15px; float: left;" class="logo" alt="img" src="images/logo.png" width="240">
+            <a href="#settingPage" data-transition="slide" style="margin-left: 10px; margin-top: 10px; margin-bottom: 15px; float: left;" class="ui-btn header-button-right ui-btn-icon-right ui-btn-icon-notext ui-shadow ui-corner-all ui-icon-gear"></a>
+        </div>
+
     </div>
 
     <!-- Ajustes page -->
     <div id="settingPage" data-role="page" data-mini="true">
+        <div data-role="header" data-theme="a" data-position="fixed" data-tap-toggle="false">
+            <a href="#home" data-rel="back" style="margin-left: 10px; margin-top: 10px; margin-bottom: 15px; float: left;" class="ui-btn-left ui-btn ui-icon-home ui-btn-icon-notext ui-shadow ui-corner-all" data-role="button" role="button">Home</a>
+            <img style="margin-left: 70px; margin-top: 10px; margin-bottom: 15px; float: left;" class="logo" alt="img" src="images/logo.png" width="240">
+            <a href="#settingPage" data-transition="slide" style="margin-left: 10px; margin-top: 10px; margin-bottom: 15px; float: left;" class="ui-btn header-button-right ui-btn-icon-right ui-btn-icon-notext ui-shadow ui-corner-all ui-icon-gear"></a>
+        </div>
         <div data-role="content">
             <p><span id="label_ISName">Nome colaborador:</span></p>
             <p><span id="ISName"></span></p>
@@ -149,46 +212,3 @@
     <script src="scripts/index.js"></script>
 </body>
 </html>
-<script type="text/javascript">
-    $(function () {
-        var dataXML = '<?xml version="1.0" encoding="utf-8"?>';
-        dataXML += '<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">';
-        dataXML += '  <soap:Header>';
-        dataXML += '    <ValidationSoapHeader xmlns="http://tempuri.org/">';
-        dataXML += '      <_devToken>WSPDK11PDK11@@</_devToken>';
-        dataXML += '    </ValidationSoapHeader>';
-        dataXML += '  </soap:Header>';
-        dataXML += '  <soap:Body>';
-        dataXML += '    <getColabInfo xmlns="http://tempuri.org/">';
-        dataXML += '      <strFuncIS>MFCS</strFuncIS>';
-        dataXML += '    </getColabInfo>';
-        dataXML += '  </soap:Body>';
-        dataXML += '</soap:Envelope>';
-        $.support.cors = true;
-        $.ajax({
-            type: 'POST',
-            //url: 'http://intrasoft.softtek.com:8081/wsSRAPDK/cResourceHours.asmx/getColabInfo',
-            url: 'http://172.16.128.71:8028/wsSRAPDK/cResourceHours.asmx?op=getColabInfo',
-            contentType: 'text/xml; charset=utf-8',
-            data: dataXML
-        })
-        .done(function (data) {
-            $(data).find('Table').each(function () {
-                console.log($(this).find('FuncIs').html());
-            });
-            
-            //var usrdata = { idUser: data.idUser, firstname: data.firstname, lastname: data.lastname, email: data.email, employer: data.employer };
-            //window.localStorage.setItem("userInfo", JSON.stringify(usrdata));
-        })
-        .fail(function (jqXHR, textStatus, errorThrown) {
-            alert("Request failed: " + textStatus + "," + errorThrown);
-        });
-
-        //var stk_App = new stkApp();
-        //stk_App.run();
-        $('btnpopupAddHours').click(function () {
-            $("#popupAddHours").popup("open");
-        })
-        
-    });
-</script>

@@ -16,6 +16,8 @@ $(function () {
     function onDeviceReady() {
         document.addEventListener('pause', onPause.bind(this), false);
         document.addEventListener('resume', onResume.bind(this), false);
+
+        stkApp.run();
     };
 
     function onPause() {
@@ -28,6 +30,7 @@ $(function () {
 })();
 
 var stkApp = function () { }
+
 stkApp.prototype = function () {
 
     var userPoints = {};
@@ -47,7 +50,7 @@ stkApp.prototype = function () {
 
         if (window.localStorage.getItem("userInfo") != null) {
             _login = true;
-            _loadHome(JSON.parse(window.localStorage.getItem("userInfo")));
+            //_loadHome(JSON.parse(window.localStorage.getItem("userInfo")));
             $.mobile.changePage('#home', { transition: 'flip' });
         }
 
@@ -111,141 +114,141 @@ stkApp.prototype = function () {
             $("#listHours").removeClass("touch");
         }
 
-        $("#listHours li").on("swipeleft swiperight", function (event) {
-            var listitem = $(this),
-                dir = event.type === "swipeleft" ? "left" : "right",
-                transition = $.support.cssTransform3d ? dir : false;
+        $("#listHours li a").on("swipeleft swiperight", function (event) {
+            //var listitem = $(this),
+            //    dir = event.type === "swipeleft" ? "left" : "right",
+            //    transition = $.support.cssTransform3d ? dir : false;
             if (confirm('Deseja Exluir o lançamento?'))
             {
-                $("#listHours").listview("refresh");
+              //  $("#listHours").listview("refresh");
                 alert('hehe touch!');
             }
         });
 
-        $('#fulldataBtn').click(function () {
-            erro = '';
-            if ($('#tfirstname').val() == '')
-                erro += '- Primeiro Nome\n';
-            if ($('#tlastname').val() == '')
-                erro += '- Último Nome\n';
-            if ($('#temployer').val() == '')
-                erro += '- Empresa\n';
-            if ($('#temail').val() == '')
-                erro += '- Email\n';
-            if ($('#position').val() == '')
-                erro += '- Cargo\n';
-            if ($('#city').val() == '')
-                erro += '- Cidade\n';
-            if ($('#state option:selected').val() == '0')
-                erro += '- Estado\n';
-            if ($('#sector option:selected').val() == '0')
-                erro += '- Setor\n';
-            if ($('#billing option:selected').val() == '0')
-                erro += '- Faturamento';
+        //$('#fulldataBtn').click(function () {
+        //    erro = '';
+        //    if ($('#tfirstname').val() == '')
+        //        erro += '- Primeiro Nome\n';
+        //    if ($('#tlastname').val() == '')
+        //        erro += '- Último Nome\n';
+        //    if ($('#temployer').val() == '')
+        //        erro += '- Empresa\n';
+        //    if ($('#temail').val() == '')
+        //        erro += '- Email\n';
+        //    if ($('#position').val() == '')
+        //        erro += '- Cargo\n';
+        //    if ($('#city').val() == '')
+        //        erro += '- Cidade\n';
+        //    if ($('#state option:selected').val() == '0')
+        //        erro += '- Estado\n';
+        //    if ($('#sector option:selected').val() == '0')
+        //        erro += '- Setor\n';
+        //    if ($('#billing option:selected').val() == '0')
+        //        erro += '- Faturamento';
 
-            if (erro.length > 0) {
-                alert('Erros encontrados: ' + erro);
-            }
-            else {
-                fauxAjax(function () {
-                    var iidUser = JSON.parse(window.localStorage.getItem("userInfo")).idUser;
-                    var dataUser = {
-                        idUser: iidUser,
-                        firstname: $('#tfirstname').val(),
-                        lastname: $('#tlastname').val(),
-                        employer: $('#temployer').val(),
-                        email: $('#temail').val(),
-                        position: $('#position').val(),
-                        city: $('#city').val(),
-                        state: $('#state  option:selected').val(),
-                        sector: $('#sector  option:selected').val(),
-                        billing: $('#billing  option:selected').val(),
-                        customerSAP: ($('#customerSAP').is(":checked") ? "1" : "0")
-                    };
+        //    if (erro.length > 0) {
+        //        alert('Erros encontrados: ' + erro);
+        //    }
+        //    else {
+        //        fauxAjax(function () {
+        //            var iidUser = JSON.parse(window.localStorage.getItem("userInfo")).idUser;
+        //            var dataUser = {
+        //                idUser: iidUser,
+        //                firstname: $('#tfirstname').val(),
+        //                lastname: $('#tlastname').val(),
+        //                employer: $('#temployer').val(),
+        //                email: $('#temail').val(),
+        //                position: $('#position').val(),
+        //                city: $('#city').val(),
+        //                state: $('#state  option:selected').val(),
+        //                sector: $('#sector  option:selected').val(),
+        //                billing: $('#billing  option:selected').val(),
+        //                customerSAP: ($('#customerSAP').is(":checked") ? "1" : "0")
+        //            };
 
-                    window.localStorage.setItem("userInfo", JSON.stringify(dataUser));
+        //            window.localStorage.setItem("userInfo", JSON.stringify(dataUser));
 
-                    $.post("http://ec2-54-200-107-211.us-west-2.compute.amazonaws.com/odata/User", dataUser)
-                     .done(function (data) {
-                         alert("Dados salvo com sucesso!");
-                         _loadHome(data);
-                         $.mobile.changePage('#home', { transition: 'flip' });
-                     })
-                    .fail(function (jqXHR, textStatus, errorThrown) {
-                        alert("Request failed: " + textStatus + "," + errorThrown);
-                    });
-                }, 'gravando...', this);
-            }
-        });
+        //            $.post("http://ec2-54-200-107-211.us-west-2.compute.amazonaws.com/odata/User", dataUser)
+        //             .done(function (data) {
+        //                 alert("Dados salvo com sucesso!");
+        //                 _loadHome(data);
+        //                 $.mobile.changePage('#home', { transition: 'flip' });
+        //             })
+        //            .fail(function (jqXHR, textStatus, errorThrown) {
+        //                alert("Request failed: " + textStatus + "," + errorThrown);
+        //            });
+        //        }, 'gravando...', this);
+        //    }
+        //});
 
-        $('#okAgenda').click(function () {
-            erro = '';
-            if ($('#tel').val() == '')
-                erro += '- Telefone\n';
-            if ($('#detail').val() == '')
-                erro += '- Necessidade\n';
+        //$('#okAgenda').click(function () {
+        //    erro = '';
+        //    if ($('#tel').val() == '')
+        //        erro += '- Telefone\n';
+        //    if ($('#detail').val() == '')
+        //        erro += '- Necessidade\n';
 
-            if (erro.length > 0) {
-                alert('Erros encontrados: ' + erro);
-            }
-            else {
-                fauxAjax(function () {
-                    var iidUser = JSON.parse(window.localStorage.getItem("userInfo")).idUser;
-                    var agendadata = {
-                        idUser: iidUser,
-                        tel: $('#tel').val(),
-                        detail: $('#detail').val()
-                    };
-                    $.post("http://ec2-54-200-107-211.us-west-2.compute.amazonaws.com/odata/Agenda", agendadata)
-                    .done(function (data) {
-                        alert('Agenda salva com suscesso!');
-                        window.localStorage.setItem("agenda", "ok");
-                        $.mobile.changePage('#home', { transition: 'flip' });
-                    })
-                    .fail(function (jqXHR, textStatus, errorThrown) {
-                        alert("Request failed: " + textStatus + "," + errorThrown);
-                    });
-                }, 'gravando...', this);
-            }
-        });
+        //    if (erro.length > 0) {
+        //        alert('Erros encontrados: ' + erro);
+        //    }
+        //    else {
+        //        fauxAjax(function () {
+        //            var iidUser = JSON.parse(window.localStorage.getItem("userInfo")).idUser;
+        //            var agendadata = {
+        //                idUser: iidUser,
+        //                tel: $('#tel').val(),
+        //                detail: $('#detail').val()
+        //            };
+        //            $.post("http://ec2-54-200-107-211.us-west-2.compute.amazonaws.com/odata/Agenda", agendadata)
+        //            .done(function (data) {
+        //                alert('Agenda salva com suscesso!');
+        //                window.localStorage.setItem("agenda", "ok");
+        //                $.mobile.changePage('#home', { transition: 'flip' });
+        //            })
+        //            .fail(function (jqXHR, textStatus, errorThrown) {
+        //                alert("Request failed: " + textStatus + "," + errorThrown);
+        //            });
+        //        }, 'gravando...', this);
+        //    }
+        //});
 
-        $('#savelulu').click(function () {
-            erro = '';
-            if ($('#standLuluCombo option:selected').val() == '0')
-                erro += '- Stand\n';
+        //$('#savelulu').click(function () {
+        //    erro = '';
+        //    if ($('#standLuluCombo option:selected').val() == '0')
+        //        erro += '- Stand\n';
 
-            if (erro.length > 0) {
-                alert('Erros encontrados: ' + erro);
-            }
-            else {
-                fauxAjax(function () {
-                    var iidUser = JSON.parse(window.localStorage.getItem("userInfo")).idUser;
-                    var luludata = {
-                        idStand: $('#standLuluCombo option:selected').val(),
-                        idUser: iidUser,
-                        question1: ($('#question1').is(":checked") ? "1" : "0"),
-                        question2: ($('#question2').is(":checked") ? "1" : "0"),
-                        question3: ($('#question3').is(":checked") ? "1" : "0"),
-                        question4: ($('#question4').is(":checked") ? "1" : "0"),
-                        question5: ($('#question5').is(":checked") ? "1" : "0"),
-                        question6: "0"
-                    };
-                    $.post("http://ec2-54-200-107-211.us-west-2.compute.amazonaws.com/api/Lulu", luludata)
-                    .done(function (data) {
-                        window.localStorage.setItem("luluOK", "ok");
-                        $.mobile.changePage('#lulurankPage', { transition: 'flip' });
-                    })
-                    .fail(function (jqXHR, textStatus, errorThrown) {
-                        alert("Request failed: " + textStatus + "," + errorThrown);
-                    });
-                }, 'gravando registros...', this);
-            }
-        });
+        //    if (erro.length > 0) {
+        //        alert('Erros encontrados: ' + erro);
+        //    }
+        //    else {
+        //        fauxAjax(function () {
+        //            var iidUser = JSON.parse(window.localStorage.getItem("userInfo")).idUser;
+        //            var luludata = {
+        //                idStand: $('#standLuluCombo option:selected').val(),
+        //                idUser: iidUser,
+        //                question1: ($('#question1').is(":checked") ? "1" : "0"),
+        //                question2: ($('#question2').is(":checked") ? "1" : "0"),
+        //                question3: ($('#question3').is(":checked") ? "1" : "0"),
+        //                question4: ($('#question4').is(":checked") ? "1" : "0"),
+        //                question5: ($('#question5').is(":checked") ? "1" : "0"),
+        //                question6: "0"
+        //            };
+        //            $.post("http://ec2-54-200-107-211.us-west-2.compute.amazonaws.com/api/Lulu", luludata)
+        //            .done(function (data) {
+        //                window.localStorage.setItem("luluOK", "ok");
+        //                $.mobile.changePage('#lulurankPage', { transition: 'flip' });
+        //            })
+        //            .fail(function (jqXHR, textStatus, errorThrown) {
+        //                alert("Request failed: " + textStatus + "," + errorThrown);
+        //            });
+        //        }, 'gravando registros...', this);
+        //    }
+        //});
 
-        $('#okdisclamer').click(function () {
-            if ($('#notDisclamer').is(":checked"))
-                window.localStorage.setItem("disclamer", "ok");
-        });
+        //$('#okdisclamer').click(function () {
+        //    if ($('#notDisclamer').is(":checked"))
+        //        window.localStorage.setItem("disclamer", "ok");
+        //});
     },
 
     _initpointsDetail = function () {
@@ -329,212 +332,212 @@ stkApp.prototype = function () {
     },
 
     _initfulldataPage = function () {
-        var dataUser = JSON.parse(window.localStorage.getItem("userInfo"));
-        $('#tfirstname').val(dataUser.firstname);
-        $('#tlastname').val(dataUser.lastname);
-        $('#temployer').val(dataUser.employer);
-        $('#temail').val(dataUser.email);
+        //var dataUser = JSON.parse(window.localStorage.getItem("userInfo"));
+        //$('#tfirstname').val(dataUser.firstname);
+        //$('#tlastname').val(dataUser.lastname);
+        //$('#temployer').val(dataUser.employer);
+        //$('#temail').val(dataUser.email);
 
-        if (dataUser.position === null) {
-            $('#position').val('');
-            $('#city').val('');
-            $('#state').val('0');
-            $('#sector').val('0');
-            $('#billing').val('0');
-            $('#customerSAP').prop('checked', false);
-            $('#fulldataForm select').selectmenu('refresh', true);
-        }
-        else {
-            $('#position').val(dataUser.position);
-            $('#city').val(dataUser.city);
-            $('#state').val(dataUser.state);
-            $('#sector').val(dataUser.sector);
-            $('#billing').val(dataUser.billing);
-            $('#fulldataForm select').selectmenu('refresh', true);
-            $('#customerSAP').prop('checked', (dataUser.customerSAP == '1'));
-        }
+        //if (dataUser.position === null) {
+        //    $('#position').val('');
+        //    $('#city').val('');
+        //    $('#state').val('0');
+        //    $('#sector').val('0');
+        //    $('#billing').val('0');
+        //    $('#customerSAP').prop('checked', false);
+        //    $('#fulldataForm select').selectmenu('refresh', true);
+        //}
+        //else {
+        //    $('#position').val(dataUser.position);
+        //    $('#city').val(dataUser.city);
+        //    $('#state').val(dataUser.state);
+        //    $('#sector').val(dataUser.sector);
+        //    $('#billing').val(dataUser.billing);
+        //    $('#fulldataForm select').selectmenu('refresh', true);
+        //    $('#customerSAP').prop('checked', (dataUser.customerSAP == '1'));
+        //}
     },
 
     _loadHome = function (userInfo) {
         fauxAjax(function () {
-            if (window.localStorage.getItem("disclamer") === null)
-                $.mobile.changePage('#disclamer', { transition: 'flip' });
-            else
+            //if (window.localStorage.getItem("disclamer") === null)
+            //    $.mobile.changePage('#disclamer', { transition: 'flip' });
+            //else
                 $.mobile.changePage('#home', { transition: 'flip' });
         }, 'carregando...', this);
     },
 
     _initagendaPage = function () {
 
-        $('#tel').val('');
-        $('#detail').val('');
+        //$('#tel').val('');
+        //$('#detail').val('');
 
-        if (window.localStorage.getItem("agenda") === null)
-            $.mobile.changePage('#agendaPage', { transition: 'flip' });
-        else {
-            $.mobile.changePage('#home', { transition: 'flip' });
-            alert('Obrigado por já ter marcado uma agenda!');
-        }
+        //if (window.localStorage.getItem("agenda") === null)
+        //    $.mobile.changePage('#agendaPage', { transition: 'flip' });
+        //else {
+        //    $.mobile.changePage('#home', { transition: 'flip' });
+        //    alert('Obrigado por já ter marcado uma agenda!');
+        //}
     },
 
     _initluluPage = function () {
-        if (window.localStorage.getItem("luluOK") === null) {
-            _LoadLuluCombo();
-        }
-        else {
-            if (confirm('Deseja avaliar outro stand?'))
-                _LoadLuluCombo();
-            else
-                $.mobile.changePage('#home', { transition: 'flip' });
-        }
+        //if (window.localStorage.getItem("luluOK") === null) {
+        //    _LoadLuluCombo();
+        //}
+        //else {
+        //    if (confirm('Deseja avaliar outro stand?'))
+        //        _LoadLuluCombo();
+        //    else
+        //        $.mobile.changePage('#home', { transition: 'flip' });
+        //}
     },
 
     _LoadLuluCombo = function () {
-        $('#question1,#question2,#question3,#question4,#question5').prop('checked', false).checkboxradio('refresh');
-        $('#standLuluCombo').empty();
-        $('#standLuluCombo').append("<option value='0' selected='selected'>Selecione...</option>");
+        //$('#question1,#question2,#question3,#question4,#question5').prop('checked', false).checkboxradio('refresh');
+        //$('#standLuluCombo').empty();
+        //$('#standLuluCombo').append("<option value='0' selected='selected'>Selecione...</option>");
 
-        var lululist = {
-            "odata.metadata": "http://ec2-54-200-107-211.us-west-2.compute.amazonaws.com/odata/$metadata#Stand", "value": [
-              {
-                  "idStand": 30, "dsStand": "Softtek"
-              }, {
-                  "idStand": 31, "dsStand": "Uol Diveo"
-              }, {
-                  "idStand": 32, "dsStand": "Sonda"
-              }, {
-                  "idStand": 33, "dsStand": "Computer Associates"
-              }, {
-                  "idStand": 34, "dsStand": "T-Systems"
-              }, {
-                  "idStand": 35, "dsStand": "Deloitte"
-              }, {
-                  "idStand": 36, "dsStand": "IBM"
-              }, {
-                  "idStand": 37, "dsStand": "pwc"
-              }, {
-                  "idStand": 38, "dsStand": "Cisco"
-              }, {
-                  "idStand": 39, "dsStand": "CSC"
-              }, {
-                  "idStand": 40, "dsStand": "Algar Tech"
-              }, {
-                  "idStand": 41, "dsStand": "HP / Intel"
-              }, {
-                  "idStand": 42, "dsStand": "Capgemini"
-              }, {
-                  "idStand": 43, "dsStand": "Bradesco"
-              }, {
-                  "idStand": 44, "dsStand": "American Express"
-              }, {
-                  "idStand": 45, "dsStand": "Sigga"
-              }, {
-                  "idStand": 46, "dsStand": "Neoris"
-              }, {
-                  "idStand": 47, "dsStand": "Indra"
-              }, {
-                  "idStand": 48, "dsStand": "FH"
-              }, {
-                  "idStand": 49, "dsStand": "Pelissari"
-              }, {
-                  "idStand": 50, "dsStand": "Resource"
-              }, {
-                  "idStand": 51, "dsStand": "Tivit"
-              }, {
-                  "idStand": 52, "dsStand": "Thomson Reuters"
-              }, {
-                  "idStand": 53, "dsStand": "its Group"
-              }, {
-                  "idStand": 54, "dsStand": "Synchro"
-              }, {
-                  "idStand": 55, "dsStand": "Thera"
-              }, {
-                  "idStand": 56, "dsStand": "megawork"
-              }, {
-                  "idStand": 57, "dsStand": "Vistex"
-              }, {
-                  "idStand": 58, "dsStand": "ENGdb"
-              }, {
-                  "idStand": 59, "dsStand": "essence"
-              }, {
-                  "idStand": 60, "dsStand": "Grupo Meta"
-              }, {
-                  "idStand": 61, "dsStand": "nsi"
-              }, {
-                  "idStand": 62, "dsStand": "first decision"
-              }, {
-                  "idStand": 63, "dsStand": "Asug"
-              }, {
-                  "idStand": 64, "dsStand": "Esperansap"
-              }, {
-                  "idStand": 65, "dsStand": "gA"
-              }, {
-                  "idStand": 66, "dsStand": "ITeam"
-              }, {
-                  "idStand": 67, "dsStand": "Runge Pincock Minarco"
-              }, {
-                  "idStand": 68, "dsStand": "Hitachi"
-              }, {
-                  "idStand": 69, "dsStand": "OI"
-              }, {
-                  "idStand": 70, "dsStand": "SEP"
-              }, {
-                  "idStand": 71, "dsStand": "Intelligenza"
-              }, {
-                  "idStand": 72, "dsStand": "LKM"
-              }, {
-                  "idStand": 73, "dsStand": "WinShuttle"
-              }, {
-                  "idStand": 74, "dsStand": "Extend"
-              }, {
-                  "idStand": 75, "dsStand": "Hybris Software"
-              }, {
-                  "idStand": 76, "dsStand": "SSI"
-              }, {
-                  "idStand": 77, "dsStand": "NMS"
-              }, {
-                  "idStand": 78, "dsStand": "Ramo"
-              }, {
-                  "idStand": 79, "dsStand": "ebs"
-              }, {
-                  "idStand": 80, "dsStand": "superabiz"
-              }, {
-                  "idStand": 81, "dsStand": "exxis"
-              }, {
-                  "idStand": 82, "dsStand": "HB Brasil"
-              }, {
-                  "idStand": 83, "dsStand": "Ipj"
-              }, {
-                  "idStand": 84, "dsStand": "training"
-              }, {
-                  "idStand": 85, "dsStand": "Ti Fontoura"
-              }, {
-                  "idStand": 86, "dsStand": "gplux"
-              }, {
-                  "idStand": 87, "dsStand": "KNOA"
-              }, {
-                  "idStand": 88, "dsStand": "Carta Capital"
-              }, {
-                  "idStand": 89, "dsStand": "Canal Energia"
-              }, {
-                  "idStand": 90, "dsStand": "Radio Bandeirantes"
-              }, {
-                  "idStand": 91, "dsStand": "Jornal Casa"
-              }, {
-                  "idStand": 92, "dsStand": "ANEFAC"
-              }, {
-                  "idStand": 93, "dsStand": "MJV"
-              }, {
-                  "idStand": 94, "dsStand": "GOL"
-              }
-            ]
-        };
+        //var lululist = {
+        //    "odata.metadata": "http://ec2-54-200-107-211.us-west-2.compute.amazonaws.com/odata/$metadata#Stand", "value": [
+        //      {
+        //          "idStand": 30, "dsStand": "Softtek"
+        //      }, {
+        //          "idStand": 31, "dsStand": "Uol Diveo"
+        //      }, {
+        //          "idStand": 32, "dsStand": "Sonda"
+        //      }, {
+        //          "idStand": 33, "dsStand": "Computer Associates"
+        //      }, {
+        //          "idStand": 34, "dsStand": "T-Systems"
+        //      }, {
+        //          "idStand": 35, "dsStand": "Deloitte"
+        //      }, {
+        //          "idStand": 36, "dsStand": "IBM"
+        //      }, {
+        //          "idStand": 37, "dsStand": "pwc"
+        //      }, {
+        //          "idStand": 38, "dsStand": "Cisco"
+        //      }, {
+        //          "idStand": 39, "dsStand": "CSC"
+        //      }, {
+        //          "idStand": 40, "dsStand": "Algar Tech"
+        //      }, {
+        //          "idStand": 41, "dsStand": "HP / Intel"
+        //      }, {
+        //          "idStand": 42, "dsStand": "Capgemini"
+        //      }, {
+        //          "idStand": 43, "dsStand": "Bradesco"
+        //      }, {
+        //          "idStand": 44, "dsStand": "American Express"
+        //      }, {
+        //          "idStand": 45, "dsStand": "Sigga"
+        //      }, {
+        //          "idStand": 46, "dsStand": "Neoris"
+        //      }, {
+        //          "idStand": 47, "dsStand": "Indra"
+        //      }, {
+        //          "idStand": 48, "dsStand": "FH"
+        //      }, {
+        //          "idStand": 49, "dsStand": "Pelissari"
+        //      }, {
+        //          "idStand": 50, "dsStand": "Resource"
+        //      }, {
+        //          "idStand": 51, "dsStand": "Tivit"
+        //      }, {
+        //          "idStand": 52, "dsStand": "Thomson Reuters"
+        //      }, {
+        //          "idStand": 53, "dsStand": "its Group"
+        //      }, {
+        //          "idStand": 54, "dsStand": "Synchro"
+        //      }, {
+        //          "idStand": 55, "dsStand": "Thera"
+        //      }, {
+        //          "idStand": 56, "dsStand": "megawork"
+        //      }, {
+        //          "idStand": 57, "dsStand": "Vistex"
+        //      }, {
+        //          "idStand": 58, "dsStand": "ENGdb"
+        //      }, {
+        //          "idStand": 59, "dsStand": "essence"
+        //      }, {
+        //          "idStand": 60, "dsStand": "Grupo Meta"
+        //      }, {
+        //          "idStand": 61, "dsStand": "nsi"
+        //      }, {
+        //          "idStand": 62, "dsStand": "first decision"
+        //      }, {
+        //          "idStand": 63, "dsStand": "Asug"
+        //      }, {
+        //          "idStand": 64, "dsStand": "Esperansap"
+        //      }, {
+        //          "idStand": 65, "dsStand": "gA"
+        //      }, {
+        //          "idStand": 66, "dsStand": "ITeam"
+        //      }, {
+        //          "idStand": 67, "dsStand": "Runge Pincock Minarco"
+        //      }, {
+        //          "idStand": 68, "dsStand": "Hitachi"
+        //      }, {
+        //          "idStand": 69, "dsStand": "OI"
+        //      }, {
+        //          "idStand": 70, "dsStand": "SEP"
+        //      }, {
+        //          "idStand": 71, "dsStand": "Intelligenza"
+        //      }, {
+        //          "idStand": 72, "dsStand": "LKM"
+        //      }, {
+        //          "idStand": 73, "dsStand": "WinShuttle"
+        //      }, {
+        //          "idStand": 74, "dsStand": "Extend"
+        //      }, {
+        //          "idStand": 75, "dsStand": "Hybris Software"
+        //      }, {
+        //          "idStand": 76, "dsStand": "SSI"
+        //      }, {
+        //          "idStand": 77, "dsStand": "NMS"
+        //      }, {
+        //          "idStand": 78, "dsStand": "Ramo"
+        //      }, {
+        //          "idStand": 79, "dsStand": "ebs"
+        //      }, {
+        //          "idStand": 80, "dsStand": "superabiz"
+        //      }, {
+        //          "idStand": 81, "dsStand": "exxis"
+        //      }, {
+        //          "idStand": 82, "dsStand": "HB Brasil"
+        //      }, {
+        //          "idStand": 83, "dsStand": "Ipj"
+        //      }, {
+        //          "idStand": 84, "dsStand": "training"
+        //      }, {
+        //          "idStand": 85, "dsStand": "Ti Fontoura"
+        //      }, {
+        //          "idStand": 86, "dsStand": "gplux"
+        //      }, {
+        //          "idStand": 87, "dsStand": "KNOA"
+        //      }, {
+        //          "idStand": 88, "dsStand": "Carta Capital"
+        //      }, {
+        //          "idStand": 89, "dsStand": "Canal Energia"
+        //      }, {
+        //          "idStand": 90, "dsStand": "Radio Bandeirantes"
+        //      }, {
+        //          "idStand": 91, "dsStand": "Jornal Casa"
+        //      }, {
+        //          "idStand": 92, "dsStand": "ANEFAC"
+        //      }, {
+        //          "idStand": 93, "dsStand": "MJV"
+        //      }, {
+        //          "idStand": 94, "dsStand": "GOL"
+        //      }
+        //    ]
+        //};
 
-        for (var ln in lululist.value) {
-            $('#standLuluCombo').append("<option value='" + lululist.value[ln].idStand + "'>" + lululist.value[ln].dsStand + "</option>");
-        }
+        //for (var ln in lululist.value) {
+        //    $('#standLuluCombo').append("<option value='" + lululist.value[ln].idStand + "'>" + lululist.value[ln].dsStand + "</option>");
+        //}
 
-        $('#standLuluCombo').selectmenu('refresh', true);
+        //$('#standLuluCombo').selectmenu('refresh', true);
 
         //fauxAjax(function () {
         //    $.getJSON("http://ec2-54-200-107-211.us-west-2.compute.amazonaws.com/odata/Stand")
@@ -550,39 +553,39 @@ stkApp.prototype = function () {
     },
 
     _initlulurankPage = function () {
-        $('#myRankListView li').remove();
+        //$('#myRankListView li').remove();
 
-        fauxAjax(function () {
-            $.getJSON("http://ec2-54-200-107-211.us-west-2.compute.amazonaws.com/api/Lulu")
-            .done(function (data) {
-                var q = 1;
-                for (var ln in data) {
-                    if (q == 1)
-                        $('#myRankListView').append("<li class='ui-li-has-thumb' id='" + data[ln].idStand + "'><a href='#' class='ui-btn ui-icon-carat-r'><img src='images/trofeu.png'><p>" + data[ln].dsStand + "</p></a></li>");
-                    else
-                        $('#myRankListView').append("<li class='ui-li-has-thumb' id='" + data[ln].idStand + "'><a href='#' class='ui-btn ui-icon-carat-r'><img src='images/trofeu2.png'><p>" + data[ln].dsStand + "</p></a></li>");
-                    q++;
-                }
-            })
-            .fail(function (jqxhr, textStatus, error) {
-                alert("Request Failed: " + textStatus + ", " + error);
-            });
-        }, 'carregando...', this);
+        //fauxAjax(function () {
+        //    $.getJSON("http://ec2-54-200-107-211.us-west-2.compute.amazonaws.com/api/Lulu")
+        //    .done(function (data) {
+        //        var q = 1;
+        //        for (var ln in data) {
+        //            if (q == 1)
+        //                $('#myRankListView').append("<li class='ui-li-has-thumb' id='" + data[ln].idStand + "'><a href='#' class='ui-btn ui-icon-carat-r'><img src='images/trofeu.png'><p>" + data[ln].dsStand + "</p></a></li>");
+        //            else
+        //                $('#myRankListView').append("<li class='ui-li-has-thumb' id='" + data[ln].idStand + "'><a href='#' class='ui-btn ui-icon-carat-r'><img src='images/trofeu2.png'><p>" + data[ln].dsStand + "</p></a></li>");
+        //            q++;
+        //        }
+        //    })
+        //    .fail(function (jqxhr, textStatus, error) {
+        //        alert("Request Failed: " + textStatus + ", " + error);
+        //    });
+        //}, 'carregando...', this);
     },
 
     _savePoints = function _savePoints(actionType) {
-        if (actionType != '' && window.localStorage.getItem(actionType) === null) {
-            var iidUser = JSON.parse(window.localStorage.getItem("userInfo")).idUser;
-            var postdata = { idUser: iidUser, typeAction: actionType };
-            $.post("http://ec2-54-200-107-211.us-west-2.compute.amazonaws.com/odata/Point", postdata)
-            .done(function (data) {
-                window.localStorage.setItem(actionType, "ok");
-                alert("Pontuação salva!");
-            })
-            .fail(function (jqXHR, textStatus, errorThrown) {
-                alert("Save Points error: " + textStatus + "," + errorThrown);
-            });
-        }
+        //if (actionType != '' && window.localStorage.getItem(actionType) === null) {
+        //    var iidUser = JSON.parse(window.localStorage.getItem("userInfo")).idUser;
+        //    var postdata = { idUser: iidUser, typeAction: actionType };
+        //    $.post("http://ec2-54-200-107-211.us-west-2.compute.amazonaws.com/odata/Point", postdata)
+        //    .done(function (data) {
+        //        window.localStorage.setItem(actionType, "ok");
+        //        alert("Pontuação salva!");
+        //    })
+        //    .fail(function (jqXHR, textStatus, errorThrown) {
+        //        alert("Save Points error: " + textStatus + "," + errorThrown);
+        //    });
+        //}
     },
 
     fauxAjax = function fauxAjax(func, text, thisObj) {
