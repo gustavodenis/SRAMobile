@@ -22,7 +22,7 @@
             <img style="margin-left: 70px; margin-top: 10px; margin-bottom: 15px; float: left;" class="logo" alt="img" src="images/logo.png" width="240px;">
             <a href="#settingPage" data-transition="slide" style="margin-left: 10px; margin-top: 10px; margin-bottom: 15px; float: left;" class="ui-btn header-button-right ui-btn-icon-right ui-btn-icon-notext ui-shadow ui-corner-all ui-icon-gear"></a>
         </div>
-        <div data-role="content">
+        <div role="main" class="ui-content">
             <!--<img class="logo-splash" src="images/logo-splash.png" width="45%" height="45%">-->
         </div>
         <div data-role="footer" data-theme="b" data-position="fixed" data-tap-toggle="false">
@@ -44,7 +44,7 @@
                 <img class="logo" alt="img" src="images/logo.png" width="240">
             </div>
         </div>
-        <div data-role="content">
+        <div role="main" class="ui-content">
             <form id="login">
                 <span id="labelIS">IS:</span>
                 <input type="text" id="is_stk" value="" />
@@ -62,7 +62,7 @@
             <img style="margin-left: 70px; margin-top: 10px; margin-bottom: 15px; float: left;" class="logo" alt="img" src="images/logo.png" width="240">
             <a href="#settingPage" data-transition="slide" style="margin-left: 10px; margin-top: 10px; margin-bottom: 15px; float: left;" class="ui-btn header-button-right ui-btn-icon-right ui-btn-icon-notext ui-shadow ui-corner-all ui-icon-gear"></a>
         </div>
-        <div data-role="content">
+        <div role="main" class="ui-content">
             <span>Semana:</span>
             <select name="select-native-2" id="select-native-2" data-mini="true">
                 <option value="1">35</option>
@@ -97,35 +97,47 @@
             </ul>
         </div>
 
-        <div data-role="popup" id="popupAddHours" data-theme="a" class="ui-corner-all">
-            <form>
-                <div style="padding:10px 20px;">
-                    <h3>Horas</h3>
-                    <span id="labelDate">Data</span>
-                    <input name="data" id="txtDt" type="text" data-role="datebox" data-options="{&quot;mode&quot;:&quot;datebox&quot;,&quot;useFocus&quot;: true}" readonly="readonly" class="" maxlength="10" />
-                    <span id="labelHours">Horas:</span>
-                    <input name="horas" id="txtHour" type="text" data-role="datebox" data-options="{&quot;mode&quot;:&quot;timebox&quot;,&quot;maxHour&quot;:&quot;8&quot;,&quot;useFocus&quot;: true}" maxlength="5" readonly="readonly" class="">
-                    <span id="labelProject">Projeto:</span>
-                    <input type="text" id="txtProj" />
-                    <span id="labelAcitivity">Atividade:</span>
-                    <select name="select-native-2" id="ddlAcitivity" data-mini="true">
-                        <option value="1">35</option>
-                        <option value="2">36</option>
-                        <option value="3">37</option>
-                        <option value="4">38</option>
-                    </select>
-                    <span id="labelDescription">Descrição:</span>
-                    <input type="text" id="txtDesc" />
-                    btn Rep datas futuras (Data Ini, Data Fim)
-                    <button type="submit" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-check">Salvar</button>
-                </div>
-            </form>
+        <div data-role="footer" data-theme="b" data-position="fixed" data-tap-toggle="false">
+            <div data-role="navbar" data-iconpos="bottom">
+                <ul>
+                    <li><a id="btnpopupAddHours" href="#normalAddPage" data-transition="pop" data-icon="plus">Adicionar</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Normal Add page -->
+    <div id="normalAddPage" data-role="page" data-mini="true">
+        <div data-role="header" data-theme="a" data-position="fixed" data-tap-toggle="false">
+            <a href="#home" data-rel="back" style="margin-left: 10px; margin-top: 10px; margin-bottom: 15px; float: left;" class="ui-btn-left ui-btn ui-icon-home ui-btn-icon-notext ui-shadow ui-corner-all" data-role="button" role="button">Home</a>
+            <img style="margin-left: 70px; margin-top: 10px; margin-bottom: 15px; float: left;" class="logo" alt="img" src="images/logo.png" width="240">
+            <a href="#settingPage" data-transition="slide" style="margin-left: 10px; margin-top: 10px; margin-bottom: 15px; float: left;" class="ui-btn header-button-right ui-btn-icon-right ui-btn-icon-notext ui-shadow ui-corner-all ui-icon-gear"></a>
+        </div>
+        <div role="main" class="ui-content">
+            <h3>Horas</h3>
+            <span id="labelDate">Data</span>
+            <input name="data" id="txtDt" type="text" data-role="datebox" data-options='{"mode":"datebox","useFocus":true}' readonly="readonly" class="" maxlength="10" />
+            <span id="labelHours">Horas:</span>
+            <input name="horas" id="txtHour" type="text" data-role="datebox" data-options='{"mode":"timebox", "overrideTimeFormat": "24"}' maxlength="5" readonly="readonly" class="">
+            <span id="labelProject">Projeto:</span>
+            <input type="text" id="txtProj" />
+            <span id="labelAcitivity">Atividade:</span>
+            <select name="select-native-2" id="ddlAcitivity" data-mini="true">
+                <option value="1">35</option>
+                <option value="2">36</option>
+                <option value="3">37</option>
+                <option value="4">38</option>
+            </select>
+            <span id="labelDescription">Descrição:</span>
+            <input type="text" id="txtDesc" />
+            btn Rep datas futuras (Data Ini, Data Fim)
         </div>
 
         <div data-role="footer" data-theme="b" data-position="fixed" data-tap-toggle="false">
             <div data-role="navbar" data-iconpos="bottom">
                 <ul>
-                    <li><a id="btnpopupAddHours" href="#popupAddHours" data-rel="popup" data-position-to="window" data-transition="pop" data-icon="plus">Adicionar</a></li>
+                    <li><a id="btnAddNormalHour" href="#" data-transition="pop" data-icon="plus">Salvar</a></li>
+                    <li><a id="btnCancelNormalHour" href="#" data-transition="pop" data-icon="plus">Cancelar</a></li>
                 </ul>
             </div>
         </div>
@@ -138,7 +150,7 @@
             <img style="margin-left: 70px; margin-top: 10px; margin-bottom: 15px; float: left;" class="logo" alt="img" src="images/logo.png" width="240">
             <a href="#settingPage" data-transition="slide" style="margin-left: 10px; margin-top: 10px; margin-bottom: 15px; float: left;" class="ui-btn header-button-right ui-btn-icon-right ui-btn-icon-notext ui-shadow ui-corner-all ui-icon-gear"></a>
         </div>
-        <div data-role="content">
+        <div role="main" class="ui-content">
             <span>Semana:</span>
             <select name="select-native-2" id="select-native-2" data-mini="true">
                 <option value="1">35</option>
@@ -173,38 +185,51 @@
             </ul>
         </div>
 
-        <div data-role="popup" id="popupAddAditionalHours" data-theme="a" class="ui-corner-all">
-            <form>
-                <div style="padding:10px 20px;">
-                    <h3>Horas</h3>
-                    <span id="labelHourBegin">Hora Entrada:</span>
-                    <input type="text" id="txtHourBegin" />
-                    <span id="labelDate">Data</span>
-                    <input name="data" id="txtDt" type="text" data-role="datebox" data-options="{&quot;mode&quot;:&quot;datebox&quot;,&quot;useFocus&quot;: true}" readonly="readonly" class="" maxlength="10" />
-                    <span id="labelHours">Horas:</span>
-                    <input name="horas" id="txtHour" type="text" data-role="datebox" data-options="{&quot;mode&quot;:&quot;timebox&quot;,&quot;maxHour&quot;:&quot;8&quot;,&quot;useFocus&quot;: true}" maxlength="5" readonly="readonly" class="">
-                    <span id="labelAcitivity">Atividade:</span>
-                    <select name="select-native-2" id="ddlAcitivity" data-mini="true">
-                        <option value="1">35</option>
-                        <option value="2">36</option>
-                        <option value="3">37</option>
-                        <option value="4">38</option>
-                    </select>
-                    <span id="labelDescription">Descrição:</span>
-                    <input type="text" id="txtDesc" />
-                    btn Rep datas futuras (Data Ini, Data Fim)
-                    <button type="submit" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-check">Salvar</button>
-                </div>
-            </form>
-        </div>
         <div data-role="footer" data-theme="b" data-position="fixed" data-tap-toggle="false">
             <div data-role="navbar" data-iconpos="bottom">
                 <ul>
-                    <li><a id="btnpopupAddAditionalHours" href="#popupAddAditionalHours" data-rel="popup" data-position-to="window" data-transition="pop" data-icon="plus">Adicionar</a></li>
+                    <li><a id="btnAddAditionalHours" href="#aditionalAddPage" data-transition="pop" data-icon="plus">Adicionar</a></li>
                 </ul>
             </div>
         </div>
 
+    </div>
+
+    <!-- Aditional Add page -->
+    <div id="aditionalAddPage" data-role="page" data-mini="true">
+        <div data-role="header" data-theme="a" data-position="fixed" data-tap-toggle="false">
+            <a href="#home" data-rel="back" style="margin-left: 10px; margin-top: 10px; margin-bottom: 15px; float: left;" class="ui-btn-left ui-btn ui-icon-home ui-btn-icon-notext ui-shadow ui-corner-all" data-role="button" role="button">Home</a>
+            <img style="margin-left: 70px; margin-top: 10px; margin-bottom: 15px; float: left;" class="logo" alt="img" src="images/logo.png" width="240">
+            <a href="#settingPage" data-transition="slide" style="margin-left: 10px; margin-top: 10px; margin-bottom: 15px; float: left;" class="ui-btn header-button-right ui-btn-icon-right ui-btn-icon-notext ui-shadow ui-corner-all ui-icon-gear"></a>
+        </div>
+        <div role="main" class="ui-content backaditional">
+            <h3>Horas</h3>
+            <span id="labelHourBegin">Hora Entrada:</span>
+            <input type="text" id="txtHourBegin" />
+            <span id="labelDate">Data</span>
+            <input name="data" id="txtDt" type="text" data-role="datebox" data-options='{"mode":"datebox","useFocus":true}' readonly="readonly" class="" maxlength="10" />
+            <span id="labelHours">Horas:</span>
+            <input name="horas" id="txtHour" type="text" data-role="datebox" data-options='{"overridetimeformat":"24", "maxhour":8}' maxlength="5" readonly="readonly" class="">
+            <span id="labelAcitivity">Atividade:</span>
+            <select name="select-native-2" id="ddlAcitivity" data-mini="true">
+                <option value="1">35</option>
+                <option value="2">36</option>
+                <option value="3">37</option>
+                <option value="4">38</option>
+            </select>
+            <span id="labelDescription">Descrição:</span>
+            <input type="text" id="txtDesc" />
+            btn Rep datas futuras (Data Ini, Data Fim)
+        </div>
+
+        <div data-role="footer" data-theme="b" data-position="fixed" data-tap-toggle="false">
+            <div data-role="navbar" data-iconpos="bottom">
+                <ul>
+                    <li><a id="btnAddAditionalHour" href="#" data-transition="pop" data-icon="plus">Salvar</a></li>
+                    <li><a id="btnCancelAditionalHour" href="#" data-transition="pop" data-icon="plus">Cancelar</a></li>
+                </ul>
+            </div>
+        </div>
     </div>
 
     <!-- Aprovação page -->
@@ -214,7 +239,7 @@
             <img style="margin-left: 70px; margin-top: 10px; margin-bottom: 15px; float: left;" class="logo" alt="img" src="images/logo.png" width="240">
             <a href="#settingPage" data-transition="slide" style="margin-left: 10px; margin-top: 10px; margin-bottom: 15px; float: left;" class="ui-btn header-button-right ui-btn-icon-right ui-btn-icon-notext ui-shadow ui-corner-all ui-icon-gear"></a>
         </div>
-        <div data-role="content">
+        <div role="main" class="ui-content">
             <ul id="listAproveHours" class="touch" data-role="listview" data-icon="false" data-split-icon="check">
                 <li>
                     <a href="#">
@@ -243,11 +268,11 @@
             <img style="margin-left: 70px; margin-top: 10px; margin-bottom: 15px; float: left;" class="logo" alt="img" src="images/logo.png" width="240">
             <a href="#settingPage" data-transition="slide" style="margin-left: 10px; margin-top: 10px; margin-bottom: 15px; float: left;" class="ui-btn header-button-right ui-btn-icon-right ui-btn-icon-notext ui-shadow ui-corner-all ui-icon-gear"></a>
         </div>
-        <div data-role="content">
+        <div role="main" class="ui-content backfault">
             <span id="labelDateBegin">Data Início</span>
-            <input name="data" id="txtDtIni" type="text" data-role="datebox" data-options="{&quot;mode&quot;:&quot;datebox&quot;,&quot;useFocus&quot;: true}" readonly="readonly" class="" maxlength="10" />
+            <input name="data" id="txtDtIni" type="text" data-role="datebox" data-options='{"mode":"datebox","useFocus":true}' readonly="readonly" class="" maxlength="10" />
             <span id="labelDateEnd">Data Fim</span>
-            <input name="data" id="txtDtFim" type="text" data-role="datebox" data-options="{&quot;mode&quot;:&quot;datebox&quot;,&quot;useFocus&quot;: true}" readonly="readonly" class="" maxlength="10" />
+            <input name="data" id="txtDtFim" type="text" data-role="datebox" data-options='{"mode":"datebox","useFocus":true}' readonly="readonly" class="" maxlength="10" />
             <span id="labelAcitivity">Atividade:</span>
             <select name="select-native-2" id="ddlAcitivity" data-mini="true">
                 <option value="1">35</option>
@@ -256,7 +281,7 @@
                 <option value="4">38</option>
             </select>
             <span id="labelHours">Horas:</span>
-            <input name="horas" id="txtHour" type="text" data-role="datebox" data-options="{&quot;mode&quot;:&quot;timebox&quot;,&quot;maxHour&quot;:&quot;8&quot;,&quot;useFocus&quot;: true}" maxlength="5" readonly="readonly" class="">
+            <input name="horas" id="txtHour" type="text" data-role="datebox" data-options='{"overridetimeformat":"24", "maxhour":8}' maxlength="5" readonly="readonly" class="">
             <span id="labelDescription">Descrição:</span>
             <input type="text" id="txtDesc" />
         </div>
@@ -277,7 +302,7 @@
             <img style="margin-left: 70px; margin-top: 10px; margin-bottom: 15px; float: left;" class="logo" alt="img" src="images/logo.png" width="240">
             <a href="#settingPage" data-transition="slide" style="margin-left: 10px; margin-top: 10px; margin-bottom: 15px; float: left;" class="ui-btn header-button-right ui-btn-icon-right ui-btn-icon-notext ui-shadow ui-corner-all ui-icon-gear"></a>
         </div>
-        <div data-role="content">
+        <div role="main" class="ui-content">
             <p><span id="label_ISName">Nome colaborador:</span></p>
             <p><span id="ISName"></span></p>
             <hr />

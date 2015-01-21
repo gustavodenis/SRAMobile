@@ -6,8 +6,8 @@ $.ajaxSetup({
 $(function () {
     $.mobile.defaultHomeScroll = 0;
 
-    jQuery.extend(jQuery.mobile.datebox.prototype.options, {
-        useLang: "en"
+    //jQuery.extend(jQuery.mobile.datebox.prototype.options, {
+        //useLang: "en"
         //useClearButton: true,
         //useCollapsedBut: false,
         //calShowWeek: false,
@@ -16,7 +16,7 @@ $(function () {
         //calUsePickersIcons: true,
         //calNoHeader: true,
         //calControlGroup: false
-    });
+    //});
 });
 
 // To debug code on page load in Ripple or on Android devices/emulators: launch your app, set breakpoints, 

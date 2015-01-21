@@ -55,7 +55,7 @@ body {
     margin-bottom: 15px;
     float: left;
     border-style: none;
-    background-color:transparent;
+    background-color: transparent;
 }
 
 .header-text {
@@ -63,42 +63,42 @@ body {
     padding-top: 17px;
 }
 
-.header-text strong {
-    letter-spacing: normal;
-    font-family: 'Lato', sans-serif;
-    font-size: 18px;
-    color: #3b4043;
-    font-weight: 600;
-    display: block;
-    text-align: right;
-    padding-right: 20px;
-}
+    .header-text strong {
+        letter-spacing: normal;
+        font-family: 'Lato', sans-serif;
+        font-size: 18px;
+        color: #3b4043;
+        font-weight: 600;
+        display: block;
+        text-align: right;
+        padding-right: 20px;
+    }
 
-.header-text em {
-    font-family: 'Dosis', sans-serif;
-    font-size: 13px;
-    letter-spacing: 0.8px;
-    font-style: normal;
-    color: #3b4043;
-    display: block;
-    padding-right: 20px;
-}
+    .header-text em {
+        font-family: 'Dosis', sans-serif;
+        font-size: 13px;
+        letter-spacing: 0.8px;
+        font-style: normal;
+        color: #3b4043;
+        display: block;
+        padding-right: 20px;
+    }
 
 .heading {
     margin-bottom: 10px;
 }
 
-.heading em {
-    font-family: 'Dosis', sans-serif;
-    font-style: normal;
-    font-size: 12px;
-    color: #ce1a13;
-}
+    .heading em {
+        font-family: 'Dosis', sans-serif;
+        font-style: normal;
+        font-size: 12px;
+        color: #ce1a13;
+    }
 
-.heading h3 {
-    color: #252525;
-    font-weight: 200;
-}
+    .heading h3 {
+        color: #252525;
+        font-weight: 200;
+    }
 
 .heading-left {
     float: left;
@@ -123,10 +123,10 @@ body {
     margin-bottom: 10px;
 }
 
-.thumb img {
-    width: 100%;
-    display: block;
-}
+    .thumb img {
+        width: 100%;
+        display: block;
+    }
 
 .left-thumb-text {
     color: #FFFFFF;
@@ -184,9 +184,9 @@ body {
     border-bottom-color: #125F9D;
 }
 
-.ui-header.ui-bar-a > .ui-title {
-    text-shadow: none;
-}
+    .ui-header.ui-bar-a > .ui-title {
+        text-shadow: none;
+    }
 
 .ui-footer {
     text-align: center;
@@ -248,6 +248,7 @@ body {
 .ui-content .ui-listview-inset {
     margin: 1em 5px;
 }
+
 .ui-btn-active {
     border: 1px solid rgba(255,255,255,0.2);
     background: rgba(255,255,255,0.2);
@@ -291,13 +292,31 @@ body {
     background: linear-gradient(to bottom, rgba(6, 123, 152, 1) 0%, rgba(41, 192, 227, 1) 100%); /* W3C */
 }
 
-.decoration{
-	background-color:#cacaca;
-	height:2px;
-	background-repeat:repeat;
-	border-bottom:solid 1px #FFFFFF;
-	margin-bottom:20px;
-	display:block;
-	width:100%;
-	clear:both;
+.decoration {
+    background-color: #cacaca;
+    height: 2px;
+    background-repeat: repeat;
+    border-bottom: solid 1px #FFFFFF;
+    margin-bottom: 20px;
+    display: block;
+    width: 100%;
+    clear: both;
+}
+
+.backaditional {
+    background: -moz-linear-gradient(top, rgba(255,0,0,1) 0%, rgba(255,218,185,1) 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(255,0,0,1)), color-stop(100%, rgba(255,218,185,1))); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, rgba(255,0,0,1) 0%, rgba(255,218,185,1) 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, rgba(255,0,0,1) 0%, rgba(255,218,185,1) 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, rgba(255,0,0,1) 0%, rgba(255,218,185,1) 100%); /* IE10+ */
+    background: linear-gradient(to bottom, rgba(255,0,0,1) 0%, rgba(255,218,185,1) 100%); /* W3C */
+}
+
+.backfault {
+    background: -moz-linear-gradient(top, rgba(70,130,180, 1) 0%, rgba(173,216,230, 1) 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(70,130,180, 1)), color-stop(100%, rgba(173,216,230, 1))); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, rgba(70,130,180, 1) 0%, rgba(173,216,230, 1) 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, rgba(70,130,180, 1) 0%, rgba(173,216,230, 1) 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, rgba(70,130,180, 1) 0%, rgba(173,216,230, 1) 100%); /* IE10+ */
+    background: linear-gradient(to bottom, rgba(70,130,180, 1) 0%, rgba(173,216,230, 1) 100%); /* W3C */
 }
