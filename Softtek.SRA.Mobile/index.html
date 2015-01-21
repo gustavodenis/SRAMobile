@@ -6,6 +6,7 @@
     <link href="css/jquery.mobile-1.4.5.css" rel="stylesheet" type="text/css" />
     <!-- Phone 320x480 High DPI (aka Retina) -->
     <link rel="stylesheet" href="css/index.css" type="text/css" />
+    <link href="css/jqm-datebox-1.4.5.min.css" rel="stylesheet" />
     <!-- Phone 480x800 Medium DPI (aka Samsung Galaxy S II Skyrocket) -->
     <link rel="stylesheet" media="only screen and (min-device-width: 320px) and (max-device-width: 508px) and (-webkit-device-pixel-ratio:1.5)" href="css/phone-800.css" type="text/css" />
     <!-- Tablet 768x1024 Low DPI (aka iPad 1 & 2") -->
@@ -101,9 +102,9 @@
                 <div style="padding:10px 20px;">
                     <h3>Horas</h3>
                     <span id="labelDate">Data</span>
-                    <input type="date" id="txtDt" />
+                    <input name="data" id="txtDt" type="text" data-role="datebox" data-options="{&quot;mode&quot;:&quot;datebox&quot;,&quot;useFocus&quot;: true}" readonly="readonly" class="" maxlength="10" />
                     <span id="labelHours">Horas:</span>
-                    <input type="text" id="txtHour" data-clear-btn="false" />
+                    <input name="horas" id="txtHour" type="text" data-role="datebox" data-options="{&quot;mode&quot;:&quot;timebox&quot;,&quot;maxHour&quot;:&quot;8&quot;,&quot;useFocus&quot;: true}" maxlength="5" readonly="readonly" class="">
                     <span id="labelProject">Projeto:</span>
                     <input type="text" id="txtProj" />
                     <span id="labelAcitivity">Atividade:</span>
@@ -179,9 +180,9 @@
                     <span id="labelHourBegin">Hora Entrada:</span>
                     <input type="text" id="txtHourBegin" />
                     <span id="labelDate">Data</span>
-                    <input type="date" id="txtDt" />
+                    <input name="data" id="txtDt" type="text" data-role="datebox" data-options="{&quot;mode&quot;:&quot;datebox&quot;,&quot;useFocus&quot;: true}" readonly="readonly" class="" maxlength="10" />
                     <span id="labelHours">Horas:</span>
-                    <input type="text" id="txtHour" />
+                    <input name="horas" id="txtHour" type="text" data-role="datebox" data-options="{&quot;mode&quot;:&quot;timebox&quot;,&quot;maxHour&quot;:&quot;8&quot;,&quot;useFocus&quot;: true}" maxlength="5" readonly="readonly" class="">
                     <span id="labelAcitivity">Atividade:</span>
                     <select name="select-native-2" id="ddlAcitivity" data-mini="true">
                         <option value="1">35</option>
@@ -244,9 +245,9 @@
         </div>
         <div data-role="content">
             <span id="labelDateBegin">Data Início</span>
-            <input type="date" id="txtDtIni" />
+            <input name="data" id="txtDtIni" type="text" data-role="datebox" data-options="{&quot;mode&quot;:&quot;datebox&quot;,&quot;useFocus&quot;: true}" readonly="readonly" class="" maxlength="10" />
             <span id="labelDateEnd">Data Fim</span>
-            <input type="date" id="txtDtFim" />
+            <input name="data" id="txtDtFim" type="text" data-role="datebox" data-options="{&quot;mode&quot;:&quot;datebox&quot;,&quot;useFocus&quot;: true}" readonly="readonly" class="" maxlength="10" />
             <span id="labelAcitivity">Atividade:</span>
             <select name="select-native-2" id="ddlAcitivity" data-mini="true">
                 <option value="1">35</option>
@@ -255,7 +256,7 @@
                 <option value="4">38</option>
             </select>
             <span id="labelHours">Horas:</span>
-            <input type="text" id="txtHour" data-clear-btn="false" />
+            <input name="horas" id="txtHour" type="text" data-role="datebox" data-options="{&quot;mode&quot;:&quot;timebox&quot;,&quot;maxHour&quot;:&quot;8&quot;,&quot;useFocus&quot;: true}" maxlength="5" readonly="readonly" class="">
             <span id="labelDescription">Descrição:</span>
             <input type="text" id="txtDesc" />
         </div>
@@ -288,6 +289,7 @@
     <script src="cordova.js"></script>
     <script src="scripts/jquery-1.11.2.min.js"></script>
     <script src="scripts/jquery.mobile-1.4.5.js"></script>
+    <script src="scripts/jquery.mobile.datebox.js"></script>
     <script src="scripts/index.js"></script>
 </body>
 </html>

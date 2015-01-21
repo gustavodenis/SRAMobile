@@ -125,6 +125,7 @@
     <Content Include="App_Resources\winphone\splash.png" />
     <Content Include="App_Resources\winphone\tileicon.png" />
     <Content Include="css\images\ajax-loader.gif" />
+    <Content Include="css\jqm-datebox-1.4.5.min.css" />
     <Content Include="css\jquery.mobile-1.4.5.css" />
     <Content Include="css\phone-1280.css" />
     <Content Include="css\phone-800.css" />
@@ -339,6 +340,7 @@
     <Content Include="images\icons-svg\video-white.svg" />
     <Content Include="images\logo-splash.png" />
     <Content Include="images\logo.png" />
+    <Content Include="scripts\jquery.mobile.datebox.js" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="config.xml">
