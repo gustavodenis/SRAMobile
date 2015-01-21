@@ -41,12 +41,10 @@ stkApp.prototype = function () {
 
         var that = this;
         $('#home').on('pagebeforecreate', $.proxy(_initHome, that));
-        //$('#pointsDetail').on('pageshow', $.proxy(_initpointsDetail, that));
-        //$('#infoSession').on('pageshow', $.proxy(_initinfoSession, that));
-        //$('#agendaPage').on('pageshow', $.proxy(_initagendaPage, that));
-        //$('#luluPage').on('pageshow', $.proxy(_initluluPage, that));
-        //$('#lulurankPage').on('pageshow', $.proxy(_initlulurankPage, that));
-        //$('#fulldataPage').on('pageshow', $.proxy(_initfulldataPage, that));
+        $('#aditionalPage').on('pageshow', $.proxy(_initaditionalPage, that));
+        $('#aprovePage').on('pageshow', $.proxy(_initaprovePage, that));
+        $('#faultPage').on('pageshow', $.proxy(_initfaultPage, that));
+        $('#settingPage').on('pageshow', $.proxy(_initsettingPage, that));
 
         if (window.localStorage.getItem("userInfo") != null) {
             _login = true;
@@ -118,9 +116,8 @@ stkApp.prototype = function () {
             //var listitem = $(this),
             //    dir = event.type === "swipeleft" ? "left" : "right",
             //    transition = $.support.cssTransform3d ? dir : false;
-            if (confirm('Deseja Exluir o lançamento?'))
-            {
-              //  $("#listHours").listview("refresh");
+            if (confirm('Deseja Exluir o lançamento?')) {
+                //  $("#listHours").listview("refresh");
                 alert('hehe touch!');
             }
         });
@@ -251,87 +248,96 @@ stkApp.prototype = function () {
         //});
     },
 
-    _initpointsDetail = function () {
-        $('#pointsDetail-cadastro, #pointsDetail-completo, #pointsDetail-infosession, #pointsDetail-stand, #pointsDetail-5info').text('');
-        $('#pointsDetail-lulu, #pointsDetail-agenda, #pointsDetail-demo, #pointsDetail-totalpoints').text('');
-
-        fauxAjax(function () {
-            var iidUser = JSON.parse(window.localStorage.getItem("userInfo")).idUser;
-            $.getJSON("http://ec2-54-200-107-211.us-west-2.compute.amazonaws.com/odata/Point(" + iidUser + ")")
-            .done(function (data) {
-                var cadastro = 0,
-                    completo = 0,
-                    infosession = 0,
-                    stand = 0,
-                    fiveinfo = 0,
-                    lulu = 0,
-                    agenda = 0,
-                    demo = 0,
-                    total = 0;
-
-                for (var i in data.value) {
-                    switch (data.value[i].typeAction) {
-                        case 'Cadastro':
-                            cadastro = 5;
-                            total = total + 5;
-                            break;
-                        case 'Dados Completo':
-                            completo = 10;
-                            total = total + 10;
-                            break;
-                        case 'InfoSession':
-                            infosession = 15;
-                            total = total + 15;
-                            break;
-                        case 'Stand':
-                            stand = 10;
-                            total = total + 10;
-                            break;
-                        case 'FirstInfoSession':
-                            fiveinfo = 25;
-                            total = total + 25;
-                            break;
-                        case 'Quiz':
-                            lulu += 15;
-                            total = total + 15;
-                            break;
-                        case 'Agendamento de Visita':
-                            agenda = 25;
-                            total = total + 25;
-                            break;
-                        case 'Demo':
-                            demo = 15;
-                            total = total + 15;
-                            break;
-                    }
-                }
-
-                $('#pointsDetail-cadastro').text(cadastro);
-                $('#pointsDetail-completo').text(completo);
-                $('#pointsDetail-infosession').text(infosession);
-                $('#pointsDetail-stand').text(stand);
-                $('#pointsDetail-5info').text(fiveinfo);
-                $('#pointsDetail-lulu').text(lulu);
-                $('#pointsDetail-agenda').text(agenda);
-                $('#pointsDetail-demo').text(demo);
-                $('#pointsDetail-totalpoints').text(total);
-            })
-            .fail(function (jqxhr, textStatus, error) {
-                alert("Get Points error: " + textStatus + ", " + error);
-            });
-        }, 'carregando...', this);
-    },
-
-    _initinfoSession = function () {
-    },
-
     _initHome = function () {
         if (!_login) {
             $.mobile.changePage("#logon", { transition: "flip" });
         }
     },
 
-    _initfulldataPage = function () {
+    _loadHome = function (userInfo) {
+        fauxAjax(function () {
+            //if (window.localStorage.getItem("disclamer") === null)
+            //    $.mobile.changePage('#disclamer', { transition: 'flip' });
+            //else
+            $.mobile.changePage('#home', { transition: 'flip' });
+        }, 'carregando...', this);
+    },
+
+    _initaditionalPage = function () {
+        //$('#pointsDetail-cadastro, #pointsDetail-completo, #pointsDetail-infosession, #pointsDetail-stand, #pointsDetail-5info').text('');
+        //$('#pointsDetail-lulu, #pointsDetail-agenda, #pointsDetail-demo, #pointsDetail-totalpoints').text('');
+
+        //fauxAjax(function () {
+        //    var iidUser = JSON.parse(window.localStorage.getItem("userInfo")).idUser;
+        //    $.getJSON("http://ec2-54-200-107-211.us-west-2.compute.amazonaws.com/odata/Point(" + iidUser + ")")
+        //    .done(function (data) {
+        //        var cadastro = 0,
+        //            completo = 0,
+        //            infosession = 0,
+        //            stand = 0,
+        //            fiveinfo = 0,
+        //            lulu = 0,
+        //            agenda = 0,
+        //            demo = 0,
+        //            total = 0;
+
+        //        for (var i in data.value) {
+        //            switch (data.value[i].typeAction) {
+        //                case 'Cadastro':
+        //                    cadastro = 5;
+        //                    total = total + 5;
+        //                    break;
+        //                case 'Dados Completo':
+        //                    completo = 10;
+        //                    total = total + 10;
+        //                    break;
+        //                case 'InfoSession':
+        //                    infosession = 15;
+        //                    total = total + 15;
+        //                    break;
+        //                case 'Stand':
+        //                    stand = 10;
+        //                    total = total + 10;
+        //                    break;
+        //                case 'FirstInfoSession':
+        //                    fiveinfo = 25;
+        //                    total = total + 25;
+        //                    break;
+        //                case 'Quiz':
+        //                    lulu += 15;
+        //                    total = total + 15;
+        //                    break;
+        //                case 'Agendamento de Visita':
+        //                    agenda = 25;
+        //                    total = total + 25;
+        //                    break;
+        //                case 'Demo':
+        //                    demo = 15;
+        //                    total = total + 15;
+        //                    break;
+        //            }
+        //        }
+
+        //        $('#pointsDetail-cadastro').text(cadastro);
+        //        $('#pointsDetail-completo').text(completo);
+        //        $('#pointsDetail-infosession').text(infosession);
+        //        $('#pointsDetail-stand').text(stand);
+        //        $('#pointsDetail-5info').text(fiveinfo);
+        //        $('#pointsDetail-lulu').text(lulu);
+        //        $('#pointsDetail-agenda').text(agenda);
+        //        $('#pointsDetail-demo').text(demo);
+        //        $('#pointsDetail-totalpoints').text(total);
+        //    })
+        //    .fail(function (jqxhr, textStatus, error) {
+        //        alert("Get Points error: " + textStatus + ", " + error);
+        //    });
+        //}, 'carregando...', this);
+    },
+
+    _initaprovePage = function () {
+    },
+
+    _initfaultPage = function () {
         //var dataUser = JSON.parse(window.localStorage.getItem("userInfo"));
         //$('#tfirstname').val(dataUser.firstname);
         //$('#tlastname').val(dataUser.lastname);
@@ -358,16 +364,7 @@ stkApp.prototype = function () {
         //}
     },
 
-    _loadHome = function (userInfo) {
-        fauxAjax(function () {
-            //if (window.localStorage.getItem("disclamer") === null)
-            //    $.mobile.changePage('#disclamer', { transition: 'flip' });
-            //else
-                $.mobile.changePage('#home', { transition: 'flip' });
-        }, 'carregando...', this);
-    },
-
-    _initagendaPage = function () {
+    _initsettingPage = function () {
 
         //$('#tel').val('');
         //$('#detail').val('');
@@ -380,7 +377,7 @@ stkApp.prototype = function () {
         //}
     },
 
-    _initluluPage = function () {
+    //_initluluPage = function () {
         //if (window.localStorage.getItem("luluOK") === null) {
         //    _LoadLuluCombo();
         //}
@@ -390,9 +387,9 @@ stkApp.prototype = function () {
         //    else
         //        $.mobile.changePage('#home', { transition: 'flip' });
         //}
-    },
+    //},
 
-    _LoadLuluCombo = function () {
+    //_LoadLuluCombo = function () {
         //$('#question1,#question2,#question3,#question4,#question5').prop('checked', false).checkboxradio('refresh');
         //$('#standLuluCombo').empty();
         //$('#standLuluCombo').append("<option value='0' selected='selected'>Selecione...</option>");
@@ -550,9 +547,9 @@ stkApp.prototype = function () {
         //        alert("Request Failed: " + textStatus + ", " + error);
         //    });
         //}, 'carregando...', this);
-    },
+    //},
 
-    _initlulurankPage = function () {
+    //_initlulurankPage = function () {
         //$('#myRankListView li').remove();
 
         //fauxAjax(function () {
@@ -571,9 +568,9 @@ stkApp.prototype = function () {
         //        alert("Request Failed: " + textStatus + ", " + error);
         //    });
         //}, 'carregando...', this);
-    },
+    //},
 
-    _savePoints = function _savePoints(actionType) {
+    //_savePoints = function _savePoints(actionType) {
         //if (actionType != '' && window.localStorage.getItem(actionType) === null) {
         //    var iidUser = JSON.parse(window.localStorage.getItem("userInfo")).idUser;
         //    var postdata = { idUser: iidUser, typeAction: actionType };
@@ -586,7 +583,7 @@ stkApp.prototype = function () {
         //        alert("Save Points error: " + textStatus + "," + errorThrown);
         //    });
         //}
-    },
+    //},
 
     fauxAjax = function fauxAjax(func, text, thisObj) {
         $.mobile.loading('show', { theme: 'a', textVisible: true, text: text });

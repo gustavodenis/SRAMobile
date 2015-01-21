@@ -27,7 +27,7 @@
         <div data-role="footer" data-theme="b" data-position="fixed" data-tap-toggle="false">
             <div data-role="navbar" data-iconpos="bottom">
                 <ul>
-                    <li><a href="#normalPage" id="hrNormal" data-transition="slide" data-icon="clock" class="ui-btn-active">Normais</a></li>
+                    <li><a href="#normalPage" id="hrNormal" data-transition="slide" data-icon="clock">Normais</a></li>
                     <li><a href="#aditionalPage" id="hrAditional" data-transition="slide" data-icon="bars">Adicionais</a></li>
                     <li><a href="#faultPage" id="hrFault" data-transition="slide" data-icon="action">Ausência</a></li>
                     <li><a href="#aprovePage" id="hrAprove" data-transition="slide" data-icon="check">Aprovar</a></li>
@@ -102,11 +102,23 @@
             <form>
                 <div style="padding:10px 20px;">
                     <h3>Horas</h3>
-                    <label for="vl" class="ui-hidden-accessible">Valor:</label>
-                    <input type="text" name="valor" id="un" value="" placeholder="valor" data-theme="a">
-                    <label for="pw" class="ui-hidden-accessible">Data:</label>
-                    <input type="text" name="data" id="pw" value="" placeholder="data" data-theme="a">
-                    <button type="submit" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-check">Gravar</button>
+                    <span id="labelDate">Data</span>
+                    <input type="date" id="txtDt" />
+                    <span id="labelHours">Horas:</span>
+                    <input type="time" id="txtHour" />
+                    <span id="labelProject">Projeto:</span>
+                    <input type="text" id="txtProj" />
+                    <span id="labelAcitivity">Atividade:</span>
+                    <select name="select-native-2" id="ddlAcitivity" data-mini="true">
+                        <option value="1">35</option>
+                        <option value="2">36</option>
+                        <option value="3">37</option>
+                        <option value="4">38</option>
+                    </select>
+                    <span id="labelDescription">Descrição:</span>
+                    <input type="text" id="txtDesc" />
+                    btn Rep datas futuras (Data Ini, Data Fim)
+                    <button type="submit" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-check">Salvar</button>
                 </div>
             </form>
         </div>
@@ -161,13 +173,39 @@
                 </li>
             </ul>
         </div>
+
+        <div data-role="popup" id="popupAddAditionalHours" data-theme="a" class="ui-corner-all">
+            <form>
+                <div style="padding:10px 20px;">
+                    <h3>Horas</h3>
+                    <span id="labelHourBegin">Hora Entrada:</span>
+                    <input type="time" id="txtHourBegin" />
+                    <span id="labelDate">Data</span>
+                    <input type="date" id="txtDt" />
+                    <span id="labelHours">Horas:</span>
+                    <input type="time" id="txtHour" />
+                    <span id="labelAcitivity">Atividade:</span>
+                    <select name="select-native-2" id="ddlAcitivity" data-mini="true">
+                        <option value="1">35</option>
+                        <option value="2">36</option>
+                        <option value="3">37</option>
+                        <option value="4">38</option>
+                    </select>
+                    <span id="labelDescription">Descrição:</span>
+                    <input type="text" id="txtDesc" />
+                    btn Rep datas futuras (Data Ini, Data Fim)
+                    <button type="submit" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-check">Salvar</button>
+                </div>
+            </form>
+        </div>
         <div data-role="footer" data-theme="b" data-position="fixed" data-tap-toggle="false">
             <div data-role="navbar" data-iconpos="bottom">
                 <ul>
-                    <li><a id="btnpopupAddHours" href="#popupAddHours" data-rel="popup" data-position-to="window" data-transition="pop" data-icon="plus">Adicionar</a></li>
+                    <li><a id="btnpopupAddAditionalHours" href="#popupAddAditionalHours" data-rel="popup" data-position-to="window" data-transition="pop" data-icon="plus">Adicionar</a></li>
                 </ul>
             </div>
         </div>
+
     </div>
 
     <!-- Aprovação page -->
@@ -177,7 +215,26 @@
             <img style="margin-left: 70px; margin-top: 10px; margin-bottom: 15px; float: left;" class="logo" alt="img" src="images/logo.png" width="240">
             <a href="#settingPage" data-transition="slide" style="margin-left: 10px; margin-top: 10px; margin-bottom: 15px; float: left;" class="ui-btn header-button-right ui-btn-icon-right ui-btn-icon-notext ui-shadow ui-corner-all ui-icon-gear"></a>
         </div>
-
+        <div data-role="content">
+            <ul id="listAproveHours" class="touch" data-role="listview" data-icon="false" data-split-icon="check">
+                <li>
+                    <a href="#">
+                        <h3>05/01/15</h3>
+                        <p class="topic"><strong>PEVEN02</strong> Especificação Técnica</p>
+                        <p class="ui-li-aside"><strong>8 Horas</strong></p>
+                    </a>
+                    <a href="#" class="btnAprove"></a>
+                </li>
+                <li>
+                    <a href="#">
+                        <h3>06/01/15</h3>
+                        <p class="topic"><strong>PEVEN02</strong> Especificação Técnica</p>
+                        <p class="ui-li-aside"><strong>8 Horas</strong></p>
+                    </a>
+                    <a href="#" class="btnAprove"></a>
+                </li>
+            </ul>
+        </div>
     </div>
 
     <!-- Ausência page -->
@@ -187,7 +244,31 @@
             <img style="margin-left: 70px; margin-top: 10px; margin-bottom: 15px; float: left;" class="logo" alt="img" src="images/logo.png" width="240">
             <a href="#settingPage" data-transition="slide" style="margin-left: 10px; margin-top: 10px; margin-bottom: 15px; float: left;" class="ui-btn header-button-right ui-btn-icon-right ui-btn-icon-notext ui-shadow ui-corner-all ui-icon-gear"></a>
         </div>
-
+        <div data-role="content">
+            <span id="labelDateBegin">Data Início</span>
+            <input type="date" id="txtDtIni" />
+            <span id="labelDateEnd">Data Fim</span>
+            <input type="date" id="txtDtFim" />
+            <span id="labelAcitivity">Atividade:</span>
+            <select name="select-native-2" id="ddlAcitivity" data-mini="true">
+                <option value="1">35</option>
+                <option value="2">36</option>
+                <option value="3">37</option>
+                <option value="4">38</option>
+            </select>
+            <span id="labelHours">Horas:</span>
+            <input type="time" id="txtHour" />
+            <span id="labelDescription">Descrição:</span>
+            <input type="text" id="txtDesc" />
+        </div>
+        <div data-role="footer" data-theme="b" data-position="fixed" data-tap-toggle="false">
+            <div data-role="navbar" data-iconpos="bottom">
+                <ul>
+                    <li><a id="btnSaveFaultHours" href="#" data-rel="popup" data-position-to="window" data-transition="pop" data-icon="plus">Salvar</a></li>
+                    <li><a id="btnCancelFaultHours" href="#" data-rel="popup" data-position-to="window" data-transition="pop" data-icon="plus">Cancelar</a></li>
+                </ul>
+            </div>
+        </div>
     </div>
 
     <!-- Ajustes page -->
@@ -202,7 +283,7 @@
             <p><span id="ISName"></span></p>
             <hr />
             <p><span id="label_Lang">Idioma:</span></p>
-            <p><span id="Lang_Br">Brasil</span><span id="Lang_Es">Espanhol</span><span id="Lang_Us">Inglês</span></p>
+            <p><a href="#" id="btnBrLang"><img src="images/BandeiraBr.png" alt="" /></a><a href="#" id="btnENLang"><img src="images/BandeiraGB.png" alt="" /></a><a href="#" id="btnESLang"><img src="images/BandeiraSpain.png" alt="" /></a></p>
         </div>
     </div>
 
