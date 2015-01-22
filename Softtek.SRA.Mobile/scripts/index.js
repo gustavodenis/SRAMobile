@@ -29,6 +29,9 @@ $(function () {
         document.addEventListener('pause', onPause.bind(this), false);
         document.addEventListener('resume', onResume.bind(this), false);
 
+        //check Platform 
+        $('#Platform').html(device.platform);
+
         // Android customization - necessary
         cordova.plugins.backgroundMode.setDefaults({ title: 'SRA', text: 'SRA - Running in backgroud!' });
         // Enable background mode
@@ -40,11 +43,11 @@ $(function () {
                 // Modify the currently displayed notification
                 cordova.plugins.backgroundMode.configure({
                     title: 'SRA',
-                    text: 'SRA - Running in background for more than 3 minutes now.'
+                    text: 'SRA - Running in background - 1 min.'
                 });
                 //Call the task to SRAUpdateTasks;
                 alert('Ativei a paradinha!');
-            }, 3 * 60000);
+            }, 60000);
         }
     };
 
