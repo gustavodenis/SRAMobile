@@ -2,6 +2,8 @@
 <html>
 <head>
     <meta charset="utf-8" />
+    <!-- WP Support -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, target-densitydpi=medium-dpi, user-scalable=0" />
     <title>Softtek SRA</title>
     <link href="css/jquery.mobile-1.4.5.css" rel="stylesheet" type="text/css" />
     <!-- Phone 320x480 High DPI (aka Retina) -->
@@ -49,8 +51,8 @@
                 <span id="labelIS">IS:</span>
                 <input type="text" id="is_stk" value="" />
                 <span id="labelPass">Senha:</span>
-                <input type="text" id="pass_stk" value="" />
-                <input type="submit" class="loginBtn" value="Login" data-icon="star" data-theme="a" />
+                <input type="password" id="pass_stk" value="" />
+                <input type="submit" class="loginBtn" value="Login" data-icon="star" data-theme="b" />
             </form>
         </div>
     </div>
@@ -100,7 +102,7 @@
         <div data-role="footer" data-theme="b" data-position="fixed" data-tap-toggle="false">
             <div data-role="navbar" data-iconpos="bottom">
                 <ul>
-                    <li><a id="btnpopupAddHours" href="#normalAddPage" data-transition="pop" data-icon="plus">Adicionar</a></li>
+                    <li><a id="btnAddHours" href="#normalAddPage" data-transition="pop" data-icon="plus">Adicionar</a></li>
                 </ul>
             </div>
         </div>
@@ -118,26 +120,34 @@
             <span id="labelDate">Data</span>
             <input name="data" id="txtDt" type="text" data-role="datebox" data-options='{"mode":"datebox","useFocus":true}' readonly="readonly" class="" maxlength="10" />
             <span id="labelHours">Horas:</span>
-            <input name="horas" id="txtHour" type="text" data-role="datebox" data-options='{"mode":"timebox", "overrideTimeFormat": "24"}' maxlength="5" readonly="readonly" class="">
+            <input name="horas" id="txtHour" type="text" data-role="datebox" data-options='{"mode":"timebox", "overrideTimeFormat": "24","maxhour":8}' maxlength="5" readonly="readonly" class="">
             <span id="labelProject">Projeto:</span>
             <input type="text" id="txtProj" />
             <span id="labelAcitivity">Atividade:</span>
             <select name="select-native-2" id="ddlAcitivity" data-mini="true">
-                <option value="1">35</option>
-                <option value="2">36</option>
-                <option value="3">37</option>
-                <option value="4">38</option>
+                <option value="1">DEBH</option>
+                <option value="2">XPTO</option>
             </select>
             <span id="labelDescription">Descrição:</span>
             <input type="text" id="txtDesc" />
-            btn Rep datas futuras (Data Ini, Data Fim)
+            <div class="ui-corner-all custom-corners">
+                <div class="ui-bar ui-bar-a">
+                    <h3 id="labelReplyLanc">Replicar Lançamentos</h3>
+                </div>
+                <div class="ui-body ui-body-a">
+                    <span id="labelDateBegin">Data Início:</span>
+                    <input name="data" id="txtDtRepNormalBegin" type="text" data-role="datebox" data-options='{"mode":"datebox","useFocus":true}' readonly="readonly" class="" maxlength="10" />
+                    <span id="labelDateEnd">Data Fim:</span>
+                    <input name="data" id="txtDtRepNormalEnd" type="text" data-role="datebox" data-options='{"mode":"datebox","useFocus":true}' readonly="readonly" class="" maxlength="10" />
+                </div>
+            </div>
         </div>
 
         <div data-role="footer" data-theme="b" data-position="fixed" data-tap-toggle="false">
             <div data-role="navbar" data-iconpos="bottom">
                 <ul>
                     <li><a id="btnAddNormalHour" href="#" data-transition="pop" data-icon="plus">Salvar</a></li>
-                    <li><a id="btnCancelNormalHour" href="#" data-transition="pop" data-icon="plus">Cancelar</a></li>
+                    <li><a id="btnCancelNormalHour" href="#" data-rel="back" data-transition="pop" data-icon="back">Cancelar</a></li>
                 </ul>
             </div>
         </div>
@@ -196,37 +206,45 @@
     </div>
 
     <!-- Aditional Add page -->
-    <div id="aditionalAddPage" data-role="page" data-mini="true">
+    <div id="aditionalAddPage" data-role="page" data-mini="true" class="backaditional">
         <div data-role="header" data-theme="a" data-position="fixed" data-tap-toggle="false">
             <a href="#home" data-rel="back" style="margin-left: 10px; margin-top: 10px; margin-bottom: 15px; float: left;" class="ui-btn-left ui-btn ui-icon-home ui-btn-icon-notext ui-shadow ui-corner-all" data-role="button" role="button">Home</a>
             <img style="margin-left: 70px; margin-top: 10px; margin-bottom: 15px; float: left;" class="logo" alt="img" src="images/logo.png" width="240">
             <a href="#settingPage" data-transition="slide" style="margin-left: 10px; margin-top: 10px; margin-bottom: 15px; float: left;" class="ui-btn header-button-right ui-btn-icon-right ui-btn-icon-notext ui-shadow ui-corner-all ui-icon-gear"></a>
         </div>
-        <div role="main" class="ui-content backaditional">
+        <div role="main" class="ui-content">
             <h3>Horas</h3>
             <span id="labelHourBegin">Hora Entrada:</span>
-            <input type="text" id="txtHourBegin" />
+            <input type="text" id="txtHourBegin" data-role="datebox" data-options='{"mode":"timebox", "overrideTimeFormat": "24"}' maxlength="5" readonly="readonly" class="">
             <span id="labelDate">Data</span>
             <input name="data" id="txtDt" type="text" data-role="datebox" data-options='{"mode":"datebox","useFocus":true}' readonly="readonly" class="" maxlength="10" />
             <span id="labelHours">Horas:</span>
-            <input name="horas" id="txtHour" type="text" data-role="datebox" data-options='{"overridetimeformat":"24", "maxhour":8}' maxlength="5" readonly="readonly" class="">
+            <input name="horas" id="txtHour" type="text" data-role="datebox" data-options='{"mode":"timebox", "overrideTimeFormat": "24","maxhour":8}' maxlength="5" readonly="readonly" class="">
             <span id="labelAcitivity">Atividade:</span>
             <select name="select-native-2" id="ddlAcitivity" data-mini="true">
-                <option value="1">35</option>
-                <option value="2">36</option>
-                <option value="3">37</option>
-                <option value="4">38</option>
+                <option value="1">DEBH</option>
+                <option value="2">XPTO</option>
             </select>
             <span id="labelDescription">Descrição:</span>
             <input type="text" id="txtDesc" />
-            btn Rep datas futuras (Data Ini, Data Fim)
+            <div class="ui-corner-all custom-corners">
+                <div class="ui-bar ui-bar-a">
+                    <h3>Replicar Lançamentos</h3>
+                </div>
+                <div class="ui-body ui-body-a">
+                    <span id="labelDateBegin">Data Início:</span>
+                    <input name="data" id="txtDtRepAditionalBegin" type="text" data-role="datebox" data-options='{"mode":"datebox","useFocus":true}' readonly="readonly" class="" maxlength="10" />
+                    <span id="labelDateEnd">Data Fim:</span>
+                    <input name="data" id="txtDtRepAditionalEnd" type="text" data-role="datebox" data-options='{"mode":"datebox","useFocus":true}' readonly="readonly" class="" maxlength="10" />
+                </div>
+            </div>
         </div>
 
         <div data-role="footer" data-theme="b" data-position="fixed" data-tap-toggle="false">
             <div data-role="navbar" data-iconpos="bottom">
                 <ul>
                     <li><a id="btnAddAditionalHour" href="#" data-transition="pop" data-icon="plus">Salvar</a></li>
-                    <li><a id="btnCancelAditionalHour" href="#" data-transition="pop" data-icon="plus">Cancelar</a></li>
+                    <li><a id="btnCancelAditionalHour" href="#" data-rel="back" data-transition="pop" data-icon="back">Cancelar</a></li>
                 </ul>
             </div>
         </div>
@@ -262,34 +280,32 @@
     </div>
 
     <!-- Ausência page -->
-    <div id="faultPage" data-role="page" data-mini="true">
+    <div id="faultPage" data-role="page" data-mini="true" class="backfault">
         <div data-role="header" data-theme="a" data-position="fixed" data-tap-toggle="false">
             <a href="#home" data-rel="back" style="margin-left: 10px; margin-top: 10px; margin-bottom: 15px; float: left;" class="ui-btn-left ui-btn ui-icon-home ui-btn-icon-notext ui-shadow ui-corner-all" data-role="button" role="button">Home</a>
             <img style="margin-left: 70px; margin-top: 10px; margin-bottom: 15px; float: left;" class="logo" alt="img" src="images/logo.png" width="240">
             <a href="#settingPage" data-transition="slide" style="margin-left: 10px; margin-top: 10px; margin-bottom: 15px; float: left;" class="ui-btn header-button-right ui-btn-icon-right ui-btn-icon-notext ui-shadow ui-corner-all ui-icon-gear"></a>
         </div>
-        <div role="main" class="ui-content backfault">
+        <div role="main" class="ui-content">
             <span id="labelDateBegin">Data Início</span>
             <input name="data" id="txtDtIni" type="text" data-role="datebox" data-options='{"mode":"datebox","useFocus":true}' readonly="readonly" class="" maxlength="10" />
             <span id="labelDateEnd">Data Fim</span>
             <input name="data" id="txtDtFim" type="text" data-role="datebox" data-options='{"mode":"datebox","useFocus":true}' readonly="readonly" class="" maxlength="10" />
             <span id="labelAcitivity">Atividade:</span>
             <select name="select-native-2" id="ddlAcitivity" data-mini="true">
-                <option value="1">35</option>
-                <option value="2">36</option>
-                <option value="3">37</option>
-                <option value="4">38</option>
+                <option value="1">DEBH</option>
+                <option value="2">XPTO</option>
             </select>
             <span id="labelHours">Horas:</span>
-            <input name="horas" id="txtHour" type="text" data-role="datebox" data-options='{"overridetimeformat":"24", "maxhour":8}' maxlength="5" readonly="readonly" class="">
+            <input name="horas" id="txtHour" type="text" data-role="datebox" data-options='{"mode":"timebox", "overrideTimeFormat": "24","maxhour":8}' maxlength="5" readonly="readonly" class="">
             <span id="labelDescription">Descrição:</span>
             <input type="text" id="txtDesc" />
         </div>
         <div data-role="footer" data-theme="b" data-position="fixed" data-tap-toggle="false">
             <div data-role="navbar" data-iconpos="bottom">
                 <ul>
-                    <li><a id="btnSaveFaultHours" href="#" data-rel="popup" data-position-to="window" data-transition="pop" data-icon="plus">Salvar</a></li>
-                    <li><a id="btnCancelFaultHours" href="#" data-rel="popup" data-position-to="window" data-transition="pop" data-icon="plus">Cancelar</a></li>
+                    <li><a id="btnSaveFaultHours" href="#" data-transition="pop" data-icon="plus">Salvar</a></li>
+                    <li><a id="btnCancelFaultHours" href="#" data-rel="back"  data-transition="pop" data-icon="back">Cancelar</a></li>
                 </ul>
             </div>
         </div>
@@ -303,11 +319,15 @@
             <a href="#settingPage" data-transition="slide" style="margin-left: 10px; margin-top: 10px; margin-bottom: 15px; float: left;" class="ui-btn header-button-right ui-btn-icon-right ui-btn-icon-notext ui-shadow ui-corner-all ui-icon-gear"></a>
         </div>
         <div role="main" class="ui-content">
+            <p><span id="label_ISFunc">ID colaborador:</span></p>
+            <p><span id="ISFunc"></span></p>
             <p><span id="label_ISName">Nome colaborador:</span></p>
             <p><span id="ISName"></span></p>
             <hr />
             <p><span id="label_Lang">Idioma:</span></p>
-            <p><a href="#" id="btnBrLang"><img src="images/BandeiraBr.png" alt="" /></a><a href="#" id="btnENLang"><img src="images/BandeiraGB.png" alt="" /></a><a href="#" id="btnESLang"><img src="images/BandeiraSpain.png" alt="" /></a></p>
+            <p><a href="#" id="btnLangBR"><img src="images/BandeiraBr.png" alt="" style="width:30px;"/></a><a href="#" id="btnLangEN"><img src="images/BandeiraGB.png" alt="" style="width:30px;" /></a><a href="#" id="btnLangES"><img src="images/BandeiraSpain.png" alt="" style="width:30px;" /></a></p>
+            <hr/>
+            <a href="#" id="btnLogoff" class="ui-btn ui-btn-icon-left ui-icon-power">Logoff</a>
         </div>
     </div>
 
@@ -316,5 +336,9 @@
     <script src="scripts/jquery.mobile-1.4.5.js"></script>
     <script src="scripts/jquery.mobile.datebox.js"></script>
     <script src="scripts/index.js"></script>
+    <script>
+        var stkAppx = new stkApp();
+        stkAppx.run();
+    </script>
 </body>
 </html>

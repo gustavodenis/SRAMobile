@@ -7,15 +7,15 @@ $(function () {
     $.mobile.defaultHomeScroll = 0;
 
     //jQuery.extend(jQuery.mobile.datebox.prototype.options, {
-        //useLang: "en"
-        //useClearButton: true,
-        //useCollapsedBut: false,
-        //calShowWeek: false,
-        //themeCloseButton: "b",
-        //calUsePickers: true,
-        //calUsePickersIcons: true,
-        //calNoHeader: true,
-        //calControlGroup: false
+    //useLang: "en"
+    //useClearButton: true,
+    //useCollapsedBut: false,
+    //calShowWeek: false,
+    //themeCloseButton: "b",
+    //calUsePickers: true,
+    //calUsePickersIcons: true,
+    //calNoHeader: true,
+    //calControlGroup: false
     //});
 });
 
@@ -29,7 +29,23 @@ $(function () {
         document.addEventListener('pause', onPause.bind(this), false);
         document.addEventListener('resume', onResume.bind(this), false);
 
-        stkApp.run();
+        // Android customization - necessary
+        cordova.plugins.backgroundMode.setDefaults({ title: 'SRA', text: 'SRA - Running in backgroud!' });
+        // Enable background mode
+        cordova.plugins.backgroundMode.enable();
+
+        // Called when background mode has been activated
+        cordova.plugins.backgroundMode.onactivate = function () {
+            setTimeout(function () {
+                // Modify the currently displayed notification
+                cordova.plugins.backgroundMode.configure({
+                    title: 'SRA',
+                    text: 'SRA - Running in background for more than 3 minutes now.'
+                });
+                //Call the task to SRAUpdateTasks;
+                alert('Ativei a paradinha!');
+            }, 3 * 60000);
+        }
     };
 
     function onPause() {
@@ -42,12 +58,11 @@ $(function () {
 })();
 
 var stkApp = function () { }
-
 stkApp.prototype = function () {
 
     var userPoints = {};
     var erro = '';
-    var _login = false,
+    var _login = true, //false para ativar o login;
 
     run = function () {
 
@@ -57,6 +72,8 @@ stkApp.prototype = function () {
         $('#aprovePage').on('pageshow', $.proxy(_initaprovePage, that));
         $('#faultPage').on('pageshow', $.proxy(_initfaultPage, that));
         $('#settingPage').on('pageshow', $.proxy(_initsettingPage, that));
+        $('#aditionalAddPage').on('pageshow', $.proxy(_initaditionalAddPage, that));
+        $('#normalAddPage').on('pageshow', $.proxy(_initnormalAddPage, that));
 
         if (window.localStorage.getItem("userInfo") != null) {
             _login = true;
@@ -78,26 +95,19 @@ stkApp.prototype = function () {
                 else {
 
                     fauxAjax(function () {
-                        var dataXML = '<?xml version="1.0" encoding="utf-8"?>';
-                        dataXML += '<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">';
-                        dataXML += '  <soap:Header>';
-                        dataXML += '    <ValidationSoapHeader xmlns="http://tempuri.org/">';
-                        dataXML += '      <_devToken>WSPDK11PDK11@@</_devToken>';
-                        dataXML += '    </ValidationSoapHeader>';
-                        dataXML += '  </soap:Header>';
-                        dataXML += '  <soap:Body>';
-                        dataXML += '    <getColabInfo xmlns="http://tempuri.org/">';
-                        dataXML += '      <strFuncIS>MFCS</strFuncIS>';
-                        dataXML += '    </getColabInfo>';
-                        dataXML += '  </soap:Body>';
-                        dataXML += '</soap:Envelope>';
+                        var bodyxml = '  <soap:Body>';
+                        bodyxml += '    <getColabInfo xmlns="http://tempuri.org/">';
+                        bodyxml += '      <strFuncIS>MFCS</strFuncIS>';
+                        bodyxml += '    </getColabInfo>';
+                        bodyxml += '  </soap:Body>';
+                        var envelope = getEnvelope(bodyxml);
 
                         $.ajax({
                             type: 'POST',
                             //url: 'http://intrasoft.softtek.com:8081/wsSRAPDK/cResourceHours.asmx/getColabInfo',
                             url: 'http://172.16.128.71:8028/wsSRAPDK/cResourceHours.asmx?op=getColabInfo',
                             contentType: 'text/xml; charset=utf-8',
-                            data: dataXML
+                            data: envelope
                         })
                         .done(function (data) {
                             alert(data);
@@ -124,7 +134,7 @@ stkApp.prototype = function () {
             $("#listHours").removeClass("touch");
         }
 
-        $("#listHours li a").on("swipeleft swiperight", function (event) {
+        $("#listHours li").on("taphold", function (event) {
             //var listitem = $(this),
             //    dir = event.type === "swipeleft" ? "left" : "right",
             //    transition = $.support.cssTransform3d ? dir : false;
@@ -132,6 +142,10 @@ stkApp.prototype = function () {
                 //  $("#listHours").listview("refresh");
                 alert('hehe touch!');
             }
+        });
+
+        $('#btnLangBR, #btnLangES, #btnLangUS').on('click', function () {
+            changeLang($(this).attr('id').substr(7, 2));
         });
 
         //$('#fulldataBtn').click(function () {
@@ -268,11 +282,16 @@ stkApp.prototype = function () {
 
     _loadHome = function (userInfo) {
         fauxAjax(function () {
-            //if (window.localStorage.getItem("disclamer") === null)
-            //    $.mobile.changePage('#disclamer', { transition: 'flip' });
-            //else
             $.mobile.changePage('#home', { transition: 'flip' });
         }, 'carregando...', this);
+    },
+
+    _initaditionalAddPage = function () {
+
+    },
+
+    _initnormalAddPage = function () {
+
     },
 
     _initaditionalPage = function () {
@@ -596,6 +615,371 @@ stkApp.prototype = function () {
         //    });
         //}
     //},
+
+    changeLang = function changeLang(lang) {
+        $("span[id^='label']").each(function (i, el) {
+            //console.log($(this).html());
+        });
+    },
+
+    saveUserData = function saveUserData(data) {
+        window.localStorage.setItem("userInfo", JSON.stringify(data));
+    },
+
+    getUserData = function getUserData() {
+        return window.localStorage.getItem("userInfo");
+    },
+
+    saveLancamento = function saveLancamento(data) {
+        window.localStorage.setItem("userLanc", JSON.stringify(data));
+    },
+
+    getEnvelope = function getEnvelope(xmlBody) {
+        var dataXML = '<?xml version="1.0" encoding="utf-8"?>';
+        dataXML += '<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">';
+        dataXML += '  <soap:Header>';
+        dataXML += '    <ValidationSoapHeader xmlns="http://tempuri.org/">';
+        dataXML += '      <_devToken>WSPDK11PDK11@@</_devToken>';
+        dataXML += '    </ValidationSoapHeader>';
+        dataXML += '  </soap:Header>';
+        dataXML += xmlBody
+        dataXML += '</soap:Envelope>';
+        return dataxml;
+    },
+
+    GetListHoraRecursoNew = function GetListHoraRecursoNew(FuncIs, intAdditionalHour, strWeekDay, strStartDate, strEndDate) {
+        var body = '<soap:Body>';
+        body += '  <getListHoraRecursoNew>';
+        //<!--Optional:-->'
+        body += '<strFuncIs>' + FuncIs + '</strFuncIs>';
+        body += '<intYear>' + 0 + '</intYear>';
+        body += '<intMonth>' + 0 + '</intMonth>';
+        body += '<intWeek>' + 0 + '</intWeek>';
+        //<!--Optional:-->'
+        body += '<strActivityCode>' + '' + '</strActivityCode>';
+        //<!--Optional:-->'
+        body += '<strSiriusCode>' + '0' + '</strSiriusCode>';
+        body += '<intProjectCode>' + 0 + '</intProjectCode>';
+        body += '<intAdditionalHour>' + intAdditionalHour + '</intAdditionalHour>';
+        //<!--Optional:-->'
+        body += '<strWeekDay>' + strWeekDay + '</strWeekDay>';
+        //<!--Optional:-->'
+        body += '<strCreatedBy>' + '' + '</strCreatedBy>';
+        //<!--Optional:-->'
+        body += '<strStartDate>' + strStartDate + '</strStartDate>';
+        //<!--Optional:-->'
+        body += '<strEndDate>' + strEndDate + '</strEndDate>';
+        body += '</getListHoraRecursoNew>';
+        body += "<soap:Body>";
+        var envelope = getEnvelope(body);
+        var returnData;
+
+        $.ajax({
+            type: 'POST',
+            //url: 'http://intrasoft.softtek.com:8081/wsSRAPDK/cResourceHours.asmx/getListHoraRecursoNew',
+            url: 'http://172.16.128.71:8028/wsSRAPDK/cResourceHours.asmx?op=getListHoraRecursoNew',
+            contentType: 'text/xml; charset=utf-8',
+            data: envelope
+        })
+        .done(function (data) {
+            returnData = data;
+        })
+        .fail(function (jqXHR, textStatus, errorThrown) {
+            alert("Request failed: " + textStatus + "," + errorThrown);
+        });
+
+        return returnData;
+    },
+
+    getWeekByDay = function getWeekByDay(year, month, day) {
+        var body = '<soap:Body>';
+        body += '  <getWeekByDay>';
+        body += '     <intYear>' + year + '</intYear>';
+        body += '     <intMonth>' + month + '</intMonth>';
+        body += '     <intDay>' + day + '</intDay>';
+        body += '  </getWeekByDay>';
+        body += "<soap:Body>";
+        var envelope = getEnvelope(body);
+        var returnData;
+
+        $.ajax({
+            type: 'POST',
+            url: 'http://172.16.128.71:8028/wsSRAPDK/cResourceHours.asmx?op=getWeekByDayResponse',
+            contentType: 'text/xml; charset=utf-8',
+            data: envelope
+        })
+        .done(function (data) {
+            returnData = data;
+        })
+        .fail(function (jqXHR, textStatus, errorThrown) {
+            alert("Request failed: " + textStatus + "," + errorThrown);
+        });
+
+        return returnData;
+    },
+
+    addRecordHoraRecurso = function addRecordHoraRecurso(intYear, strFuncIS, intWeek, intWeekDay,
+    		intSequencial, strFinalCustomer, strActivityCode, intOpportunity, intDescHoursCode,
+    		dblHours, intMonth, intMonthDay, strAlternativeCode, intCalendarYear, intAdditionalHour,
+    		strCreatedBy, HourEnter, segmentId) {
+        var body = '<soap:Body>';
+        body += '<addRecordHoraRecursoMobile>';
+        body += '<IntYear>' + intYear + '</IntYear>';
+        //Optional
+        body += '<strFuncIS>' + strFuncIS + '</strFuncIS>';
+        body += '<intWeek>' + intWeek + '</intWeek>';
+        body += '<intWeekDay>' + intWeekDay + '</intWeekDay>';
+        body += '<intSequencial>' + intSequencial + '</intSequencial>';
+        //Optional
+        body += '<strFinalCustomer>' + strFinalCustomer + '</strFinalCustomer>';
+        //Optional
+        body += '<strActivityCode>' + strActivityCode.replace(' ', '').replace(' ', '').trim() + '</strActivityCode>';
+        body += '<intOpportunity>' + intOpportunity + '</intOpportunity>';
+        body += '<intDescHoursCode>' + intDescHoursCode + '</intDescHoursCode>';
+        //Optional:-->'
+        body += '<dblHours>' + dblHours + '</dblHours>';
+        body += '<intMonth>' + intMonth + '</intMonth>';
+        body += '<intMonthDay>' + intMonthDay + '</intMonthDay>';
+        //<!--Optional:-->'
+        body += '<strAlternativeCode>' + strAlternativeCode + '</strAlternativeCode>';
+        body += '<intCalendarYear>' + intCalendarYear + '</intCalendarYear>';
+        body += '<intAdditionalHour>' + intAdditionalHour + '</intAdditionalHour>';
+        //<!--Optional:-->'
+        body += '<strCreatedBy>' + strCreatedBy + '</strCreatedBy>';
+        //<!--Optional:-->'
+        body += '<HourEnter>' + HourEnter + '</HourEnter>';
+        //<!--Optional:-->'
+        body += '<segmentId>' + segmentId.trim() + '</segmentId>';
+        body += '</addRecordHoraRecursoMobile>';
+        body += '<soap:Body>';
+        var envelope = getEnvelope(body);
+        var returnData;
+
+        $.ajax({
+            type: 'POST',
+            url: 'http://172.16.128.71:8028/wsSRAPDK/cResourceHours.asmx?op=addRecordHoraRecursoMobile',
+            contentType: 'text/xml; charset=utf-8',
+            data: envelope
+        })
+        .done(function (data) {
+            returnData = data;
+        })
+        .fail(function (jqXHR, textStatus, errorThrown) {
+            alert("Request failed: " + textStatus + "," + errorThrown);
+        });
+
+        return returnData;
+    },
+
+    getActivity = function getActivity() {
+        var body = '<soap:Body>';
+        body += '  <getActivity>';
+        body += '     <strSegmentId>' + '' + '</strSegmentId>';
+        body += '     <strActivityId>' + '' + '</strActivityId>';
+        body += '     <intTypeOfActivity>' + '' + '</intTypeOfActivity>';
+        body += '     <strEntityId>' + '' + '</strEntityId>';
+        body += '     <strTeamId>' + '' + '</strTeamId>';
+        body += '   </getActivity>';
+        body += '<soap:Body>';
+        var envelope = getEnvelope(body);
+        var returnData;
+
+        $.ajax({
+            type: 'POST',
+            url: 'http://172.16.128.71:8028/wsSRAPDK/cResourceHours.asmx?op=getActivity',
+            contentType: 'text/xml; charset=utf-8',
+            data: envelope
+        })
+        .done(function (data) {
+            returnData = data;
+        })
+        .fail(function (jqXHR, textStatus, errorThrown) {
+            alert("Request failed: " + textStatus + "," + errorThrown);
+        });
+
+        return returnData;
+    },
+
+    getActivities = function getActivities() {
+        var body = '<soap:Body>';
+        body += '  <getActivities>';
+        body += '     <strSegmentId>' + '' + '</strSegmentId>';
+        body += '     <strEntityId>' + '' + '</strEntityId>';
+        body += '     <strTeamId>' + '' + '</strTeamId>';
+        body += '  </getActivities>';
+        body += '<soap:Body>';
+        var envelope = getEnvelope(body);
+        var returnData;
+
+        $.ajax({
+            type: 'POST',
+            url: 'http://172.16.128.71:8028/wsSRAPDK/cResourceHours.asmx?op=getActivities',
+            contentType: 'text/xml; charset=utf-8',
+            data: envelope
+        })
+        .done(function (data) {
+            returnData = data;
+        })
+        .fail(function (jqXHR, textStatus, errorThrown) {
+            alert("Request failed: " + textStatus + "," + errorThrown);
+        });
+
+        return returnData;
+    },
+
+    getSequencial = function getSequencial(strFuncIS, intYear, intWeek, intWeekDay) {
+        var body = '<soap:Body>';
+        body += '  <getSequencial xmlns=\"http://tempuri.org/\">';
+        body += '<strFuncIS>' + strFuncIS + '</strFuncIS>';
+        body += '<intYear>' + intYear + '</intYear>';
+        body += '<intWeek>' + intWeek + '</intWeek>';
+        body += '<intWeekDay>' + intWeekDay + '</intWeekDay>';
+        body += '</getSequencial>';
+        body += '<soap:Body>';
+        var envelope = getEnvelope(body);
+        var returnData;
+
+        $.ajax({
+            type: 'POST',
+            url: 'http://172.16.128.71:8028/wsSRAPDK/cResourceHours.asmx?op=getSequencial',
+            contentType: 'text/xml; charset=utf-8',
+            data: envelope
+        })
+        .done(function (data) {
+            returnData = data;
+        })
+        .fail(function (jqXHR, textStatus, errorThrown) {
+            alert("Request failed: " + textStatus + "," + errorThrown);
+        });
+
+        return returnData;
+    },
+
+    getCombodataAbsence = function getCombodataAbsence(segmentId, isBillable) {
+        var body = '<soap:Body>';
+        body += '<getCombodataAbsence xmlns=\"http://tempuri.org/\">';
+        body += '<segmentId>' + segmentId + '</segmentId>';
+        body += '<isBillable>' + isBillable + '</isBillable>';
+        body += '</getCombodataAbsence>';
+        body += '<soap:Body>';
+        var envelope = getEnvelope(body);
+        var returnData;
+
+        $.ajax({
+            type: 'POST',
+            url: 'http://172.16.128.71:8028/wsSRAPDK/cResourceHours.asmx?op=getCombodataAbsence',
+            contentType: 'text/xml; charset=utf-8',
+            data: envelope
+        })
+        .done(function (data) {
+            returnData = data;
+        })
+        .fail(function (jqXHR, textStatus, errorThrown) {
+            alert("Request failed: " + textStatus + "," + errorThrown);
+        });
+
+        return returnData;
+    },
+
+    ObtainOpportunity = function ObtainOpportunity(Activity, IpID, FuncIS) {
+        var body = '<soap:Body>';
+        body += '<ObtainOpportunity xmlns=\"http://tempuri.org/\">';
+        body += '<Activity>' + Activity + '</Activity>';
+        body += '<IpID>' + IpID + '</IpID>';
+        body += '<FuncIS>' + FuncIS + '</FuncIS>';
+        body += '</ObtainOpportunity>';
+        body += '<soap:Body>';
+        var envelope = getEnvelope(body);
+        var returnData;
+
+        $.ajax({
+            type: 'POST',
+            url: 'http://172.16.128.71:8028/wsSRAPDK/cResourceHours.asmx?op=ObtainOpportunity',
+            contentType: 'text/xml; charset=utf-8',
+            data: envelope
+        })
+        .done(function (data) {
+            returnData = data;
+        })
+        .fail(function (jqXHR, textStatus, errorThrown) {
+            alert("Request failed: " + textStatus + "," + errorThrown);
+        });
+
+        return returnData;
+    },
+
+    GetActualWeek = function GetActualWeek() {
+        var body = '<soap:Body>';
+        body += '<GetActualWeek xmlns=\"http://tempuri.org/\" />';
+        body += '<soap:Body>';
+        var envelope = getEnvelope(body);
+        var returnData;
+
+        $.ajax({
+            type: 'POST',
+            url: 'http://172.16.128.71:8028/wsSRAPDK/cResourceHours.asmx?op=GetActualWeek',
+            contentType: 'text/xml; charset=utf-8',
+            data: envelope
+        })
+        .done(function (data) {
+            returnData = data;
+        })
+        .fail(function (jqXHR, textStatus, errorThrown) {
+            alert("Request failed: " + textStatus + "," + errorThrown);
+        });
+
+        return returnData;
+    },
+
+    getColabInfo = function getColabInfo(funcIS) {
+        var body = '<soap:Body>';
+        body += '<getColabInfo xmlns=\"http://tempuri.org/\">';
+        body += '<strFuncIS>' + funcIS + '</strFuncIS>';
+        body += '</getColabInfo>';
+        body += '<soap:Body>';
+        var envelope = getEnvelope(body);
+        var returnData;
+
+        $.ajax({
+            type: 'POST',
+            url: 'http://172.16.128.71:8028/wsSRAPDK/cResourceHours.asmx?op=getColabInfo',
+            contentType: 'text/xml; charset=utf-8',
+            data: envelope
+        })
+        .done(function (data) {
+            returnData = data;
+        })
+        .fail(function (jqXHR, textStatus, errorThrown) {
+            alert("Request failed: " + textStatus + "," + errorThrown);
+        });
+
+        return returnData;
+    },
+
+    isLeader = function isLeader(funcIS) {
+        var body = '<soap:Body>';
+        body += '<isLeader xmlns="http://tempuri.org/">';
+        body += '<strFuncIS>' + funcIS + '</strFuncIS>';
+        body += '</isLeader>';
+        body += '<soap:Body>';
+        var envelope = getEnvelope(body);
+        var returnData;
+
+        $.ajax({
+            type: 'POST',
+            url: 'http://172.16.128.71:8028/wsSRAPDK/cResourceHours.asmx?op=isLeader',
+            contentType: 'text/xml; charset=utf-8',
+            data: envelope
+        })
+        .done(function (data) {
+            returnData = data;
+        })
+        .fail(function (jqXHR, textStatus, errorThrown) {
+            alert("Request failed: " + textStatus + "," + errorThrown);
+        });
+
+        return returnData;
+    },
 
     fauxAjax = function fauxAjax(func, text, thisObj) {
         $.mobile.loading('show', { theme: 'a', textVisible: true, text: text });
