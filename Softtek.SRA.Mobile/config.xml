@@ -33,7 +33,7 @@
   <gap:plugin name="org.apache.cordova.globalization" />
   <gap:plugin name="org.apache.cordova.device" />
   <gap:plugin name="org.apache.cordova.network-information" />
-  <gap:plugin name="it.witek.cordova.plugin.background-mode" />
+  <!--<gap:plugin name="it.witek.cordova.plugin.background-mode" />-->
 
   <gap:platform name="ios" />
   <gap:platform name="android" />

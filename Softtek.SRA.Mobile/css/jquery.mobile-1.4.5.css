@@ -3045,9 +3045,9 @@ fieldset.ui-controlgroup {
 	max-width: 100%;
 }
 .ui-controlgroup-controls > label {
-	position: absolute !important;
+	/*position: absolute !important;
 	height: 1px;
-	width: 1px;
+	width: 1px;*/
 	overflow: hidden;
 	clip: rect(1px,1px,1px,1px);
 }
