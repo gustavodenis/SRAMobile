@@ -33,22 +33,22 @@ $(function () {
         $('#Platform').html(device.platform);
 
         // Android customization - necessary
-        cordova.plugins.backgroundMode.setDefaults({ title: 'SRA', text: 'SRA - Running in backgroud!' });
+        //cordova.plugins.backgroundMode.setDefaults({ title: 'SRA', text: 'SRA - Running in backgroud!' });
         // Enable background mode
-        cordova.plugins.backgroundMode.enable();
+        //cordova.plugins.backgroundMode.enable();
 
         // Called when background mode has been activated
-        cordova.plugins.backgroundMode.onactivate = function () {
-            setTimeout(function () {
-                // Modify the currently displayed notification
-                cordova.plugins.backgroundMode.configure({
-                    title: 'SRA',
-                    text: 'SRA - Running in background - 1 min.'
-                });
-                //Call the task to SRAUpdateTasks;
-                alert('Ativei a paradinha!');
-            }, 60000);
-        }
+        //cordova.plugins.backgroundMode.onactivate = function () {
+        //    setTimeout(function () {
+        //        // Modify the currently displayed notification
+        //        cordova.plugins.backgroundMode.configure({
+        //            title: 'SRA',
+        //            text: 'SRA - Running in background - 1 min.'
+        //        });
+        //        //Call the task to SRAUpdateTasks;
+        //        alert('Ativei a paradinha!');
+        //    }, 60000);
+        //}
     };
 
     function onPause() {

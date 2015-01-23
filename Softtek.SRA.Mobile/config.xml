@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <widget xmlns   = "http://www.w3.org/ns/widgets"
     xmlns:gap   = "http://phonegap.com/ns/1.0"
-    id="Softtek.SRA.Mobile"
+    id="Softtek.Mobile.App"
     version="1.0.0.0">
-  <name>Softtek SRA</name>
+  <name>Softtek Mobile App</name>
   <description>
-    Aplicação para apontamento de horas para funcionários da Softtek (SRA).
+    Aplicação para funcionários da Softtek.
   </description>
   <author href="http://www.softtek.com" email="gustavo.denis@softtek.com">
     Gustavo Denis
