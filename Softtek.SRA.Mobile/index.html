@@ -52,7 +52,7 @@
                 <input type="text" id="is_stk" value="" />
                 <span id="labelPass">Senha:</span>
                 <input type="password" id="pass_stk" value="" />
-                <input type="submit" class="loginBtn" value="Login" data-icon="star" data-theme="b" />
+                <input type="submit" id="loginBtn" class="loginBtn" value="Login" data-icon="star" data-theme="b" />
             </form>
         </div>
     </div>
@@ -66,38 +66,11 @@
         </div>
         <div role="main" class="ui-content">
             <h3 id="labelHourNormal">Horas Normais</h3>
-            <span>Semana:</span>
+            <span id="labelWeek">Semana:</span>
             <select name="ddlWeek" id="ddlWeek" class="ddlWeek" data-mini="true">
-                <option value="1">1 - 01/01/2015 - 03/01/2015</option>
-                <option value="2">2 - 04/01/2015 - 10/01/2015</option>
-                <option value="3">3 - 11/01/2015 - 17/01/2015</option>
-                <option value="4">4 - 18/01/2015 - 24/01/2015</option>
-                <option value="5">5 - 25/01/2015 - 31/01/2015</option>
             </select>
             <hr />
             <ul id="listHours" class="touch" data-role="listview" data-icon="false" data-split-icon="edit">
-                <li>
-                    <a href="#">
-                        <h3>05/01/15</h3>
-                        <p class="topic"><strong>PEVEN02</strong> Especificação Técnica</p>
-                        <p class="ui-li-aside"><strong>8 Horas</strong></p>
-                    </a>
-                    <a href="#" class="btnEditHN"></a>
-                </li>
-                <li>
-                    <a href="#">
-                        <h3>06/01/15</h3>
-                        <p class="topic"><strong>PEVEN02</strong> Especificação Técnica</p>
-                        <p class="ui-li-aside"><strong>8 Horas</strong></p>
-                    </a>
-                    <a href="#" class="btnEditHN"></a>
-                </li>
-                <li>
-                    <a href="#">
-                        <h3>Total Horas</h3>
-                        <p class="ui-li-aside"><strong>30 Horas</strong></p>
-                    </a>
-                </li>
             </ul>
         </div>
 
@@ -120,6 +93,7 @@
         </div>
         <div role="main" class="ui-content">
             <h3 id="labelHourNormal">Horas Normais</h3>
+            <input type="hidden" id="idSeq" value="0" />
             <span id="labelDate">Data</span>
             <input name="data" id="txtDt" type="text" data-role="datebox" data-options='{"mode":"datebox","useFocus":true}' readonly="readonly" class="" maxlength="10" />
             <span id="labelHours">Horas:</span>
@@ -133,7 +107,7 @@
             </select>
             <span id="labelDescription">Descrição:</span>
             <input type="text" id="txtDesc" />
-            <div data-role="collapsible">
+            <div id="divRepLanc" data-role="collapsible">
                 <h3 id="labelReplyLanc">Replicar Lançamentos</h3>
                 <div class="ui-body ui-body-a">
                     <span id="labelDateBegin">Data Início:</span>
@@ -163,38 +137,11 @@
         </div>
         <div role="main" class="ui-content">
             <h3 id="labelHourAditional">Horas Adicional</h3>
-            <span>Semana:</span>
+            <span id="labelWeek">Semana:</span>
             <select name="ddlWeekAditional" id="ddlWeekAditional" class="ddlWeek" data-mini="true">
-                <option value="1">1 - 01/01/2015 - 03/01/2015</option>
-                <option value="2">2 - 04/01/2015 - 10/01/2015</option>
-                <option value="3">3 - 11/01/2015 - 17/01/2015</option>
-                <option value="4">4 - 18/01/2015 - 24/01/2015</option>
-                <option value="5">5 - 25/01/2015 - 31/01/2015</option>
             </select>
             <hr />
             <ul id="listAditionalHours" class="touch" data-role="listview" data-icon="false" data-split-icon="edit">
-                <li>
-                    <a href="#">
-                        <h3>05/01/15</h3>
-                        <p class="topic"><strong>PEVEN02</strong> Especificação Técnica</p>
-                        <p class="ui-li-aside"><strong>8 Horas</strong></p>
-                    </a>
-                    <a href="#" class="btnEditHN"></a>
-                </li>
-                <li>
-                    <a href="#">
-                        <h3>06/01/15</h3>
-                        <p class="topic"><strong>PEVEN02</strong> Especificação Técnica</p>
-                        <p class="ui-li-aside"><strong>8 Horas</strong></p>
-                    </a>
-                    <a href="#" class="btnEditHN"></a>
-                </li>
-                <li>
-                    <a href="#">
-                        <h3>Total Horas</h3>
-                        <p class="ui-li-aside"><strong>30 Horas</strong></p>
-                    </a>
-                </li>
             </ul>
         </div>
 
@@ -218,12 +165,15 @@
         </div>
         <div role="main" class="ui-content">
             <h3 id="labelHourAditional">Horas Adicional</h3>
+            <input type="hidden" id="idSeqAditional" value="0" />
             <span id="labelDate">Data</span>
             <input name="data" id="txtDtAditional" type="text" data-role="datebox" data-options='{"mode":"datebox","useFocus":true}' readonly="readonly" class="" maxlength="10" />
             <span id="labelHourBegin">Hora Entrada:</span>
             <input type="text" id="txtHourBegin" data-role="datebox" data-options='{"mode":"timebox", "overrideTimeFormat": "24"}' maxlength="5" readonly="readonly" class="">
             <span id="labelHours">Horas:</span>
             <input name="horas" id="txtHourAditional" type="tel" max="16">
+            <span id="labelProject">Projeto:</span>
+            <input type="text" id="txtProjAditional" />
             <span id="labelAcitivity">Atividade:</span>
             <select name="ddlActivityAditional" id="ddlActivityAditional" data-mini="true">
                 <option value="1">DEBH</option>
@@ -231,7 +181,7 @@
             </select>
             <span id="labelDescription">Descrição:</span>
             <input type="text" id="txtDescAditional" />
-            <div data-role="collapsible">
+            <div id="divRepLancAditional" data-role="collapsible">
                 <h3 id="labelReplyLanc">Replicar Lançamentos</h3>
                 <div class="ui-body ui-body-a">
                     <span id="labelDateBegin">Data Início:</span>
@@ -272,7 +222,7 @@
                                         <h3>GUDE - Gustavo Denis</h3>
                                         <p class="topic"><strong>ADAC - Atividades Administrativas</strong></p>
                                         <p>8 Horas : 10/01/2015 - 11/01/2015</p>
-                                        <p>descrição da atividade xpto</p>                                        
+                                        <p>descrição da atividade xpto</p>
                                         <p>B. Horas: 0, P. Férias: 0, Abono: 0</p>
                                     </label>
                                 </label>
@@ -292,7 +242,7 @@
                                         <h3>GUDE - Gustavo Denis</h3>
                                         <p class="topic"><strong>ADAC - Atividades Administrativas</strong></p>
                                         <p>8 Horas : 10/01/2015 - 11/01/2015</p>
-                                        <p>descrição da atividade xpto</p>                                        
+                                        <p>descrição da atividade xpto</p>
                                         <p>B. Horas: 0, P. Férias: 0, Abono: 0</p>
                                     </label>
                                 </label>
@@ -312,7 +262,7 @@
                                         <h3>ADLC - Adriano Luciano Candido</h3>
                                         <p class="topic"><strong>HOLI - Feriado</strong></p>
                                         <p>8 Horas : 10/01/2015 - 11/01/2015</p>
-                                        <p>Aprovações</p>                                        
+                                        <p>Aprovações</p>
                                         <p>B. Horas: 0, P. Férias: 0, Abono: 0</p>
                                     </label>
                                 </label>
@@ -328,15 +278,15 @@
                 <div style="padding:10px 20px;">
                     <h3>Aprovação</h3>
                     <ul data-role="listview" data-inset="true" style="min-width:210px;">
-                        <li data-role="list-divider">Tipo de Desconto</li>
+                        <li id="labelTypeDiscount" data-role="list-divider">Tipo de Desconto</li>
                         <li><a href="#">Desconto em Banco de Horas</a></li>
                         <li><a href="#">Desconto no Passivo de Férias</a></li>
                         <li><a href="#">Desconto em Salário</a></li>
                         <li><a href="#">Abonar</a></li>
                         <li><a href="#">Aprovar</a></li>
                     </ul>
-                    <button type="button" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-check">Gravar</button>
-                    <button type="button" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-delete">Reprovar</button>
+                    <button type="button" id="btnSaveApprove" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-check">Gravar</button>
+                    <button type="button" id="btnReproveApprove" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-delete">Reprovar</button>
                 </div>
             </form>
         </div>
@@ -391,7 +341,7 @@
             <a href="#settingPage" data-transition="slide" style="margin-left: 10px; margin-top: 10px; margin-bottom: 15px; float: left;" class="ui-btn header-button-right ui-btn-icon-right ui-btn-icon-notext ui-shadow ui-corner-all ui-icon-gear"></a>
         </div>
         <div role="main" class="ui-content">
-            <p><span id="label_ISFunc">ID colaborador:</span></p>
+            <p><span id="labelIS">ID colaborador:</span></p>
             <p><span id="ISFunc"></span></p>
             <p><span id="label_ISName">Nome colaborador:</span></p>
             <p><span id="ISName"></span></p>
