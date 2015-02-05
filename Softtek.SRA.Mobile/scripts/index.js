@@ -1,37 +1,32 @@
-﻿$(function () {
-    $.mobile.defaultHomeScroll = 0;
-});
+﻿var onLinePhone = false;
 
-jQuery.support.cors = true;
-$.ajaxSetup({
-    cache: false
-});
-
-var onLinePhone = false;
-
-// To debug code on page load launch your app, set breakpoints, 
-// and then run "window.location.reload()" in the JavaScript Console.
 (function () {
     "use strict";
 
+    onLinePhone = navigator.onLine;
+
     document.addEventListener('deviceready', onDeviceReady.bind(this), false);
-    document.addEventListener("offline", onOffline.bind(this), false);
-    document.addEventListener("online", onOnline.bind(this), false);
 
-    function onOffline() {
-        onLinePhone = false;
-    }
-
-    function onOnline() {
-        onLinePhone = true;
-    }
+    $.mobile.defaultHomeScroll = 0;
+    jQuery.support.cors = true;
+    $.ajaxSetup({
+        cache: false
+    });
 
     function onDeviceReady() {
         document.addEventListener('pause', onPause.bind(this), false);
         document.addEventListener('resume', onResume.bind(this), false);
+        document.addEventListener("offline", onOffline.bind(this), false);
+        document.addEventListener("online", onOnline.bind(this), false);
 
         //check Platform 
         $('#Platform').html(device.platform);
+
+        //var networkState = navigator.connection.type;
+        //if (networkState == Connection.UNKNOWN || networkState == Connection.NONE)
+        //    onLinePhone = false;
+        //else
+        //    onLinePhone = true;
 
         // Android customization - necessary
         //cordova.plugins.backgroundMode.setDefaults({ title: 'SRA', text: 'SRA - Running in backgroud!' });
@@ -60,6 +55,13 @@ var onLinePhone = false;
         // TODO: This application has been reactivated. Restore application state here.
     };
 
+    function onOffline() {
+        onLinePhone = false;
+    }
+
+    function onOnline() {
+        onLinePhone = true;
+    }
 })();
 
 var stkApp = function () { }
@@ -90,6 +92,8 @@ stkApp.prototype = function () {
         $('#settingPage').on('pageshow', $.proxy(_initsettingPage, that));
         $('#normalAddPage').on('pageshow', $.proxy(_initnormalAddPage, that));
         $('#aditionalAddPage').on('pageshow', $.proxy(_initaditionalAddPage, that));
+
+        alert(onLinePhone);
 
         if (window.localStorage.getItem("userInfo") != null) {
             _login = true;
@@ -378,7 +382,6 @@ stkApp.prototype = function () {
     },
 
     _initLoadHome = function () {
-        alert(onLinePhone);
         if (Weeks.length == 0) {
             var body = '<soap12:Body>';
             body += '<getRangeSRADaysMobile xmlns="http://tempuri.org/">';
