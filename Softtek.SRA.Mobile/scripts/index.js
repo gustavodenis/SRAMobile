@@ -821,18 +821,16 @@ stkApp.prototype = function () {
 
     _initfaultPage = function () {
         var dt = new Date();
-        LoadFaultGrid("01/" + zeroPad((dt.getMonth() > 1 ? dt.getMonth() - 1 : dt.getMonth()), 2) + "/" + dt.getFullYear(), "31/" + zeroPad(dt.getMonth(), 2) + "/" + dt.getFullYear());
+        var dtI = new Date();
+        dtI.setDate(dt.getDate() - 7);
+        LoadFaultGrid(zeroPad(dtI.getDate(),2) + zeroPad(dtI.getMonth(), 2) + "/" + dtI.getFullYear(), "31/" + zeroPad(dt.getMonth(), 2) + "/" + dt.getFullYear());
     },
 
     _initaditionalPage = function () {
     },
-
     _initapprovePage = function () {
-
     },
-
     _initsettingPage = function () {
-
     },
 
     changeLang = function changeLang(langSel) {
@@ -1207,15 +1205,15 @@ function GetWeekDay(day) {
     }
 }
 
-function isOnline() {
-    var networkState = navigator.connection.type;
-    if (networkState == Connection.UNKNOWN || networkState == Connection.NONE)
-        return false;
-    else
-        return true;
+//function isOnline() {
+//    var networkState = navigator.connection.type;
+//    if (networkState == Connection.UNKNOWN || networkState == Connection.NONE)
+//        return false;
+//    else
+//        return true;
 
-    //return window.navigator.onLine;
-}
+//    //return window.navigator.onLine;
+//}
 
 function TestConnectivity() {
     $.ajax({
@@ -1225,9 +1223,7 @@ function TestConnectivity() {
         timeout: 5000
     }).done(function (data) {
         onLinePhone = true;
-        alert("jqeury Phone on");
     }).fail(function (jqXHR, textStatus, errorThrown) {
         onLinePhone = false;
-        alert("jqeury Phone off");
     });
 }

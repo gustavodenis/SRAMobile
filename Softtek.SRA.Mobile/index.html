@@ -305,8 +305,7 @@
         </div>
         <div role="main" class="ui-content">
             <h3 id="labelHourAditional">Minhas Ausências</h3>
-            <hr />
-            <ul id="listFault" class="touch" data-role="listview" data-icon="false" data-split-icon="edit"></ul>
+            <ul id="listFault" class="touch" data-role="listview" data-filter="true" data-icon="false" data-split-icon="edit"></ul>
         </div>
         <div data-role="footer" data-theme="b" data-position="fixed" data-tap-toggle="false">
             <div data-role="navbar" data-iconpos="bottom">
@@ -372,9 +371,8 @@
             <hr />
             <a href="#" id="btnLogoff" class="ui-btn ui-btn-icon-left ui-icon-power">Logoff</a>
         </div>
-        <div data-role="footer" data-theme="b" data-position="fixed" data-tap-toggle="false">
-            <p><span id="label_DevName">Desenvolvido por: Gustavo Denis</span></p>
-            <p><span id="label_DevTeam">Time: DEV Brasil</span></p>
+        <div data-role="footer" data-theme="a" data-position="fixed" data-tap-toggle="false">
+            <p><span id="label_DevName">Desenvolvido por: Gustavo Denis - AD - Softtek Brasil</span></p>
         </div>
     </div>
 
@@ -386,13 +384,10 @@
     <script>
         var onLinePhone = false;
 
+        //Jquery Configs
         $.mobile.defaultHomeScroll = 0;
-
         jQuery.support.cors = true;
-
-        $.ajaxSetup({
-            cache: false
-        });
+        $.ajaxSetup({ cache: false });
 
         function OnLoadMobile() {
             document.addEventListener('deviceready', onDeviceReady.bind(this), false);
@@ -401,26 +396,9 @@
         function onDeviceReady() {
             document.addEventListener('pause', onPause.bind(this), false);
             document.addEventListener('resume', onResume.bind(this), false);
-            document.addEventListener("offline", onOffline.bind(this), false);
-            document.addEventListener("online", onOnline.bind(this), false);
 
             //check Platform
             $('#Platform').html(device.platform);
-
-            if (navigator.connection.type === Connection.NONE) {
-                onLinePhone = false;
-                alert("off phonegap device ready");
-            }
-            else {
-                onLinePhone = true;
-                alert("off phonegap device ready");
-            }
-
-            //var networkState = navigator.connection.type;
-            //if (networkState == Connection.UNKNOWN || networkState == Connection.NONE)
-            //    onLinePhone = false;
-            //else
-            //    onLinePhone = true;
 
             // Android customization - necessary
             //cordova.plugins.backgroundMode.setDefaults({ title: 'SRA', text: 'SRA - Running in backgroud!' });
@@ -449,18 +427,9 @@
             // TODO: This application has been reactivated. Restore application state here.
         };
 
-        function onOffline() {
-            onLinePhone = false;
-            alert("off phonegap");
-        }
-
-        function onOnline() {
-            onLinePhone = true;
-            alert("on phonegap");
-        }
+        TestConnectivity();
 
         var stkAppx = new stkApp();
-        TestConnectivity();
         stkAppx.run();
 
     </script>

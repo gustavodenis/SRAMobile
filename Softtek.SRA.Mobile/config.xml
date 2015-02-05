@@ -26,13 +26,17 @@
   <preference name="show-splash-screen-spinner" value="true" />
   <preference name="auto-hide-splash-screen" value="true" />
   <preference name="disable-cursor" value="false" />
-  <preference name="android-minSdkVersion" value="7" />
+  <preference name="android-minSdkVersion" value="10" />
   <preference name="android-installLocation" value="auto" />
   <feature name="http://api.phonegap.com/1.0/network" />
-
+  <feature name="http://api.phonegap.com/1.0/notification" />
+  <feature name="http://api.phonegap.com/1.0/device" />
+  <feature name="http://api.phonegap.com/1.0/file" />
+  
   <gap:plugin name="org.apache.cordova.globalization" />
   <gap:plugin name="org.apache.cordova.device" />
   <gap:plugin name="org.apache.cordova.network-information" />
+  <!--<gap:plugin name="com.brodysoft.sqliteplugin" />-->
   <!--<gap:plugin name="it.witek.cordova.plugin.background-mode" />-->
 
   <gap:platform name="ios" />
