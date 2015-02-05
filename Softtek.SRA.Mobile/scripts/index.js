@@ -1,70 +1,5 @@
-﻿var onLinePhone = false;
+﻿var stkApp = function () { }
 
-(function () {
-    "use strict";
-
-    onLinePhone = navigator.onLine;
-
-    document.addEventListener('deviceready', onDeviceReady.bind(this), false);
-
-    $.mobile.defaultHomeScroll = 0;
-    jQuery.support.cors = true;
-    $.ajaxSetup({
-        cache: false
-    });
-
-    function onDeviceReady() {
-        document.addEventListener('pause', onPause.bind(this), false);
-        document.addEventListener('resume', onResume.bind(this), false);
-        document.addEventListener("offline", onOffline.bind(this), false);
-        document.addEventListener("online", onOnline.bind(this), false);
-
-        //check Platform 
-        $('#Platform').html(device.platform);
-
-        //var networkState = navigator.connection.type;
-        //if (networkState == Connection.UNKNOWN || networkState == Connection.NONE)
-        //    onLinePhone = false;
-        //else
-        //    onLinePhone = true;
-
-        // Android customization - necessary
-        //cordova.plugins.backgroundMode.setDefaults({ title: 'SRA', text: 'SRA - Running in backgroud!' });
-        // Enable background modeç
-        //cordova.plugins.backgroundMode.enable();
-
-        // Called when background mode has been activated
-        //cordova.plugins.backgroundMode.onactivate = function () {
-        //    setTimeout(function () {
-        //        // Modify the currently displayed notification
-        //        cordova.plugins.backgroundMode.configure({
-        //            title: 'SRA',
-        //            text: 'SRA - Running in background - 1 min.'
-        //        });
-        //        //Call the task to SRAUpdateTasks;
-        //        alert('Ativei a paradinha!');
-        //    }, 60000);
-        //}
-    };
-
-    function onPause() {
-        // TODO: This application has been suspended. Save application state here.
-    };
-
-    function onResume() {
-        // TODO: This application has been reactivated. Restore application state here.
-    };
-
-    function onOffline() {
-        onLinePhone = false;
-    }
-
-    function onOnline() {
-        onLinePhone = true;
-    }
-})();
-
-var stkApp = function () { }
 stkApp.prototype = function () {
 
     var erro = '';
@@ -92,8 +27,6 @@ stkApp.prototype = function () {
         $('#settingPage').on('pageshow', $.proxy(_initsettingPage, that));
         $('#normalAddPage').on('pageshow', $.proxy(_initnormalAddPage, that));
         $('#aditionalAddPage').on('pageshow', $.proxy(_initaditionalAddPage, that));
-
-        alert(onLinePhone);
 
         if (window.localStorage.getItem("userInfo") != null) {
             _login = true;
@@ -354,11 +287,13 @@ stkApp.prototype = function () {
         $('#btnAddHours').on('click', function () {
             $('#txtDt,#txtHour,#txtProj,#txtDesc,#txtDtRepNormalBegin,#txtDtRepNormalEnd').val('');
             $('#ddlActivity, #idSeq').val(0);
+            $('#divRepLanc').show();
         });
 
         $('#btnAddAditionalHours').on('click', function () {
             $('#txtHourBegin,#txtDtAditional,#txtHourAditional,#txtDescAditional,#txtDtRepAditionalBegin,#txtDtRepAditionalEnd').val('');
             $('#ddlActivityAditional, #idSeqAditional').val(0);
+            $('#divRepLancAditional').show();
         });
     },
 
@@ -1280,4 +1215,19 @@ function isOnline() {
         return true;
 
     //return window.navigator.onLine;
+}
+
+function TestConnectivity() {
+    $.ajax({
+        type: "GET",
+        url: "http://shopname.myshopify.com/products.json",
+        dataType: "json",
+        timeout: 5000
+    }).done(function (data) {
+        onLinePhone = true;
+        alert("jqeury Phone on");
+    }).fail(function (jqXHR, textStatus, errorThrown) {
+        onLinePhone = false;
+        alert("jqeury Phone off");
+    });
 }

@@ -16,7 +16,7 @@
     <!-- Phone 720x1280 High DPI (aka Google Nexus) -->
     <link rel="stylesheet" media="only screen and (min-device-width: 720px) and (max-device-width: 1280px) and (-webkit-device-pixel-ratio:2)" href="css/phone-1280.css" type="text/css" />
 </head>
-<body>
+<body onload="OnLoadMobile();">
     <!-- home page -->
     <div id="home" data-role="page" data-mini="true">
         <div data-role="header" data-theme="a" data-position="fixed" data-tap-toggle="false">
@@ -384,8 +384,85 @@
     <script src="scripts/jquery.mobile.datebox.js"></script>
     <script src="scripts/index.js"></script>
     <script>
+        var onLinePhone = false;
+
+        $.mobile.defaultHomeScroll = 0;
+
+        jQuery.support.cors = true;
+
+        $.ajaxSetup({
+            cache: false
+        });
+
+        function OnLoadMobile() {
+            document.addEventListener('deviceready', onDeviceReady.bind(this), false);
+        }
+
+        function onDeviceReady() {
+            document.addEventListener('pause', onPause.bind(this), false);
+            document.addEventListener('resume', onResume.bind(this), false);
+            document.addEventListener("offline", onOffline.bind(this), false);
+            document.addEventListener("online", onOnline.bind(this), false);
+
+            //check Platform
+            $('#Platform').html(device.platform);
+
+            if (navigator.connection.type === Connection.NONE) {
+                onLinePhone = false;
+                alert("off phonegap device ready");
+            }
+            else {
+                onLinePhone = true;
+                alert("off phonegap device ready");
+            }
+
+            //var networkState = navigator.connection.type;
+            //if (networkState == Connection.UNKNOWN || networkState == Connection.NONE)
+            //    onLinePhone = false;
+            //else
+            //    onLinePhone = true;
+
+            // Android customization - necessary
+            //cordova.plugins.backgroundMode.setDefaults({ title: 'SRA', text: 'SRA - Running in backgroud!' });
+            // Enable background modeç
+            //cordova.plugins.backgroundMode.enable();
+
+            // Called when background mode has been activated
+            //cordova.plugins.backgroundMode.onactivate = function () {
+            //    setTimeout(function () {
+            //        // Modify the currently displayed notification
+            //        cordova.plugins.backgroundMode.configure({
+            //            title: 'SRA',
+            //            text: 'SRA - Running in background - 1 min.'
+            //        });
+            //        //Call the task to SRAUpdateTasks;
+            //        alert('Ativei a paradinha!');
+            //    }, 60000);
+            //}
+        };
+
+        function onPause() {
+            // TODO: This application has been suspended. Save application state here.
+        };
+
+        function onResume() {
+            // TODO: This application has been reactivated. Restore application state here.
+        };
+
+        function onOffline() {
+            onLinePhone = false;
+            alert("off phonegap");
+        }
+
+        function onOnline() {
+            onLinePhone = true;
+            alert("on phonegap");
+        }
+
         var stkAppx = new stkApp();
+        TestConnectivity();
         stkAppx.run();
+
     </script>
 </body>
 </html>
