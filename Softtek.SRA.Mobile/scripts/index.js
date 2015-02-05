@@ -7,11 +7,24 @@ $.ajaxSetup({
     cache: false
 });
 
+var onLinePhone = false;
+
 // To debug code on page load launch your app, set breakpoints, 
 // and then run "window.location.reload()" in the JavaScript Console.
 (function () {
     "use strict";
+
     document.addEventListener('deviceready', onDeviceReady.bind(this), false);
+    document.addEventListener("offline", onOffline.bind(this), false);
+    document.addEventListener("online", onOnline.bind(this), false);
+
+    function onOffline() {
+        onLinePhone = false;
+    }
+
+    function onOnline() {
+        onLinePhone = true;
+    }
 
     function onDeviceReady() {
         document.addEventListener('pause', onPause.bind(this), false);
@@ -365,7 +378,7 @@ stkApp.prototype = function () {
     },
 
     _initLoadHome = function () {
-        alert(isOnline());
+        alert(onLinePhone);
         if (Weeks.length == 0) {
             var body = '<soap12:Body>';
             body += '<getRangeSRADaysMobile xmlns="http://tempuri.org/">';
@@ -1258,7 +1271,6 @@ function GetWeekDay(day) {
 
 function isOnline() {
     var networkState = navigator.connection.type;
-    alert(networkState);
     if (networkState == Connection.UNKNOWN || networkState == Connection.NONE)
         return false;
     else
