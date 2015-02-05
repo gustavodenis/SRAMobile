@@ -46,6 +46,7 @@ $.ajaxSetup({
     function onResume() {
         // TODO: This application has been reactivated. Restore application state here.
     };
+
 })();
 
 var stkApp = function () { }
@@ -54,10 +55,13 @@ stkApp.prototype = function () {
     var erro = '';
     var aLancamentos = [];
     var aLancamentosAditional = [];
+    var aAbsence = [];
     var Weeks = [];
     var Activities = [];
     var IdSegment = 'BR';
     var FuncIS = 'ACFV';
+    var TeamId = 'DEV';
+    var EntityId = '2690702';
     var _login = true, //false para ativar o login;
 
     run = function () {
@@ -69,6 +73,7 @@ stkApp.prototype = function () {
         $('#aditionalPage').on('pageshow', $.proxy(_initaditionalPage, that));
         $('#approvePage').on('pageshow', $.proxy(_initapprovePage, that));
         $('#faultPage').on('pageshow', $.proxy(_initfaultPage, that));
+        $('#faultAddPage').on('pageshow', $.proxy(_initfaultAddPage, that));
         $('#settingPage').on('pageshow', $.proxy(_initsettingPage, that));
         $('#normalAddPage').on('pageshow', $.proxy(_initnormalAddPage, that));
         $('#aditionalAddPage').on('pageshow', $.proxy(_initaditionalAddPage, that));
@@ -143,93 +148,31 @@ stkApp.prototype = function () {
             return false;
         });
 
+        $(document).on("swiperight", "#listHours li", function (event) {
+            var listitem = $(this),
+            transition = $.support.cssTransform3d ? "right" : false;
+            DeleteHourNormal(listitem, transition);
+        });
+
+        $(document).on("swiperight", "#listAditionalHours li", function (event) {
+            var listitem = $(this),
+            transition = $.support.cssTransform3d ? "right" : false;
+            DeleteHourAditional(listitem, transition);
+        });
+
         if (!$.mobile.support.touch) {
-            $("#listHours, #listAditionalHours").removeClass("touch");
+            $("#listHours").removeClass("touch");
+            $("#listHours li.btnDelHN").on("click", function () {
+                var listitem = $(this).parent("li");
+                DeleteHourNormal(listitem);
+            });
+
+            $("#listAditionalHours").removeClass("touch");
+            $("#listAditionalHours li.btnDelHA").on("click", function () {
+                var listitem = $(this).parent("li");
+                DeleteHourAditional(listitem);
+            });
         }
-
-        $("#listAditionalHours li").on("taphold", function (event) {
-            if (confirm('Deseja Exluir o lançamento?')) {
-                fauxAjax(function () {
-                    var ano, mes, dia;
-                    var seq = $(this).attr('Seq');
-                    $.each(aLancamentos, function (index, el) {
-                        console.log(aLancamentos[index].Sequencial);
-                        if (seq == aLancamentos[index].Sequencial) {
-                            ano = aLancamentos[index].Ano;
-                            mes = aLancamentos[index].Mes;
-                            dia = aLancamentos[index].DiaMes;
-                        }
-                    });
-
-                    var bodyxml = '<soap12:Body>';
-                    bodyxml += '<deleteRecordByDayMobile xmlns="http://tempuri.org/">';
-                    bodyxml += '<strFuncIS>' + FuncIS + '</strFuncIS>';
-                    bodyxml += '<intYear>' + ano + '</intYear>';
-                    bodyxml += '<intMonth>' + mes + '</intMonth>';
-                    bodyxml += '<intDay>' + dia + '</intDay>';
-                    bodyxml += '<intAdditionalHour>1</intAdditionalHour>';
-                    bodyxml += '<intSequencial>' + seq + '</intSequencial>';
-                    bodyxml += '</deleteRecordByDayMobile>';
-                    bodyxml += '</soap12:Body>';
-                    var envelope = getEnvelope(bodyxml);
-
-                    $.ajax({
-                        type: 'POST',
-                        url: MountURLWS('deleteRecordByDayMobile'),
-                        contentType: 'application/soap+xml; charset=utf-8',
-                        data: envelope
-                    })
-                    .done(function (data) {
-                        LoadAditionalHours($('#ddlWeek option:selected').val());
-                    })
-                    .fail(function (jqXHR, textStatus, errorThrown) {
-                        alert("Request failed: " + textStatus + "," + errorThrown);
-                    });
-                }, 'excluindo...', this);
-            }
-        });
-
-        $("#listHours li").on("taphold", function (event) {
-            if (confirm('Deseja Exluir o lançamento?')) {
-                fauxAjax(function () {
-                    var ano, mes, dia;
-                    var seq = $(this).attr('Seq');
-                    $.each(aLancamentos, function (index, el) {
-                        console.log(aLancamentos[index].Sequencial);
-                        if (seq == aLancamentos[index].Sequencial) {
-                            ano = aLancamentos[index].Ano;
-                            mes = aLancamentos[index].Mes;
-                            dia = aLancamentos[index].DiaMes;
-                        }
-                    });
-
-                    var bodyxml = '<soap12:Body>';
-                    bodyxml += '<deleteRecordByDayMobile xmlns="http://tempuri.org/">';
-                    bodyxml += '<strFuncIS>' + FuncIS + '</strFuncIS>';
-                    bodyxml += '<intYear>' + ano + '</intYear>';
-                    bodyxml += '<intMonth>' + mes + '</intMonth>';
-                    bodyxml += '<intDay>' + dia + '</intDay>';
-                    bodyxml += '<intAdditionalHour>0</intAdditionalHour>';
-                    bodyxml += '<intSequencial>' + seq + '</intSequencial>';
-                    bodyxml += '</deleteRecordByDayMobile>';
-                    bodyxml += '</soap12:Body>';
-                    var envelope = getEnvelope(bodyxml);
-
-                    $.ajax({
-                        type: 'POST',
-                        url: MountURLWS('deleteRecordByDayMobile'),
-                        contentType: 'application/soap+xml; charset=utf-8',
-                        data: envelope
-                    })
-                    .done(function (data) {
-                        LoadNormalHours($('#ddlWeek option:selected').val());
-                    })
-                    .fail(function (jqXHR, textStatus, errorThrown) {
-                        alert("Request failed: " + textStatus + "," + errorThrown);
-                    });
-                }, 'excluindo...', this);
-            }
-        });
 
         $('#btnLangBR, #btnLangES, #btnLangUS').on('click', function () {
             changeLang($(this).attr('id').substr(7, 2));
@@ -244,19 +187,24 @@ stkApp.prototype = function () {
             var DtRepBegin = $('#txtDtRepNormalBegin').val();
             var DtRepEnd = $('#txtDtRepNormalEnd').val();
             var Week = $('#ddlWeek option:selected').val();
-            var dtParse = new Date(dt);
+            var dtParse = new Date(Dt);
 
             var erros = '';
             if (Dt == '')
-                erros += '- Data sem seleção\n';
+                erros += '- Data\n';
             if (Hour == '')
-                erros += '- Horas sem preenchimento\n';
+                erros += '- Horas\n';
             if (Proj == '')
-                erros += '- Projeto sem preenchimento\n';
+                erros += '- Projeto\n';
             if (Activity == '')
-                erros += '- Atividade sem seleção\n';
+                erros += '- Atividade\n';
             if (Desc == '')
-                erros += '- Descrição sem preenchimento\n';
+                erros += '- Descrição\n';
+
+            //var dtValid = checkDateWeek(getFirstDateOfWeek(week), getLastDateOfWeek(week));
+            //if(!dtValid)
+            //    erros += '- Data Selecionada fora da Semana\n';
+
             if (erros.length > 0)
                 alert('Erros Encontrados:\n' + erros);
             else {
@@ -264,16 +212,17 @@ stkApp.prototype = function () {
                 body += '<addRecordHoraRecursoMobile xmlns="http://tempuri.org/">';
                 body += '<IntYear>' + dtParse.getFullYear() + '</IntYear>';
                 body += '<strFuncIS>' + FuncIS + '</strFuncIS>';
-                body += '<intWeek>' + Week + '</intWeek>';
+                //body += '<intWeek>' + Week + '</intWeek>';
+                body += '<intWeek>' + dtParse.getWeek() + '</intWeek>';
                 body += '<intWeekDay>' + GetWeekDay(dtParse.getDay()) + '</intWeekDay>';
                 body += '<intSequencial>' + $('#idSeq').val() + '</intSequencial>';
                 body += '<strDescription>' + Desc + '</strDescription>';
                 body += '<strActivityCode>' + Activity + '</strActivityCode>';
-                body += '<intOpportunity>0</intOpportunity>';
-                body += '<intDescHoursCode>' + intDescHoursCode + '</intDescHoursCode>';
+                //body += '<intOpportunity>0</intOpportunity>';
+                //body += '<intDescHoursCode>' + intDescHoursCode + '</intDescHoursCode>';
                 body += '<dblHours>' + Hour + '</dblHours>';
                 body += '<intMonth>' + (dtParse.getMonth() + 1) + '</intMonth>';
-                body += '<intMonthDay>' + (dtParse.getMonth() + 1) + '</intMonthDay>';
+                body += '<intMonthDay>' + dtParse.getDate() + '</intMonthDay>';
                 body += '<strAlternativeCode>' + Proj + '</strAlternativeCode>';
                 body += '<intCalendarYear>' + dtParse.getFullYear() + '</intCalendarYear>';
                 body += '<intAdditionalHour>0</intAdditionalHour>';
@@ -283,7 +232,7 @@ stkApp.prototype = function () {
                 body += '</addRecordHoraRecursoMobile>';
                 body += '<soap12:Body>';
                 var envelope = getEnvelope(body);
-                var returnData;
+                console.log(envelope);
 
                 $.ajax({
                     type: 'POST',
@@ -314,17 +263,18 @@ stkApp.prototype = function () {
 
             var erros = '';
             if (Dt == '')
-                erros += '- Data sem seleção\n';
+                erros += '- Data\n';
             if (HourBegin == '')
-                erros += '- Horas de Entrada sem preenchimento\n';
+                erros += '- Horas de Entrada\n';
             if (Hour == '')
-                erros += '- Horas sem preenchimento\n';
+                erros += '- Horas\n';
             if (Proj == '')
-                erros += '- Projeto sem preenchimento\n';
+                erros += '- Projeto\n';
             if (Activity == '')
-                erros += '- Atividade sem seleção\n';
+                erros += '- Atividade\n';
             if (Desc == '')
-                erros += '- Descrição sem preenchimento\n';
+                erros += '- Descrição\n';
+
             if (erros.length > 0)
                 alert('Erros Encontrados:\n' + erros);
             else {
@@ -332,16 +282,17 @@ stkApp.prototype = function () {
                 body += '<addRecordHoraRecursoMobile xmlns="http://tempuri.org/">';
                 body += '<IntYear>' + dtParse.getFullYear() + '</IntYear>';
                 body += '<strFuncIS>' + FuncIS + '</strFuncIS>';
-                body += '<intWeek>' + Week + '</intWeek>';
+                //body += '<intWeek>' + Week + '</intWeek>';
+                body += '<intWeek>' + dtParse.getWeek() + '</intWeek>';
                 body += '<intWeekDay>' + GetWeekDay(dtParse.getDay()) + '</intWeekDay>';
                 body += '<intSequencial>' + $('#idSeq').val() + '</intSequencial>';
                 body += '<strDescription>' + Desc + '</strDescription>';
                 body += '<strActivityCode>' + Activity + '</strActivityCode>';
-                body += '<intOpportunity>0</intOpportunity>';
-                body += '<intDescHoursCode>' + intDescHoursCode + '</intDescHoursCode>';
+                //body += '<intOpportunity>0</intOpportunity>';
+                //body += '<intDescHoursCode>' + intDescHoursCode + '</intDescHoursCode>';
                 body += '<dblHours>' + Hour + '</dblHours>';
                 body += '<intMonth>' + (dtParse.getMonth() + 1) + '</intMonth>';
-                body += '<intMonthDay>' + (dtParse.getMonth() + 1) + '</intMonthDay>';
+                body += '<intMonthDay>' + dtParse.getDate() + '</intMonthDay>';
                 body += '<strAlternativeCode>' + Proj + '</strAlternativeCode>';
                 body += '<intCalendarYear>' + dtParse.getFullYear() + '</intCalendarYear>';
                 body += '<intAdditionalHour>1</intAdditionalHour>';
@@ -351,7 +302,6 @@ stkApp.prototype = function () {
                 body += '</addRecordHoraRecursoMobile>';
                 body += '<soap12:Body>';
                 var envelope = getEnvelope(body);
-                var returnData;
 
                 $.ajax({
                     type: 'POST',
@@ -415,6 +365,7 @@ stkApp.prototype = function () {
     },
 
     _initLoadHome = function () {
+        //isOnline();
         if (Weeks.length == 0) {
             var body = '<soap12:Body>';
             body += '<getRangeSRADaysMobile xmlns="http://tempuri.org/">';
@@ -472,6 +423,8 @@ stkApp.prototype = function () {
         else {
             MountActivityCombo();
         }
+
+        //getCollaborator();
     },
 
     MountWeekCombo = function MountWeekCombo() {
@@ -488,6 +441,139 @@ stkApp.prototype = function () {
         $.each(Activities, function (index, el) {
             $('#ddlActivity, #ddlActivityAditional').append("<option value=" + Activities[index].value + ">" + Activities[index].value + "</option>");
         });
+    },
+
+    DeleteHourAditional = function (listitem, transition) {
+
+        listitem.children(".ui-btn").addClass("ui-btn-active");
+
+        if (confirm('Deseja Exluir o lançamento?')) {
+            fauxAjax(function () {
+                var ano, mes, dia, seq;
+                seq = $(this).attr('Seq');
+                dia = $(this).attr('Dia');
+                $.each(aLancamentosAditional, function (index, el) {
+                    if (seq == aLancamentosAditional[index].Sequencial && dia == aLancamentosAditional[index].DiaMes) {
+                        ano = aLancamentosAditional[index].Ano;
+                        mes = aLancamentosAditional[index].Mes;
+                    }
+                });
+
+                var bodyxml = '<soap12:Body>';
+                bodyxml += '<deleteRecordByDayMobile xmlns="http://tempuri.org/">';
+                bodyxml += '<strFuncIS>' + FuncIS + '</strFuncIS>';
+                bodyxml += '<intYear>' + ano + '</intYear>';
+                bodyxml += '<intMonth>' + mes + '</intMonth>';
+                bodyxml += '<intDay>' + dia + '</intDay>';
+                bodyxml += '<intAdditionalHour>1</intAdditionalHour>';
+                bodyxml += '<intSequencial>' + seq + '</intSequencial>';
+                bodyxml += '</deleteRecordByDayMobile>';
+                bodyxml += '</soap12:Body>';
+                var envelope = getEnvelope(bodyxml);
+
+                $.ajax({
+                    type: 'POST',
+                    url: MountURLWS('deleteRecordByDayMobile'),
+                    contentType: 'application/soap+xml; charset=utf-8',
+                    data: envelope
+                })
+                .done(function (data) {
+                    if (data == "True") {
+                        if (transition) {
+                            listitem
+                            .addClass(transition)
+                            .on("webkitTransitionEnd transitionend otransitionend", function () {
+                                listitem.remove();
+                                $("#list").listview("refresh").find(".border-bottom").removeClass("border-bottom");
+                            })
+                            .prev("li").children("a").addClass("border-bottom")
+                            .end().end().children(".ui-btn").removeClass("ui-btn-active");
+                        }
+                        else {
+                            listitem.remove();
+                            $("#list").listview("refresh");
+                        }
+                        LoadAditionalHours($('#ddlWeekAditional option:selected').val());
+                    }
+                    else {
+                        alert('Erro ao excluir o registro!');
+                    }
+                })
+                .fail(function (jqXHR, textStatus, errorThrown) {
+                    alert("Request failed: " + textStatus + "," + errorThrown);
+                });
+            }, 'excluindo...', this);
+        }
+        else {
+            listitem.children(".ui-btn").removeClass("ui-btn-active");
+        }
+    },
+
+    DeleteHourNormal = function (listitem, transition) {
+
+        listitem.children(".ui-btn").addClass("ui-btn-active");
+
+        if (confirm('Deseja Exluir o lançamento?')) {
+            fauxAjax(function () {
+                var ano, mes, dia, seq;
+                seq = $(this).attr('Seq');
+                dia = $(this).attr('Dia');
+                $.each(aLancamentos, function (index, el) {
+                    if (seq == aLancamentos[index].Sequencial && dia == aLancamentos[index].DiaMes) {
+                        ano = aLancamentos[index].Ano;
+                        mes = aLancamentos[index].Mes;
+                    }
+                });
+
+                var bodyxml = '<soap12:Body>';
+                bodyxml += '<deleteRecordByDayMobile xmlns="http://tempuri.org/">';
+                bodyxml += '<strFuncIS>' + FuncIS + '</strFuncIS>';
+                bodyxml += '<intYear>' + ano + '</intYear>';
+                bodyxml += '<intMonth>' + mes + '</intMonth>';
+                bodyxml += '<intDay>' + dia + '</intDay>';
+                bodyxml += '<intAdditionalHour>0</intAdditionalHour>';
+                bodyxml += '<intSequencial>' + seq + '</intSequencial>';
+                bodyxml += '</deleteRecordByDayMobile>';
+                bodyxml += '</soap12:Body>';
+                var envelope = getEnvelope(bodyxml);
+
+                $.ajax({
+                    type: 'POST',
+                    url: MountURLWS('deleteRecordByDayMobile'),
+                    contentType: 'application/soap+xml; charset=utf-8',
+                    data: envelope
+                })
+                .done(function (data) {
+                    if (data == "True") {
+                        if (transition) {
+                            listitem
+                            .addClass(transition)
+                            .on("webkitTransitionEnd transitionend otransitionend", function () {
+                                listitem.remove();
+                                $("#list").listview("refresh").find(".border-bottom").removeClass("border-bottom");
+                            })
+                            .prev("li").children("a").addClass("border-bottom")
+                            .end().end().children(".ui-btn").removeClass("ui-btn-active");
+                        }
+                        else {
+                            listitem.remove();
+                            $("#list").listview("refresh");
+                        }
+
+                        LoadNormalHours($('#ddlWeek option:selected').val());
+                    }
+                    else {
+                        alert('Erro ao excluir o registro!');
+                    }
+                })
+                .fail(function (jqXHR, textStatus, errorThrown) {
+                    alert("Request failed: " + textStatus + "," + errorThrown);
+                });
+            }, 'excluindo...', this);
+        }
+        else {
+            listitem.children(".ui-btn").removeClass("ui-btn-active");
+        }
     },
 
     _initnormalPage = function () {
@@ -534,10 +620,10 @@ stkApp.prototype = function () {
                             'Descricao': $(this).find('Descricao').text().trim()
                         });
 
-                        rows += '<li Seq=' + $(this).find('Sequencial').text().trim() + '>';
+                        rows += '<li Seq=' + $(this).find('Sequencial').text().trim() + ' Dia=' + $(this).find('DiaMes').text().trim() + ' class="btnDelHN">';
                         rows += '<a href="#"><h3>' + getDateString($(this).find('DiaMes').text().trim(), $(this).find('Mes').text().trim(), $(this).find('Ano').text().trim()) + '</h3><p class="topic"><strong>';
                         rows += $(this).find('CodigoAlternativo').text().trim() + '</strong> ' + $(this).find('Descricao').text().trim() + '</p><p class="ui-li-aside"><strong>' + parseInt($(this).find('Horas').text()).toString() + ' Horas</strong></p></a>';
-                        rows += '<a href="#" Seq=' + $(this).find('Sequencial').text().trim() + ' class="btnEditHN"></a>';
+                        rows += '<a href="#" Seq=' + $(this).find('Sequencial').text().trim() + ' Dia=' + $(this).find('DiaMes').text().trim() + ' class="btnEditHN"></a>';
                         rows += '</li>';
 
                         total += parseFloat($(this).find('Horas').text().replace(':', '.'));
@@ -625,10 +711,10 @@ stkApp.prototype = function () {
                             'Descricao': $(this).find('Descricao').text().trim()
                         });
 
-                        rows += '<li Seq=' + $(this).find('Sequencial').text().trim() + '>';
-                        rows += '<a href="#"><h3>' + getDateString($(this).find('DiaMes').text().trim(), $(this).find('Mes').text().trim(), $(this).find('Ano').text().trim()) + '</h3><p class="topic"><strong>';
+                        rows += '<li Seq=' + $(this).find('Sequencial').text().trim() + ' Dia=' + $(this).find('DiaMes').text().trim() + ' class="btnDelHA">';
+                        rows += '<a href="#"><h3>' + getDateString($(this).find('DiaMes').text().trim(), $(this).find('Mes').text().trim(), $(this).find('Ano').text().trim()) + ' / ' + $(this).find('Entrada').text().trim() + '</h3><p class="topic"><strong>';
                         rows += $(this).find('CodigoAlternativo').text().trim() + '</strong> ' + $(this).find('Descricao').text().trim() + '</p><p class="ui-li-aside"><strong>' + parseInt($(this).find('Horas').text()).toString() + ' Horas</strong></p></a>';
-                        rows += '<a href="#" Seq=' + $(this).find('Sequencial').text().trim() + ' class="btnEditHA"></a>';
+                        rows += '<a href="#" Seq=' + $(this).find('Sequencial').text().trim() + ' Dia=' + $(this).find('DiaMes').text().trim() + ' class="btnEditHA"></a>';
                         rows += '</li>';
 
                         total += parseFloat($(this).find('Horas').text().replace(':', '.'));
@@ -675,13 +761,102 @@ stkApp.prototype = function () {
         }, 'carregando...', this);
     },
 
+    LoadFaultGrid = function (dtBegin, dtEnd) {
+        fauxAjax(function () {
+            var body = '<soap12:Body>';
+            body += '<getOrders xmlns="http://Stk.org/">';
+            body += '<strFuncIs>' + FuncIS + '</strFuncIs>';
+            body += '<strSegmentId>' + IdSegment + '</strSegmentId>';
+            body += '<strEntityId>' + EntityId + '</strEntityId>';
+            body += '<strTeamId>' + TeamId + '</strTeamId>';
+            body += '<strActivityId></strActivityId>';
+            body += '<intTypeOfActivity>-1</intTypeOfActivity>';
+            body += '<dteFromDate>' + dtBegin + '</dteFromDate>';
+            body += '<dteToDate>' + dtEnd + '</dteToDate>';
+            body += '<strApproverId></strApproverId>';
+            body += '<strValidatorId></strValidatorId>';
+            body += '<intOrderSatus>-1</intOrderSatus>';
+            body += '<intIsCertificateRule>-1</intIsCertificateRule>';
+            body += '<intTypeOfReport>0</intTypeOfReport>';
+            body += '</getOrders>';
+            body += '</soap12:Body>';
+            var envelope = getEnvelopeAbs(body);
+
+            $.ajax({
+                type: 'POST',
+                url: MountURLSWSAbs('getOrders'),
+                contentType: 'application/soap+xml; charset=utf-8',
+                data: envelope
+            })
+            .done(function (xml) {
+                var rows = '';
+                var total = 0;
+                aAbsence = [];
+
+                $('#listFault').empty();
+
+                $(xml).find('cAbsence').each(function () {
+                    /*
+                    <Orders>
+                    OrderId = drAbsence("OrderId")
+                    .Activity = New cActivity().getActivity()
+                    .FromDate = ValidateNull(drAbsence("FromDate"), Nothing)
+                    .ToDate = ValidateNull(drAbsence("ToDate"), "")
+                    .TotalHours = CDbl(ValidateNull(drAbsence("TotalHours"), 0))
+                    .OrderStatus = CInt(ValidateNull(drAbsence("OrderStatus"), -1))
+                    .OrderDescription = drAbsence("OrderDescription").ToString.Trim
+                    .ApprovalDescription = drAbsence("ApprovalDescription").ToString.Trim
+                    .ValidationDescription = drAbsence("ValidationDescription").ToString.Trim
+                    .IsCertificate = drAbsence("IsCertificate")
+                    .TypeOfDiscount = CInt(ValidateNull(drAbsence("TypeOfDiscount"), 0))
+                    .TotalCertificates = CInt(ValidateNull(drAbsence("TotalCertificates"), 0))
+                    .ApprovedBy = drAbsence("ApprovedBy").ToString.Trim
+                    .ApprovalDate = ValidateNull(drAbsence("ApprovalDate"), Nothing)
+                    .ValidatedBy = drAbsence("ValidatedBy").ToString.Trim
+                    .ValidationDate = ValidateNull(drAbsence("ValidationDate"), Nothing)
+                    .CreatedBy = drAbsence("CreatedBy").ToString.Trim
+                    .CreationDate = ValidateNull(drAbsence("CreationDate"), Nothing)
+                    .UpdatedBy = drAbsence("UpdatedBy").ToString.Trim
+                    .UpdateDate = ValidateNull(drAbsence("UpdateDate"), Nothing)          
+                    </Orders>
+                    */
+                    aAbsence.push({
+                        'FuncIs': $(this).find('FuncIs').text().trim(),
+                        'CollaboratorName': $(this).find('CollaboratorName').text().trim(),
+                        'EntityLeader': $(this).find('EntityLeader').text().trim(),
+                        'TeamLeader': $(this).find('TeamLeader').text().trim(),
+                        'IsCovenant': $(this).find('IsCovenant').text().trim(),
+                        'TotalBankHours': $(this).find('TotalBankHours').text().trim(),
+                        'TotalVacations': $(this).find('TotalVacations').text().trim(),
+                        'TotalAllowance': $(this).find('TotalAllowance').text().trim()
+                    });
+
+                    rows += '<li Seq=' + $(this).find('Sequencial').text().trim() + '>';
+                    rows += '<a href="#"><h3>' + getDateString($(this).find('DiaMes').text().trim(), $(this).find('Mes').text().trim(), $(this).find('Ano').text().trim()) + '</h3><p class="topic"><strong>';
+                    rows += $(this).find('CodigoAlternativo').text().trim() + '</strong> ' + $(this).find('Descricao').text().trim() + '</p><p class="ui-li-aside"><strong>' + parseInt($(this).find('Horas').text()).toString() + ' Horas</strong></p></a>';
+                    rows += '<a href="#"></a>';
+                    rows += '</li>';
+
+                    total += parseFloat($(this).find('Horas').text().replace(':', '.'));
+                });
+
+                rows += '<li><a href="#"><h3>Total</h3><p class="ui-li-aside"><strong>' + total.toString() + ' Horas</strong></p></a></li>'
+                $('#listFault').append(rows);
+                $("#listFault").listview("refresh");
+            })
+            .fail(function (jqXHR, textStatus, errorThrown) {
+                alert("Request failed: " + textStatus + "," + errorThrown);
+            });
+        }, 'carregando...', this);
+    },
+
     _initaditionalAddPage = function () {
     },
 
     _initnormalAddPage = function () {
     },
 
-    _initfaultPage = function () {
+    _initfaultAddPage = function () {
         //$('#txtDtBeginFault,#txtDtEndFault,#txtHourFault,#ddlActivityFault,#txtDescFault').val('');
         //fauxAjax(function () {
         //    $('#txtDtBeginFault').val('');
@@ -691,6 +866,11 @@ stkApp.prototype = function () {
         //    $('#txtDescFault').val('')
         //    ;
         //}, 'carregando...', this);
+    },
+
+    _initfaultPage = function () {
+        var dt = new Date();
+        LoadFaultGrid("01/" + zeroPad((dt.getMonth() > 1 ? dt.getMonth() - 1 : dt.getMonth()), 2) + "/" + dt.getFullYear(), "31/" + zeroPad(dt.getMonth(), 2) + "/" + dt.getFullYear());
     },
 
     _initaditionalPage = function () {
@@ -705,7 +885,6 @@ stkApp.prototype = function () {
     },
 
     changeLang = function changeLang(langSel) {
-
         if (lang == "PT") {
             $(dictionarySTK.lang.PT).each(function (i, item) {
                 changeLangObj(item.Controle, item.Label);
@@ -739,18 +918,6 @@ stkApp.prototype = function () {
         }
     },
 
-    saveUserData = function saveUserData(data) {
-        window.localStorage.setItem("userInfo", JSON.stringify(data));
-    },
-
-    getUserData = function getUserData() {
-        return window.localStorage.getItem("userInfo");
-    },
-
-    saveLancamento = function saveLancamento(data) {
-        window.localStorage.setItem("userLanc", JSON.stringify(data));
-    },
-
     getEnvelope = function getEnvelope(xmlBody) {
         var dataXML = '<?xml version="1.0" encoding="utf-8"?>';
         dataXML += '<soap12:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://www.w3.org/2003/05/soap-envelope">';
@@ -764,208 +931,120 @@ stkApp.prototype = function () {
         return dataXML;
     },
 
-    getWeekByDay = function getWeekByDay(year, month, day) {
-        var body = '<soap:Body>';
-        body += '  <getWeekByDay>';
-        body += '     <intYear>' + year + '</intYear>';
-        body += '     <intMonth>' + month + '</intMonth>';
-        body += '     <intDay>' + day + '</intDay>';
-        body += '  </getWeekByDay>';
-        body += "<soap:Body>";
-        var envelope = getEnvelope(body);
-        var returnData;
-
-        $.ajax({
-            type: 'POST',
-            url: MountURLWS('getWeekByDayResponse'),
-            contentType: 'text/xml; charset=utf-8',
-            data: envelope
-        })
-        .done(function (data) {
-            returnData = data;
-        })
-        .fail(function (jqXHR, textStatus, errorThrown) {
-            alert("Request failed: " + textStatus + "," + errorThrown);
-        });
-
-        return returnData;
+    getEnvelopeAbs = function getEnvelopeAbs(xmlBody) {
+        var dataXML = '<?xml version="1.0" encoding="utf-8"?>';
+        dataXML += '<soap12:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://www.w3.org/2003/05/soap-envelope">';
+        dataXML += '<soap12:Header>';
+        dataXML += '<cValidationSoapHeader xmlns="http://Stk.org/">';
+        dataXML += '<_devToken>WSPDK11PDK11@@</_devToken>';
+        dataXML += '</cValidationSoapHeader>';
+        dataXML += '</soap12:Header>';
+        dataXML += xmlBody;
+        dataXML += '</soap12:Envelope>';
+        return dataXML;
     },
 
-    addRecordHoraRecurso = function addRecordHoraRecurso(intYear, strFuncIS, intWeek, intWeekDay,
-    		intSequencial, strFinalCustomer, strActivityCode, intOpportunity, intDescHoursCode,
-    		dblHours, intMonth, intMonthDay, strAlternativeCode, intCalendarYear, intAdditionalHour,
-    		strCreatedBy, HourEnter, segmentId) {
-        var body = '<soap:Body>';
-        body += '<addRecordHoraRecursoMobile>';
-        body += '<IntYear>' + intYear + '</IntYear>';
-        //Optional
-        body += '<strFuncIS>' + strFuncIS + '</strFuncIS>';
-        body += '<intWeek>' + intWeek + '</intWeek>';
-        body += '<intWeekDay>' + intWeekDay + '</intWeekDay>';
-        body += '<intSequencial>' + intSequencial + '</intSequencial>';
-        //Optional
-        body += '<strFinalCustomer>' + strFinalCustomer + '</strFinalCustomer>';
-        //Optional
-        body += '<strActivityCode>' + strActivityCode.replace(' ', '').replace(' ', '').trim() + '</strActivityCode>';
-        body += '<intOpportunity>' + intOpportunity + '</intOpportunity>';
-        body += '<intDescHoursCode>' + intDescHoursCode + '</intDescHoursCode>';
-        //Optional:-->'
-        body += '<dblHours>' + dblHours + '</dblHours>';
-        body += '<intMonth>' + intMonth + '</intMonth>';
-        body += '<intMonthDay>' + intMonthDay + '</intMonthDay>';
-        //<!--Optional:-->'
-        body += '<strAlternativeCode>' + strAlternativeCode + '</strAlternativeCode>';
-        body += '<intCalendarYear>' + intCalendarYear + '</intCalendarYear>';
-        body += '<intAdditionalHour>' + intAdditionalHour + '</intAdditionalHour>';
-        //<!--Optional:-->'
-        body += '<strCreatedBy>' + strCreatedBy + '</strCreatedBy>';
-        //<!--Optional:-->'
-        body += '<HourEnter>' + HourEnter + '</HourEnter>';
-        //<!--Optional:-->'
-        body += '<segmentId>' + segmentId.trim() + '</segmentId>';
-        body += '</addRecordHoraRecursoMobile>';
-        body += '<soap:Body>';
-        var envelope = getEnvelope(body);
-        var returnData;
+    getCollaborator = function getCollaborator() {
+        var body = '<soap12:Body>';
+        body += '  <getCollaborator xmlns="http://Stk.org/">';
+        body += '     <strFuncIs>' + FuncIS + '</strFuncIs>';
+        body += '   </getCollaborator>';
+        body += '</soap12:Body>';
+        var envelope = getEnvelopeAbs(body);
 
         $.ajax({
             type: 'POST',
-            url: MountURLWS('addRecordHoraRecursoMobile'),
-            contentType: 'text/xml; charset=utf-8',
+            url: MountURLSWSAbs('getCollaborator'),
+            contentType: 'application/soap+xml; charset=utf-8',
             data: envelope
         })
         .done(function (data) {
-            returnData = data;
+            EntityId = $(data).find('EntityId').text();
+            TeamId = $(data).find('TeamId').text();
+
+            var colabdata = {
+                EntityId: $(data).find('EntityId').text(),
+                TeamId: $(data).find('TeamId').text(),
+                EntityLeaderName: $(data).find('EntityLeaderName').text(),
+                TotalBankHours: $(data).find('TotalBankHours').text(),
+                TotalVacations: $(data).find('TotalVacations').text(),
+                TotalAllowance: $(data).find('TotalAllowance').text(),
+                IsCovenant: $(data).find('IsCovenant').text(),
+                TeamLeaderName: $(data).find('TeamLeaderName').text()
+            };
+
+            window.localStorage.setItem("colabInfo", JSON.stringify(colabdata));
         })
         .fail(function (jqXHR, textStatus, errorThrown) {
             alert("Request failed: " + textStatus + "," + errorThrown);
         });
-
-        return returnData;
     },
 
     getActivity = function getActivity() {
-        var body = '<soap:Body>';
-        body += '  <getActivity>';
-        body += '     <strSegmentId>' + '' + '</strSegmentId>';
-        body += '     <strActivityId>' + '' + '</strActivityId>';
-        body += '     <intTypeOfActivity>' + '' + '</intTypeOfActivity>';
-        body += '     <strEntityId>' + '' + '</strEntityId>';
-        body += '     <strTeamId>' + '' + '</strTeamId>';
+        var body = '<soap12:Body>';
+        body += '  <getActivity xmlns="http://Stk.org/">';
+        body += '     <strSegmentId>' + IdSegment + '</strSegmentId>';
+        body += '     <strActivityId></strActivityId>';
+        body += '     <intTypeOfActivity></intTypeOfActivity>';
+        body += '     <strEntityId>' + EntityId + '</strEntityId>';
+        body += '     <strTeamId>' + TeamId + '</strTeamId>';
         body += '   </getActivity>';
-        body += '<soap:Body>';
-        var envelope = getEnvelope(body);
-        var returnData;
+        body += '</soap12:Body>';
+        var envelope = getEnvelopeAbs(body);
 
         $.ajax({
             type: 'POST',
-            url: MountURLWS('getActivity'),
-            contentType: 'text/xml; charset=utf-8',
+            url: MountURLSWSAbs('getActivity'),
+            contentType: 'application/soap+xml; charset=utf-8',
             data: envelope
         })
         .done(function (data) {
-            returnData = data;
+            //montar o combo
         })
         .fail(function (jqXHR, textStatus, errorThrown) {
             alert("Request failed: " + textStatus + "," + errorThrown);
         });
-
-        return returnData;
     },
 
     getActivities = function getActivities() {
-        var body = '<soap:Body>';
-        body += '  <getActivities>';
-        body += '     <strSegmentId>' + '' + '</strSegmentId>';
-        body += '     <strEntityId>' + '' + '</strEntityId>';
-        body += '     <strTeamId>' + '' + '</strTeamId>';
-        body += '  </getActivities>';
-        body += '<soap:Body>';
-        var envelope = getEnvelope(body);
-        var returnData;
+        var body = '<soap12:Body>';
+        body += '<getActivities xmlns="http://Stk.org/">';
+        body += '<strSegmentId>' + IdSegment + '</strSegmentId>';
+        body += '<strEntityId>' + EntityId + '</strEntityId>';
+        body += '<strTeamId>' + TeamId + '</strTeamId>';
+        body += '</getActivities>';
+        body += '</soap12:Body>';
+        var envelope = getEnvelopeAbs(body);
 
         $.ajax({
             type: 'POST',
-            url: MountURLWS('getActivities'),
-            contentType: 'text/xml; charset=utf-8',
+            url: MountURLSWSAbs('getActivities'),
+            contentType: 'application/soap+xml; charset=utf-8',
             data: envelope
         })
         .done(function (data) {
-            returnData = data;
+            //montar ocombo
         })
         .fail(function (jqXHR, textStatus, errorThrown) {
             alert("Request failed: " + textStatus + "," + errorThrown);
         });
-
-        return returnData;
-    },
-
-    getSequencial = function getSequencial(strFuncIS, intYear, intWeek, intWeekDay) {
-        var body = '<soap:Body>';
-        body += '  <getSequencial xmlns=\"http://tempuri.org/\">';
-        body += '<strFuncIS>' + strFuncIS + '</strFuncIS>';
-        body += '<intYear>' + intYear + '</intYear>';
-        body += '<intWeek>' + intWeek + '</intWeek>';
-        body += '<intWeekDay>' + intWeekDay + '</intWeekDay>';
-        body += '</getSequencial>';
-        body += '<soap:Body>';
-        var envelope = getEnvelope(body);
-        var returnData;
-
-        $.ajax({
-            type: 'POST',
-            url: MountURLWS('getSequencial'),
-            contentType: 'text/xml; charset=utf-8',
-            data: envelope
-        })
-        .done(function (data) {
-            returnData = data;
-        })
-        .fail(function (jqXHR, textStatus, errorThrown) {
-            alert("Request failed: " + textStatus + "," + errorThrown);
-        });
-
-        return returnData;
     },
 
     ObtainOpportunity = function ObtainOpportunity(Activity, IpID, FuncIS) {
-        var body = '<soap:Body>';
+        var body = '<soap12:Body>';
         body += '<ObtainOpportunity xmlns=\"http://tempuri.org/\">';
         body += '<Activity>' + Activity + '</Activity>';
         body += '<IpID>' + IpID + '</IpID>';
         body += '<FuncIS>' + FuncIS + '</FuncIS>';
         body += '</ObtainOpportunity>';
-        body += '<soap:Body>';
+        body += '</soap12:Body>';
         var envelope = getEnvelope(body);
         var returnData;
 
         $.ajax({
             type: 'POST',
             url: MountURLWS('ObtainOpportunity'),
-            contentType: 'text/xml; charset=utf-8',
-            data: envelope
-        })
-        .done(function (data) {
-            returnData = data;
-        })
-        .fail(function (jqXHR, textStatus, errorThrown) {
-            alert("Request failed: " + textStatus + "," + errorThrown);
-        });
-
-        return returnData;
-    },
-
-    GetActualWeek = function GetActualWeek() {
-        var body = '<soap:Body>';
-        body += '<GetActualWeek xmlns=\"http://tempuri.org/\" />';
-        body += '<soap:Body>';
-        var envelope = getEnvelope(body);
-        var returnData;
-
-        $.ajax({
-            type: 'POST',
-            url: MountURLWS('GetActualWeek'),
-            contentType: 'text/xml; charset=utf-8',
+            contentType: 'application/soap+xml; charset=utf-8',
             data: envelope
         })
         .done(function (data) {
@@ -979,18 +1058,18 @@ stkApp.prototype = function () {
     },
 
     isLeader = function isLeader(funcIS) {
-        var body = '<soap:Body>';
+        var body = '<soap12:Body>';
         body += '<isLeader xmlns="http://tempuri.org/">';
         body += '<strFuncIS>' + funcIS + '</strFuncIS>';
         body += '</isLeader>';
-        body += '<soap:Body>';
+        body += '</soap12:Body>';
         var envelope = getEnvelope(body);
         var returnData;
 
         $.ajax({
             type: 'POST',
             url: MountURLWS('isLeader'),
-            contentType: 'text/xml; charset=utf-8',
+            contentType: 'application/soap+xml; charset=utf-8',
             data: envelope
         })
         .done(function (data) {
@@ -1041,6 +1120,21 @@ function compareDate(dt_ini, dt_fim) {
         return false;
     } else {
         return true;
+    }
+}
+
+function checkDateWeek(dt_sel, dt_ini, dt_fim) {
+    var dtIni = dt_ini.split("/");
+    var dtFim = dt_fim.split("/");
+    var dtSel = dt_sel.split("/");
+
+    var dataInicio = parseInt(dtIni[2] + dtIni[1] + dtIni[0]);
+    var dataFinal = parseInt(dtFim[2] + dtFim[1] + dtFim[0]);
+    var dataSel = parseInt(dtSel[2] + dtSel[1] + dtSel[0]);
+    if (dataSel >= dataInicio && dataSel <= dataFinal) {
+        return true;
+    } else {
+        return false;
     }
 }
 
@@ -1132,6 +1226,10 @@ function MountURLWS(operation) {
     return 'http://172.16.128.71:8028/wsSRAPDK/cResourceHours.asmx?op=' + operation;
 }
 
+function MountURLSWSAbs(operation) {
+    return 'http://172.16.128.71:8028/wsStkiAbsence/cService.asmx?op=' + operation;
+}
+
 function GetWeekDay(day) {
     switch (day) {
         case 0: //Sunday
@@ -1156,4 +1254,16 @@ function GetWeekDay(day) {
             return 1;
             break;
     }
+}
+
+function isOnline() {
+    //var networkState = navigator.connection.type;
+    //alert(networkState);
+    //if (networkState == Connection.UNKNOWN || networkState == Connection.NONE)
+    //    return false;
+    //else
+    //    return true;
+
+    console.log(window.navigator.onLine);
+    return window.navigator.onLine;
 }

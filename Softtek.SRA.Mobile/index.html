@@ -67,11 +67,9 @@
         <div role="main" class="ui-content">
             <h3 id="labelHourNormal">Horas Normais</h3>
             <span id="labelWeek">Semana:</span>
-            <select name="ddlWeek" id="ddlWeek" class="ddlWeek" data-mini="true">
-            </select>
+            <select name="ddlWeek" id="ddlWeek" class="ddlWeek" data-mini="true"></select>
             <hr />
-            <ul id="listHours" class="touch" data-role="listview" data-icon="false" data-split-icon="edit">
-            </ul>
+            <ul id="listHours" class="touch" data-role="listview" data-icon="false" data-split-icon="edit"></ul>
         </div>
 
         <div data-role="footer" data-theme="b" data-position="fixed" data-tap-toggle="false">
@@ -138,11 +136,9 @@
         <div role="main" class="ui-content">
             <h3 id="labelHourAditional">Horas Adicional</h3>
             <span id="labelWeek">Semana:</span>
-            <select name="ddlWeekAditional" id="ddlWeekAditional" class="ddlWeek" data-mini="true">
-            </select>
+            <select name="ddlWeekAditional" id="ddlWeekAditional" class="ddlWeek" data-mini="true"></select>
             <hr />
-            <ul id="listAditionalHours" class="touch" data-role="listview" data-icon="false" data-split-icon="edit">
-            </ul>
+            <ul id="listAditionalHours" class="touch" data-role="listview" data-icon="false" data-split-icon="edit"></ul>
         </div>
 
         <div data-role="footer" data-theme="b" data-position="fixed" data-tap-toggle="false">
@@ -301,7 +297,29 @@
     </div>
 
     <!-- Ausência page -->
-    <div id="faultPage" data-role="page" data-mini="true" class="backfault">
+    <div id="faultPage" data-role="page" data-mini="true">
+        <div data-role="header" data-theme="a" data-position="fixed" data-tap-toggle="false">
+            <a href="#home" data-rel="back" style="margin-left: 10px; margin-top: 10px; margin-bottom: 15px; float: left;" class="ui-btn-left ui-btn ui-icon-home ui-btn-icon-notext ui-shadow ui-corner-all" data-role="button" role="button">Home</a>
+            <img style="margin-left: 70px; margin-top: 10px; margin-bottom: 15px; float: left;" class="logo" alt="img" src="images/logo.png" width="240">
+            <a href="#settingPage" data-transition="slide" style="margin-left: 10px; margin-top: 10px; margin-bottom: 15px; float: left;" class="ui-btn header-button-right ui-btn-icon-right ui-btn-icon-notext ui-shadow ui-corner-all ui-icon-gear"></a>
+        </div>
+        <div role="main" class="ui-content">
+            <h3 id="labelHourAditional">Minhas Ausências</h3>
+            <hr />
+            <ul id="listFault" class="touch" data-role="listview" data-icon="false" data-split-icon="edit"></ul>
+        </div>
+        <div data-role="footer" data-theme="b" data-position="fixed" data-tap-toggle="false">
+            <div data-role="navbar" data-iconpos="bottom">
+                <ul>
+                    <li><a id="btnAddFaultHours" href="#faultAddPage" data-transition="pop" data-icon="plus">Adicionar</a></li>
+                    <li><a id="btnCancelFaultHours" href="#" data-rel="back" data-transition="pop" data-icon="back">Cancelar</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ausência page -->
+    <div id="faultAddPage" data-role="page" data-mini="true" class="backfault">
         <div data-role="header" data-theme="a" data-position="fixed" data-tap-toggle="false">
             <a href="#home" data-rel="back" style="margin-left: 10px; margin-top: 10px; margin-bottom: 15px; float: left;" class="ui-btn-left ui-btn ui-icon-home ui-btn-icon-notext ui-shadow ui-corner-all" data-role="button" role="button">Home</a>
             <img style="margin-left: 70px; margin-top: 10px; margin-bottom: 15px; float: left;" class="logo" alt="img" src="images/logo.png" width="240">
@@ -327,7 +345,7 @@
             <div data-role="navbar" data-iconpos="bottom">
                 <ul>
                     <li><a id="btnSaveFaultHours" href="#" data-transition="pop" data-icon="plus">Salvar</a></li>
-                    <li><a id="btnCancelFaultHours" href="#" data-rel="back" data-transition="pop" data-icon="back">Cancelar</a></li>
+                    <li><a id="btnCancelAddFaultHours" href="#" data-rel="back" data-transition="pop" data-icon="back">Cancelar</a></li>
                 </ul>
             </div>
         </div>
@@ -353,6 +371,10 @@
             <p><span id="Platform"></span></p>
             <hr />
             <a href="#" id="btnLogoff" class="ui-btn ui-btn-icon-left ui-icon-power">Logoff</a>
+        </div>
+        <div data-role="footer" data-theme="b" data-position="fixed" data-tap-toggle="false">
+            <p><span id="label_DevName">Desenvolvido por: Gustavo Denis</span></p>
+            <p><span id="label_DevTeam">Time: DEV Brasil</span></p>
         </div>
     </div>
 
