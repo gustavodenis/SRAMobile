@@ -365,7 +365,7 @@ stkApp.prototype = function () {
     },
 
     _initLoadHome = function () {
-        //isOnline();
+        isOnline();
         if (Weeks.length == 0) {
             var body = '<soap12:Body>';
             body += '<getRangeSRADaysMobile xmlns="http://tempuri.org/">';
@@ -1264,6 +1264,6 @@ function isOnline() {
     //else
     //    return true;
 
-    console.log(window.navigator.onLine);
+    alert(window.navigator.onLine);
     return window.navigator.onLine;
 }
