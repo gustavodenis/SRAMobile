@@ -365,7 +365,7 @@ stkApp.prototype = function () {
     },
 
     _initLoadHome = function () {
-        isOnline();
+        alert(isOnline());
         if (Weeks.length == 0) {
             var body = '<soap12:Body>';
             body += '<getRangeSRADaysMobile xmlns="http://tempuri.org/">';
@@ -1257,13 +1257,12 @@ function GetWeekDay(day) {
 }
 
 function isOnline() {
-    //var networkState = navigator.connection.type;
-    //alert(networkState);
-    //if (networkState == Connection.UNKNOWN || networkState == Connection.NONE)
-    //    return false;
-    //else
-    //    return true;
+    var networkState = navigator.connection.type;
+    alert(networkState);
+    if (networkState == Connection.UNKNOWN || networkState == Connection.NONE)
+        return false;
+    else
+        return true;
 
-    alert(window.navigator.onLine);
-    return window.navigator.onLine;
+    //return window.navigator.onLine;
 }
