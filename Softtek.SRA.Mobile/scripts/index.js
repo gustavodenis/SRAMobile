@@ -6,6 +6,7 @@ stkApp.prototype = function () {
     var aLancamentos = [];
     var aLancamentosAditional = [];
     var aAbsence = [];
+    var AcitivityFaults = [];
     var Weeks = [];
     var Activities = [];
     var IdSegment = 'BR';
@@ -138,7 +139,7 @@ stkApp.prototype = function () {
             });
         }
 
-        $('#btnLangBR, #btnLangES, #btnLangUS').on('click', function () {
+        $('#btnLangBR, #btnLangES, #btnLangEN').on('click', function () {
             changeLang($(this).attr('id').substr(7, 2));
         });
 
@@ -363,9 +364,13 @@ stkApp.prototype = function () {
         });
 
         $('#btnSaveApprove, #btnReproveApprove').on('click', function () {
+            var OrderIds = '';
+            $('#listApproveHours input[type="checkbox"]:checked').each(function () {
+                OrderIds += $(this).val() + ",";
+            });
             var body = '<soap12:Body>';
             body += '<setUpdateStatusMobile xmlns="http://Stk.org/">';
-            body += '<strLanguageId>' + EntityId + '</strLanguageId>';
+            body += '<strLanguageId>' + IdSegment + '</strLanguageId>';
             body += '<OrderIds>' + OrderIds + '</OrderIds>';
             body += '<OrderStatus>' + Status + '</OrderStatus>';
             body += '<OrderDescription>' + Desc + '</OrderDescription>';
@@ -893,7 +898,7 @@ stkApp.prototype = function () {
             })
             .done(function (xml) {
                 var rows = '';
-
+                var i = 1;
                 $('#listApproveHours').empty();
 
                 $(xml).find('cAbsence').each(function () {
@@ -901,9 +906,9 @@ stkApp.prototype = function () {
                     rows += '<a href="#" style="padding-top: 0px;padding-bottom: 0px;padding-right: 42px;padding-left: 0px;">';
                     rows += '    <label style="border-top-width: 0px;margin-top: 0px;border-bottom-width: 0px;margin-bottom: 0px;border-left-width: 0px;border-right-width: 0px;" data-corners="false">';
                     rows += '        <fieldset data-role="controlgroup">';
-                    rows += '            <input id="SelectedSensors_0__Value" name="SelectedSensors[0].Value" type="checkbox" value="true" />';
-                    rows += '            <input id="SelectedSensors_0__Id" name="SelectedSensors[0].Id" type="hidden" value="' + $(this).find('OrderId').text().trim() + '" />';
-                    rows += '            <label for="SelectedSensors_0__Value" style="border-top-width: 0px;margin-top: 0px;border-bottom-width: 0px;margin-bottom: 0px;border-left-width: 0px;border-right-width: 0px;">';
+                    rows += '            <input id="SelectedSensors_' + i + '__Value" name="SelectedSensors[' + i + '].Value" type="checkbox" value="' + $(this).find('OrderId').text().trim() + '" />';
+                    rows += '            <input id="SelectedSensors_' + i + '__Id" name="SelectedSensors[' + i + '].Id" type="hidden" value="' + $(this).find('OrderId').text().trim() + '" />';
+                    rows += '            <label for="SelectedSensors_' + i + '__Value" style="border-top-width: 0px;margin-top: 0px;border-bottom-width: 0px;margin-bottom: 0px;border-left-width: 0px;border-right-width: 0px;">';
                     rows += '                <label style="padding:10px 0px 0px 10px;">';
                     rows += '                    <h3>' + FuncIS + ' - ' + FuncName + '</h3>';
                     rows += '                    <p class="topic"><strong>' + $(this).find('ActivityId').text().trim() + ' - ' + $(this).find('ActivityName').text().trim() + '</strong></p>';
@@ -959,24 +964,47 @@ stkApp.prototype = function () {
 
     _initapprovePage = function () {
         fauxAjax(function () {
-            getTypeofDiscount();
+            var body = '<soap12:Body>';
+            body += '<isLeader xmlns="http://tempuri.org/">';
+            body += '<strFuncIS>' + funcIS + '</strFuncIS>';
+            body += '</isLeader>';
+            body += '</soap12:Body>';
+            var envelope = getEnvelope(body);
 
-            var dtA = new Date();
-            var dt = new Date();
-            dt.setFullYear(dtA.getFullYear(), dtA.getMonth(), 1);
-            var dtI = new Date();
-            dtI.setDate(dt.getDate() - 7);
-            var dtF = new Date(dtA.getFullYear(), dtA.getMonth() + 1, 0);
-            LoadApproveGrid(dtI.getFullYear() + "-" + zeroPad(dtI.getMonth() + 1, 2) + "-" + zeroPad(dtI.getDate(), 2), dtF.getFullYear() + "-" + zeroPad(dtF.getMonth() + 1, 2) + "-" + zeroPad(dtF.getDate(), 2));
+            $.ajax({
+                type: 'POST',
+                url: MountURLWS('isLeader'),
+                contentType: 'application/soap+xml; charset=utf-8',
+                data: envelope
+            })
+            .done(function (data) {
+                if (data === 'true') {
+                    getTypeofDiscount();
 
+                    var dtA = new Date();
+                    var dt = new Date();
+                    dt.setFullYear(dtA.getFullYear(), dtA.getMonth(), 1);
+                    var dtI = new Date();
+                    dtI.setDate(dt.getDate() - 7);
+                    var dtF = new Date(dtA.getFullYear(), dtA.getMonth() + 1, 0);
+                    LoadApproveGrid(dtI.getFullYear() + "-" + zeroPad(dtI.getMonth() + 1, 2) + "-" + zeroPad(dtI.getDate(), 2), dtF.getFullYear() + "-" + zeroPad(dtF.getMonth() + 1, 2) + "-" + zeroPad(dtF.getDate(), 2));
+                }
+                else {
+                    alert('Você não possui permissão para acessar esta página!');
+                }
+            })
+            .fail(function (jqXHR, textStatus, errorThrown) {
+                alert("Request failed: " + textStatus + "," + errorThrown);
+            });
         }, 'carregando...', this);
     },
 
     _initsettingPage = function () {
     },
 
-    changeLang = function changeLang(langSel) {
-        if (lang == "PT") {
+    changeLang = function changeLang(lang) {
+        console.log(lang);
+        if (lang == "BR") {
             $(dictionarySTK.lang.PT).each(function (i, item) {
                 changeLangObj(item.Controle, item.Label);
             });
@@ -997,11 +1025,14 @@ stkApp.prototype = function () {
         var objLabel = $('#' + obj);
         var tag = $(objLabel).get(0).tagName;
         switch (tag) {
-            case "span":
+            case "SPAN":
                 $(objLabel).html(label);
                 break;
-            case "input":
-                $(objLabel).val(label);
+            case "A":
+                $(objLabel).html(label);
+                break;
+            case "H3":
+                $(objLabel).html(label);
                 break;
             default:
                 $(objLabel).val(label);
@@ -1057,10 +1088,10 @@ stkApp.prototype = function () {
                 EntityId: $(data).find('EntityId').text(),
                 TeamId: $(data).find('TeamId').text(),
                 EntityLeaderName: $(data).find('EntityLeaderName').text(),
-                TotalBankHours: $(data).find('TotalBankHours').text(),
-                TotalVacations: $(data).find('TotalVacations').text(),
-                TotalAllowance: $(data).find('TotalAllowance').text(),
-                IsCovenant: $(data).find('IsCovenant').text(),
+                //TotalBankHours: $(data).find('TotalBankHours').text(),
+                //TotalVacations: $(data).find('TotalVacations').text(),
+                //TotalAllowance: $(data).find('TotalAllowance').text(),
+                //IsCovenant: $(data).find('IsCovenant').text(),
                 TeamLeaderName: $(data).find('TeamLeaderName').text()
             };
 
@@ -1070,39 +1101,54 @@ stkApp.prototype = function () {
             alert("Request failed: " + textStatus + "," + errorThrown);
         });
     },
-    
-    getActivities = function getActivities() {
-        var body = '<soap12:Body>';
-        body += '<getActivities xmlns="http://Stk.org/">';
-        body += '<strSegmentId>' + IdSegment + '</strSegmentId>';
-        body += '<strEntityId>' + EntityId + '</strEntityId>';
-        body += '<strTeamId>' + TeamId + '</strTeamId>';
-        body += '</getActivities>';
-        body += '</soap12:Body>';
-        var envelope = getEnvelopeAbs(body);
 
-        $.ajax({
-            type: 'POST',
-            url: MountURLSWSAbs('getActivities'),
-            contentType: 'application/soap+xml; charset=utf-8',
-            data: envelope
-        })
-        .done(function (data) {
-            $('#ddlActivityFault').empty();
-            $('#ddlActivityFault').append("<option value='0' selected='selected'>Selecione...</option>");
-            $(data).find('cActivity').each(function () {
-                var desc = '';
-                if (IdSegment == 'BR')
-                    desc = $(this).find('Description_BR').text();
-                else if (IdSegment == 'CL' || IdSegment == 'CO' || IdSegment == 'AR')
-                    desc = $(this).find('Description_SP').text();
-                else
-                    desc = $(this).find('Description_EN').text();
-                $('#ddlActivityFault').append("<option value=" + $(this).find('ActivityId').text() + ">" + $(this).find('ActivityId').text() + ' - ' + desc + "</option>");
+    getActivities = function getActivities() {
+        if (AcitivityFaults.length == 0) {
+            var body = '<soap12:Body>';
+            body += '<getActivities xmlns="http://Stk.org/">';
+            body += '<strSegmentId>' + IdSegment + '</strSegmentId>';
+            body += '<strEntityId>' + EntityId + '</strEntityId>';
+            body += '<strTeamId>' + TeamId + '</strTeamId>';
+            body += '</getActivities>';
+            body += '</soap12:Body>';
+            var envelope = getEnvelopeAbs(body);
+
+            $.ajax({
+                type: 'POST',
+                url: MountURLSWSAbs('getActivities'),
+                contentType: 'application/soap+xml; charset=utf-8',
+                data: envelope
+            })
+            .done(function (xml) {
+                $(xml).find('cActivity').each(function () {
+                    AcitivityFaults.push({ 'ActivityId': $(this).find('ActivityId').text(), 'Description_BR': $(this).find('Description_BR').text(), 'Description_SP': $(this).find('Description_SP').text(), 'Description_EN': $(this).find('Description_EN').text() });
+                });
+
+                MountActivityFaultCombo();
+            })
+            .fail(function (jqXHR, textStatus, errorThrown) {
+                alert("Request failed: " + textStatus + "," + errorThrown);
             });
-        })
-        .fail(function (jqXHR, textStatus, errorThrown) {
-            alert("Request failed: " + textStatus + "," + errorThrown);
+        }
+        else {
+            MountActivityFaultCombo();
+        }
+    },
+
+    MountActivityFaultCombo = function () {
+        $('#ddlActivityFault').empty();
+        $('#ddlActivityFault').append("<option value='0' selected='selected'>Selecione...</option>");
+
+        $.each(AcitivityFaults, function (index, el) {
+            var desc = '';
+            if (IdSegment == 'BR')
+                desc = AcitivityFaults[index].Description_BR;
+            else if (IdSegment == 'CL' || IdSegment == 'CO' || IdSegment == 'AR')
+                desc = AcitivityFaults[index].Description_SP;
+            else
+                desc = AcitivityFaults[index].Description_EN;
+
+            $('#ddlActivityFault').append("<option value=" + AcitivityFaults[index].ActivityId + ">" + desc + "</option>");
         });
     },
 
@@ -1193,31 +1239,6 @@ stkApp.prototype = function () {
         else {
             listitem.children(".ui-btn").removeClass("ui-btn-active");
         }
-    },
-
-    isLeader = function isLeader(funcIS) {
-        var body = '<soap12:Body>';
-        body += '<isLeader xmlns="http://tempuri.org/">';
-        body += '<strFuncIS>' + funcIS + '</strFuncIS>';
-        body += '</isLeader>';
-        body += '</soap12:Body>';
-        var envelope = getEnvelope(body);
-        var returnData;
-
-        $.ajax({
-            type: 'POST',
-            url: MountURLWS('isLeader'),
-            contentType: 'application/soap+xml; charset=utf-8',
-            data: envelope
-        })
-        .done(function (data) {
-            returnData = data;
-        })
-        .fail(function (jqXHR, textStatus, errorThrown) {
-            alert("Request failed: " + textStatus + "," + errorThrown);
-        });
-
-        return returnData;
     },
 
     fauxAjax = function fauxAjax(func, text, thisObj) {
@@ -1337,7 +1358,7 @@ var dictionarySTK = {
             { "Controle": "labelHourBegin", "Label": "Hora Entrada:" },
             { "Controle": "btnAddAditionalHour", "Label": "Salvar" },
             { "Controle": "btnCancelAditionalHour", "Label": "Cancelar" },
-            { "Controle": "labelTypeDiscount", "Label": "Tipo de Desconto" },
+            //{ "Controle": "labelTypeDiscount", "Label": "Tipo de Desconto" },
             { "Controle": "btnSaveApprove", "Label": "Gravar" },
             { "Controle": "btnReproveApprove", "Label": "Reprovar" },
             { "Controle": "btnApprove", "Label": "Aprovar" },
@@ -1351,11 +1372,89 @@ var dictionarySTK = {
             { "Controle": "btnLogoff", "Label": "Logoff" }
         ],
         "EN": [
-            {
-            }],
+            { "Controle": "hrNormal", "Label": "Normal" },
+            { "Controle": "hrAditional", "Label": "Aditional" },
+            { "Controle": "hrFault", "Label": "Vacation" },
+            { "Controle": "hrAprove", "Label": "Approve" },
+            { "Controle": "hrNormal", "Label": "Normal" },
+            { "Controle": "labelIS", "Label": "IS:" },
+            { "Controle": "labelPass", "Label": "Password:" },
+            { "Controle": "loginBtn", "Label": "Login" },
+            { "Controle": "labelDateBegin", "Label": "Date Begin:" },
+            { "Controle": "labelDateEnd", "Label": "Date End:" },
+            { "Controle": "labelHours", "Label": "Hour:" },
+            { "Controle": "labelHourNormal", "Label": "Hours Normals" },
+            { "Controle": "labelWeek", "Label": "Week:" },
+            { "Controle": "btnAddHours", "Label": "Add" },
+            { "Controle": "btnCancelHour", "Label": "Cancel" },
+            { "Controle": "labelProject", "Label": "Project:" },
+            { "Controle": "labelAcitivity", "Label": "Activity" },
+            { "Controle": "labelDescription", "Label": "Description" },
+            { "Controle": "labelReplyLanc", "Label": "Reply Hours" },
+            { "Controle": "btnAddNormalHour", "Label": "Save" },
+            { "Controle": "btnCancelNormalHour", "Label": "Cancel" },
+            { "Controle": "labelHourAditional", "Label": "Aditional Hours" },
+            { "Controle": "btnAddAditionalHours", "Label": "Add" },
+            { "Controle": "btnCancelHour", "Label": "Cancel" },
+            { "Controle": "labelDate", "Label": "Date:" },
+            { "Controle": "labelHourBegin", "Label": "Hour Entrance:" },
+            { "Controle": "btnAddAditionalHour", "Label": "Save" },
+            { "Controle": "btnCancelAditionalHour", "Label": "Cancel" },
+            //{ "Controle": "labelTypeDiscount", "Label": "Type of Discount" },
+            { "Controle": "btnSaveApprove", "Label": "Save" },
+            { "Controle": "btnReproveApprove", "Label": "Disapprove" },
+            { "Controle": "btnApprove", "Label": "Approve" },
+            { "Controle": "btnCancelAprove", "Label": "Cancel" },
+            { "Controle": "labelFault", "Label": "Absence" },
+            { "Controle": "btnSaveFaultHours", "Label": "Save" },
+            { "Controle": "btnCancelFaultHours", "Label": "Cancel" },
+            { "Controle": "label_ISName", "Label": "Resource Name:" },
+            { "Controle": "label_Lang", "Label": "Language:" },
+            { "Controle": "label_Platform", "Label": "Plataform:" },
+            { "Controle": "btnLogoff", "Label": "Logoff" }
+        ],
         "ES": [
-            {
-            }]
+            { "Controle": "hrNormal", "Label": "Normal" },
+            { "Controle": "hrAditional", "Label": "Aditional" },
+            { "Controle": "hrFault", "Label": "Vacation" },
+            { "Controle": "hrAprove", "Label": "Approve" },
+            { "Controle": "hrNormal", "Label": "Normal" },
+            { "Controle": "labelIS", "Label": "IS:" },
+            { "Controle": "labelPass", "Label": "Password:" },
+            { "Controle": "loginBtn", "Label": "Login" },
+            { "Controle": "labelDateBegin", "Label": "Date Begin:" },
+            { "Controle": "labelDateEnd", "Label": "Date End:" },
+            { "Controle": "labelHours", "Label": "Hour:" },
+            { "Controle": "labelHourNormal", "Label": "Hours Normals" },
+            { "Controle": "labelWeek", "Label": "Week:" },
+            { "Controle": "btnAddHours", "Label": "Add" },
+            { "Controle": "btnCancelHour", "Label": "Cancel" },
+            { "Controle": "labelProject", "Label": "Project:" },
+            { "Controle": "labelAcitivity", "Label": "Activity" },
+            { "Controle": "labelDescription", "Label": "Description" },
+            { "Controle": "labelReplyLanc", "Label": "Reply Hours" },
+            { "Controle": "btnAddNormalHour", "Label": "Save" },
+            { "Controle": "btnCancelNormalHour", "Label": "Cancel" },
+            { "Controle": "labelHourAditional", "Label": "Aditional Hours" },
+            { "Controle": "btnAddAditionalHours", "Label": "Add" },
+            { "Controle": "btnCancelHour", "Label": "Cancel" },
+            { "Controle": "labelDate", "Label": "Date:" },
+            { "Controle": "labelHourBegin", "Label": "Hour Entrance:" },
+            { "Controle": "btnAddAditionalHour", "Label": "Save" },
+            { "Controle": "btnCancelAditionalHour", "Label": "Cancel" },
+            //{ "Controle": "labelTypeDiscount", "Label": "Type of Discount" },
+            { "Controle": "btnSaveApprove", "Label": "Save" },
+            { "Controle": "btnReproveApprove", "Label": "Disapprove" },
+            { "Controle": "btnApprove", "Label": "Approve" },
+            { "Controle": "btnCancelAprove", "Label": "Cancel" },
+            { "Controle": "labelFault", "Label": "Absence" },
+            { "Controle": "btnSaveFaultHours", "Label": "Save" },
+            { "Controle": "btnCancelFaultHours", "Label": "Cancel" },
+            { "Controle": "label_ISName", "Label": "Resource Name:" },
+            { "Controle": "label_Lang", "Label": "Language:" },
+            { "Controle": "label_Platform", "Label": "Plataform:" },
+            { "Controle": "btnLogoff", "Label": "Logoff" }
+        ]
     }
 };
 
