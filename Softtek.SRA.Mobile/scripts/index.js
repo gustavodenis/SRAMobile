@@ -10,6 +10,7 @@ stkApp.prototype = function () {
     var Activities = [];
     var IdSegment = 'BR';
     var FuncIS = 'ACFV';
+    var FuncName = 'Vidal';
     var TeamId = 'DEV';
     var EntityId = '2690702';
     var _login = true, //false para ativar o login;
@@ -110,6 +111,13 @@ stkApp.prototype = function () {
             DeleteHourAditional(listitem, transition);
         });
 
+        $(document).on("swiperight", "#listFault li", function (event) {
+            var listitem = $(this),
+            transition = $.support.cssTransform3d ? "right" : false;
+            deleteFault(listitem, transition);
+        });
+
+
         if (!$.mobile.support.touch) {
             $("#listHours").removeClass("touch");
             $("#listHours li.btnDelHN").on("click", function () {
@@ -121,6 +129,12 @@ stkApp.prototype = function () {
             $("#listAditionalHours li.btnDelHA").on("click", function () {
                 var listitem = $(this).parent("li");
                 DeleteHourAditional(listitem);
+            });
+
+            $("#listFault").removeClass("touch");
+            $("#listFault li.btnDelF").on("click", function () {
+                var listitem = $(this).parent("li");
+                deleteFault(listitem);
             });
         }
 
@@ -274,6 +288,53 @@ stkApp.prototype = function () {
             var Hour = $('#txtHourFault').val();
             var Activity = $('#ddlActivityFault option:selected').val();
             var Desc = $('#txtDescFault').val();
+
+            var erros = '';
+            if (DtBegin == '')
+                erros += '- Data Inicio\n';
+            if (DtEnd == '')
+                erros += '- Data Final\n';
+            if (Hour == '')
+                erros += '- Horas\n';
+            if (Activity == '')
+                erros += '- Atividade\n';
+            if (Desc == '')
+                erros += '- Descrição\n';
+
+            if (erros.length > 0)
+                alert('Erros Encontrados:\n' + erros);
+            else {
+                var body = '<soap12:Body>';
+                body += '<setInsertOrderMobile xmlns="http://Stk.org/">';
+                body += '<strLanguageId>' + dtParse.getFullYear() + '</strLanguageId>';
+                body += '<strFuncIs>' + FuncIS + '</strFuncIs>';
+                body += '<strActivityId>' + dtParse.getWeek() + '</strActivityId>';
+                body += '<intTypeOfActivity>' + GetWeekDay(dtParse.getDay()) + '</intTypeOfActivity>';
+                body += '<dteFromDate>' + $('#idSeq').val() + '</dteFromDate    >';
+                body += '<dteToDate>' + Desc + '</dteToDate>';
+                body += '<decTotalHours>' + Activity + '</decTotalHours>';
+                body += '<strOrderDescription>' + Hour + '</strOrderDescription>';
+                body += '<intTotalCertificates>' + (dtParse.getMonth() + 1) + '</intTotalCertificates>';
+                body += '<strCreatedBy>' + dtParse.getDate() + '</strCreatedBy>';
+                body += '<intTypeOfDiscount>' + Proj + '</intTypeOfDiscount>';
+                body += '<intOrderStatus>' + dtParse.getFullYear() + '</intOrderStatus>';
+                body += '</setInsertOrderMobile>';
+                body += '<soap12:Body>';
+                var envelope = getEnvelopeAbs(body);
+
+                $.ajax({
+                    type: 'POST',
+                    url: MountURLSWSAbs('setInsertOrderMobile'),
+                    contentType: 'application/soap+xml; charset=utf-8',
+                    data: envelope
+                })
+                .done(function (data) {
+                    alert((data > 0 ? 'Registro salvo com sucesso!' : 'Erro ao gravar a ausência!'));
+                })
+                .fail(function (jqXHR, textStatus, errorThrown) {
+                    alert("Request failed: " + textStatus + "," + errorThrown);
+                });
+            }
         });
 
         $('#ddlWeek').on('click', function () {
@@ -294,6 +355,41 @@ stkApp.prototype = function () {
             $('#txtHourBegin,#txtDtAditional,#txtHourAditional,#txtDescAditional,#txtDtRepAditionalBegin,#txtDtRepAditionalEnd').val('');
             $('#ddlActivityAditional, #idSeqAditional').val(0);
             $('#divRepLancAditional').show();
+        });
+
+        $('#btnAddFaultHours').on('click', function () {
+            $('#txtDtBeginFault,#txtDtEndFault,#txtHourFault,#txtDescFault').val('');
+            $('#ddlActivityFault, #OrderId').val(0);
+        });
+
+        $('#btnSaveApprove, #btnReproveApprove').on('click', function () {
+            var body = '<soap12:Body>';
+            body += '<setUpdateStatusMobile xmlns="http://Stk.org/">';
+            body += '<strLanguageId>' + EntityId + '</strLanguageId>';
+            body += '<OrderIds>' + OrderIds + '</OrderIds>';
+            body += '<OrderStatus>' + Status + '</OrderStatus>';
+            body += '<OrderDescription>' + Desc + '</OrderDescription>';
+            body += '<ApprovalDescription>' + AprDesc + '</ApprovalDescription>';
+            body += '<ValidationDescription>' + ValDesc + '</ValidationDescription>';
+            body += '<UpdatedBy>' + FuncIS + '</UpdatedBy>';
+            body += '<IsCertificate>' + 0 + '</IsCertificate>';
+            body += '<TypeOfDiscount>' + ddlTypeDiscount + '</TypeOfDiscount>';
+            body += '</setUpdateStatusMobile>';
+            body += '<soap12:Body>';
+            var envelope = getEnvelopeAbs(body);
+
+            $.ajax({
+                type: 'POST',
+                url: MountURLSWSAbs('setUpdateStatusMobile'),
+                contentType: 'application/soap+xml; charset=utf-8',
+                data: envelope
+            })
+            .done(function (data) {
+                alert((data > 0 ? 'Registro salvo com sucesso!' : 'Erro ao gravar a ausência!'));
+            })
+            .fail(function (jqXHR, textStatus, errorThrown) {
+                alert("Request failed: " + textStatus + "," + errorThrown);
+            });
         });
     },
 
@@ -435,14 +531,14 @@ stkApp.prototype = function () {
                             .addClass(transition)
                             .on("webkitTransitionEnd transitionend otransitionend", function () {
                                 listitem.remove();
-                                $("#list").listview("refresh").find(".border-bottom").removeClass("border-bottom");
+                                $("#listAditional").listview("refresh").find(".border-bottom").removeClass("border-bottom");
                             })
                             .prev("li").children("a").addClass("border-bottom")
                             .end().end().children(".ui-btn").removeClass("ui-btn-active");
                         }
                         else {
                             listitem.remove();
-                            $("#list").listview("refresh");
+                            $("#listAditional").listview("refresh");
                         }
                         LoadAditionalHours($('#ddlWeekAditional option:selected').val());
                     }
@@ -501,14 +597,14 @@ stkApp.prototype = function () {
                             .addClass(transition)
                             .on("webkitTransitionEnd transitionend otransitionend", function () {
                                 listitem.remove();
-                                $("#list").listview("refresh").find(".border-bottom").removeClass("border-bottom");
+                                $("#listHours").listview("refresh").find(".border-bottom").removeClass("border-bottom");
                             })
                             .prev("li").children("a").addClass("border-bottom")
                             .end().end().children(".ui-btn").removeClass("ui-btn-active");
                         }
                         else {
                             listitem.remove();
-                            $("#list").listview("refresh");
+                            $("#listHours").listview("refresh");
                         }
 
                         LoadNormalHours($('#ddlWeek option:selected').val());
@@ -741,59 +837,94 @@ stkApp.prototype = function () {
             })
             .done(function (xml) {
                 var rows = '';
-                var total = 0;
                 aAbsence = [];
 
                 $('#listFault').empty();
 
                 $(xml).find('cAbsence').each(function () {
-                    /*
-                    <Orders>
-                    OrderId = drAbsence("OrderId")
-                    .Activity = New cActivity().getActivity()
-                    .FromDate = ValidateNull(drAbsence("FromDate"), Nothing)
-                    .ToDate = ValidateNull(drAbsence("ToDate"), "")
-                    .TotalHours = CDbl(ValidateNull(drAbsence("TotalHours"), 0))
-                    .OrderStatus = CInt(ValidateNull(drAbsence("OrderStatus"), -1))
-                    .OrderDescription = drAbsence("OrderDescription").ToString.Trim
-                    .ApprovalDescription = drAbsence("ApprovalDescription").ToString.Trim
-                    .ValidationDescription = drAbsence("ValidationDescription").ToString.Trim
-                    .IsCertificate = drAbsence("IsCertificate")
-                    .TypeOfDiscount = CInt(ValidateNull(drAbsence("TypeOfDiscount"), 0))
-                    .TotalCertificates = CInt(ValidateNull(drAbsence("TotalCertificates"), 0))
-                    .ApprovedBy = drAbsence("ApprovedBy").ToString.Trim
-                    .ApprovalDate = ValidateNull(drAbsence("ApprovalDate"), Nothing)
-                    .ValidatedBy = drAbsence("ValidatedBy").ToString.Trim
-                    .ValidationDate = ValidateNull(drAbsence("ValidationDate"), Nothing)
-                    .CreatedBy = drAbsence("CreatedBy").ToString.Trim
-                    .CreationDate = ValidateNull(drAbsence("CreationDate"), Nothing)
-                    .UpdatedBy = drAbsence("UpdatedBy").ToString.Trim
-                    .UpdateDate = ValidateNull(drAbsence("UpdateDate"), Nothing)          
-                    </Orders>
-                    */
-                    aAbsence.push({
-                        'FuncIs': $(this).find('FuncIs').text().trim(),
-                        'CollaboratorName': $(this).find('CollaboratorName').text().trim(),
-                        'EntityLeader': $(this).find('EntityLeader').text().trim(),
-                        'TeamLeader': $(this).find('TeamLeader').text().trim(),
-                        'IsCovenant': $(this).find('IsCovenant').text().trim(),
-                        'TotalBankHours': $(this).find('TotalBankHours').text().trim(),
-                        'TotalVacations': $(this).find('TotalVacations').text().trim(),
-                        'TotalAllowance': $(this).find('TotalAllowance').text().trim()
-                    });
-
-                    rows += '<li Seq=' + $(this).find('Sequencial').text().trim() + '>';
-                    rows += '<a href="#"><h3>' + getDateString($(this).find('DiaMes').text().trim(), $(this).find('Mes').text().trim(), $(this).find('Ano').text().trim()) + '</h3><p class="topic"><strong>';
-                    rows += $(this).find('CodigoAlternativo').text().trim() + '</strong> ' + $(this).find('Descricao').text().trim() + '</p><p class="ui-li-aside"><strong>' + parseInt($(this).find('Horas').text()).toString() + ' Horas</strong></p></a>';
-                    rows += '<a href="#"></a>';
-                    rows += '</li>';
-
-                    total += parseFloat($(this).find('Horas').text().replace(':', '.'));
+                    rows += '<li OrderId=' + $(this).find('OrderId').text().trim() + ' class="btnDelF"><a href="#">';
+                    rows += '<h3>' + FuncIS + ' - ' + FuncName + '</h3>';
+                    rows += '<p class="topic"><strong>' + $(this).find('ActivityId').text().trim() + ' - ' + $(this).find('ActivityName').text().trim() + '</strong></p>';
+                    rows += '<p>' + $(this).find('TotalHours').text().trim() + ' Horas : ' + $(this).find('FromDate').text().trim() + " - " + +$(this).find('ToDate').text().trim() + '</p>';
+                    rows += '<p>' + $(this).find('OrderDescription').text().trim() + '</p>';
+                    rows += '<p>' + $(this).find('OrderStatus').text().trim() + ' - ' + $(this).find('ApprovedBy').text().trim() + ' - ' + $(this).find('AprovalDate').text().trim() + '</p>';
+                    rows += '</a><a href="#" class="btnFaultItem" OrderId=' + $(this).find('OrderId').text().trim() + '></a></li>';
                 });
 
-                rows += '<li><a href="#"><h3>Total</h3><p class="ui-li-aside"><strong>' + total.toString() + ' Horas</strong></p></a></li>'
                 $('#listFault').append(rows);
                 $("#listFault").listview("refresh");
+
+                $('#btnFaultItem').on('click', function () {
+                    deleteFault($(this).parent(), $(this).attr('OrderId'));
+                });
+            })
+            .fail(function (jqXHR, textStatus, errorThrown) {
+                alert("Request failed: " + textStatus + "," + errorThrown);
+            });
+        }, 'carregando...', this);
+    },
+
+    LoadApproveGrid = function (dtBegin, dtEnd) {
+        fauxAjax(function () {
+            var body = '<soap12:Body>';
+            body += '<getOrders xmlns="http://Stk.org/">';
+            body += '<strFuncIs>' + FuncIS + '</strFuncIs>';
+            body += '<strSegmentId>' + IdSegment + '</strSegmentId>';
+            body += '<strEntityId>' + EntityId + '</strEntityId>';
+            body += '<strTeamId>' + TeamId + '</strTeamId>';
+            body += '<strActivityId></strActivityId>';
+            body += '<intTypeOfActivity>-1</intTypeOfActivity>';
+            body += '<dteFromDate>' + dtBegin + '</dteFromDate>';
+            body += '<dteToDate>' + dtEnd + '</dteToDate>';
+            body += '<strApproverId></strApproverId>';
+            body += '<strValidatorId></strValidatorId>';
+            body += '<intOrderSatus>-1</intOrderSatus>';
+            body += '<intIsCertificateRule>-1</intIsCertificateRule>';
+            body += '<intTypeOfReport>0</intTypeOfReport>';
+            body += '</getOrders>';
+            body += '</soap12:Body>';
+            var envelope = getEnvelopeAbs(body);
+
+            $.ajax({
+                type: 'POST',
+                url: MountURLSWSAbs('getOrders'),
+                contentType: 'application/soap+xml; charset=utf-8',
+                data: envelope
+            })
+            .done(function (xml) {
+                var rows = '';
+
+                $('#listApproveHours').empty();
+
+                $(xml).find('cAbsence').each(function () {
+                    rows += '<li OrderId=' + $(this).find('OrderId').text().trim() + '>';
+                    rows += '<a href="#" style="padding-top: 0px;padding-bottom: 0px;padding-right: 42px;padding-left: 0px;">';
+                    rows += '    <label style="border-top-width: 0px;margin-top: 0px;border-bottom-width: 0px;margin-bottom: 0px;border-left-width: 0px;border-right-width: 0px;" data-corners="false">';
+                    rows += '        <fieldset data-role="controlgroup">';
+                    rows += '            <input id="SelectedSensors_0__Value" name="SelectedSensors[0].Value" type="checkbox" value="true" />';
+                    rows += '            <input id="SelectedSensors_0__Id" name="SelectedSensors[0].Id" type="hidden" value="' + $(this).find('OrderId').text().trim() + '" />';
+                    rows += '            <label for="SelectedSensors_0__Value" style="border-top-width: 0px;margin-top: 0px;border-bottom-width: 0px;margin-bottom: 0px;border-left-width: 0px;border-right-width: 0px;">';
+                    rows += '                <label style="padding:10px 0px 0px 10px;">';
+                    rows += '                    <h3>' + FuncIS + ' - ' + FuncName + '</h3>';
+                    rows += '                    <p class="topic"><strong>' + $(this).find('ActivityId').text().trim() + ' - ' + $(this).find('ActivityName').text().trim() + '</strong></p>';
+                    rows += '                    <p>' + $(this).find('TotalHours').text().trim() + ' Horas : ' + $(this).find('FromDate').text().trim() + " - " + +$(this).find('ToDate').text().trim() + '</p>';
+                    rows += '                    <p>' + $(this).find('OrderDescription').text().trim() + '</p>';
+                    rows += '                    <p>B. Horas: ' + $(this).find('TotalBankHours').text().trim() + ', P. Férias: ' + $(this).find('TotalVacations').text().trim() + ', Abono: ' + $(this).find('TotalAllowance').text().trim() + '</p>';
+                    rows += '                </label>';
+                    rows += '            </label>';
+                    rows += '        </fieldset>';
+                    rows += '    </label>';
+                    rows += '</a>';
+                    rows += '<a href="#" class="btnApproveItem" OrderId=' + $(this).find('OrderId').text().trim() + '></a>';
+                    rows += '</li>';
+                });
+
+                $('#listApproveHours').append(rows);
+                $("#listApproveHours").listview("refresh");
+
+                $('#btnApproveItem').on('click', function () {
+                    $('#popupApprove').show();
+                });
             })
             .fail(function (jqXHR, textStatus, errorThrown) {
                 alert("Request failed: " + textStatus + "," + errorThrown);
@@ -808,28 +939,39 @@ stkApp.prototype = function () {
     },
 
     _initfaultAddPage = function () {
-        //$('#txtDtBeginFault,#txtDtEndFault,#txtHourFault,#ddlActivityFault,#txtDescFault').val('');
-        //fauxAjax(function () {
-        //    $('#txtDtBeginFault').val('');
-        //    $('#txtDtEndFault').val('');
-        //    $('#txtHourFault').val('');
-        //    $('#ddlActivityFault').val('');
-        //    $('#txtDescFault').val('')
-        //    ;
-        //}, 'carregando...', this);
+        fauxAjax(function () {
+            getActivities();
+        }, 'carregando...', this);
     },
 
     _initfaultPage = function () {
+        var dtA = new Date();
         var dt = new Date();
+        dt.setFullYear(dtA.getFullYear(), dtA.getMonth(), 1);
         var dtI = new Date();
         dtI.setDate(dt.getDate() - 7);
-        LoadFaultGrid(zeroPad(dtI.getDate(),2) + zeroPad(dtI.getMonth(), 2) + "/" + dtI.getFullYear(), "31/" + zeroPad(dt.getMonth(), 2) + "/" + dt.getFullYear());
+        var dtF = new Date(dtA.getFullYear(), dtA.getMonth() + 1, 0);
+        LoadFaultGrid(dtI.getFullYear() + "-" + zeroPad(dtI.getMonth() + 1, 2) + "-" + zeroPad(dtI.getDate(), 2), dtF.getFullYear() + "-" + zeroPad(dtF.getMonth() + 1, 2) + "-" + zeroPad(dtF.getDate(), 2));
     },
 
     _initaditionalPage = function () {
     },
+
     _initapprovePage = function () {
+        fauxAjax(function () {
+            getTypeofDiscount();
+
+            var dtA = new Date();
+            var dt = new Date();
+            dt.setFullYear(dtA.getFullYear(), dtA.getMonth(), 1);
+            var dtI = new Date();
+            dtI.setDate(dt.getDate() - 7);
+            var dtF = new Date(dtA.getFullYear(), dtA.getMonth() + 1, 0);
+            LoadApproveGrid(dtI.getFullYear() + "-" + zeroPad(dtI.getMonth() + 1, 2) + "-" + zeroPad(dtI.getDate(), 2), dtF.getFullYear() + "-" + zeroPad(dtF.getMonth() + 1, 2) + "-" + zeroPad(dtF.getDate(), 2));
+
+        }, 'carregando...', this);
     },
+
     _initsettingPage = function () {
     },
 
@@ -928,33 +1070,7 @@ stkApp.prototype = function () {
             alert("Request failed: " + textStatus + "," + errorThrown);
         });
     },
-
-    getActivity = function getActivity() {
-        var body = '<soap12:Body>';
-        body += '  <getActivity xmlns="http://Stk.org/">';
-        body += '     <strSegmentId>' + IdSegment + '</strSegmentId>';
-        body += '     <strActivityId></strActivityId>';
-        body += '     <intTypeOfActivity></intTypeOfActivity>';
-        body += '     <strEntityId>' + EntityId + '</strEntityId>';
-        body += '     <strTeamId>' + TeamId + '</strTeamId>';
-        body += '   </getActivity>';
-        body += '</soap12:Body>';
-        var envelope = getEnvelopeAbs(body);
-
-        $.ajax({
-            type: 'POST',
-            url: MountURLSWSAbs('getActivity'),
-            contentType: 'application/soap+xml; charset=utf-8',
-            data: envelope
-        })
-        .done(function (data) {
-            //montar o combo
-        })
-        .fail(function (jqXHR, textStatus, errorThrown) {
-            alert("Request failed: " + textStatus + "," + errorThrown);
-        });
-    },
-
+    
     getActivities = function getActivities() {
         var body = '<soap12:Body>';
         body += '<getActivities xmlns="http://Stk.org/">';
@@ -972,38 +1088,111 @@ stkApp.prototype = function () {
             data: envelope
         })
         .done(function (data) {
-            //montar ocombo
+            $('#ddlActivityFault').empty();
+            $('#ddlActivityFault').append("<option value='0' selected='selected'>Selecione...</option>");
+            $(data).find('cActivity').each(function () {
+                var desc = '';
+                if (IdSegment == 'BR')
+                    desc = $(this).find('Description_BR').text();
+                else if (IdSegment == 'CL' || IdSegment == 'CO' || IdSegment == 'AR')
+                    desc = $(this).find('Description_SP').text();
+                else
+                    desc = $(this).find('Description_EN').text();
+                $('#ddlActivityFault').append("<option value=" + $(this).find('ActivityId').text() + ">" + $(this).find('ActivityId').text() + ' - ' + desc + "</option>");
+            });
         })
         .fail(function (jqXHR, textStatus, errorThrown) {
             alert("Request failed: " + textStatus + "," + errorThrown);
         });
     },
 
-    ObtainOpportunity = function ObtainOpportunity(Activity, IpID, FuncIS) {
+    getTypeofDiscount = function getTypeofDiscount() {
         var body = '<soap12:Body>';
-        body += '<ObtainOpportunity xmlns=\"http://tempuri.org/\">';
-        body += '<Activity>' + Activity + '</Activity>';
-        body += '<IpID>' + IpID + '</IpID>';
-        body += '<FuncIS>' + FuncIS + '</FuncIS>';
-        body += '</ObtainOpportunity>';
+        body += '<getTypeOfDiscount xmlns="http://Stk.org/">';
+        body += '</getTypeOfDiscount>';
         body += '</soap12:Body>';
-        var envelope = getEnvelope(body);
-        var returnData;
+        var envelope = getEnvelopeAbs(body);
 
         $.ajax({
             type: 'POST',
-            url: MountURLWS('ObtainOpportunity'),
+            url: MountURLSWSAbs('getTypeOfDiscount'),
             contentType: 'application/soap+xml; charset=utf-8',
             data: envelope
         })
         .done(function (data) {
-            returnData = data;
+            $('#listtypeDiscount').empty();
+            var rows = '<li id="labelTypeDiscount" data-role="list-divider">Tipo de Desconto</li>';
+
+            $(data).find('Table').each(function () {
+                var desc = '';
+                if (IdSegment == 'BR')
+                    desc = $(this).find('descr').text();
+                else if (IdSegment == 'CL' || IdSegment == 'CO' || IdSegment == 'AR')
+                    desc = $(this).find('descr_sp').text();
+                else
+                    desc = $(this).find('descr_en').text();
+
+                rows += '<li><a href="#" id=' + $(this).find('value') + '>' + desc + '</a></li>';
+            });
+
+            $('#listtypeDiscount').append(rows);
+            $('#listtypeDiscount').listview("refresh");
         })
         .fail(function (jqXHR, textStatus, errorThrown) {
             alert("Request failed: " + textStatus + "," + errorThrown);
         });
+    },
 
-        return returnData;
+    deleteFault = function deleteFault(listitem, orderid) {
+        listitem.children(".ui-btn").addClass("ui-btn-active");
+
+        if (confirm('Deseja Exluir o lançamento?')) {
+            fauxAjax(function () {
+
+                var body = '<soap12:Body>';
+                body += '<setDeleteOrderMobile xmlns="http://Stk.org/">';
+                body += '<strLanguageId>' + IdSegment + '</strLanguageId>';
+                body += '<intOrderId>' + orderid + '</intOrderId>';
+                body += '</setDeleteOrderMobile>';
+                body += '</soap12:Body>';
+                var envelope = getEnvelopeAbs(body);
+
+                $.ajax({
+                    type: 'POST',
+                    url: MountURLSWSAbs('setDeleteOrderMobile'),
+                    contentType: 'application/soap+xml; charset=utf-8',
+                    data: envelope
+                })
+                .done(function (data) {
+                    if (data == "true") {
+
+                        if (transition) {
+                            listitem
+                            .addClass(transition)
+                            .on("webkitTransitionEnd transitionend otransitionend", function () {
+                                listitem.remove();
+                                $("#listFault").listview("refresh").find(".border-bottom").removeClass("border-bottom");
+                            })
+                            .prev("li").children("a").addClass("border-bottom")
+                            .end().end().children(".ui-btn").removeClass("ui-btn-active");
+                        }
+                        else {
+                            listitem.remove();
+                            $("#listFault").listview("refresh");
+                        }
+                    }
+                    else {
+                        alert('Erro ao excluir o registro!');
+                    }
+                })
+                .fail(function (jqXHR, textStatus, errorThrown) {
+                    alert("Request failed: " + textStatus + "," + errorThrown);
+                });
+            }, 'excluindo...', this);
+        }
+        else {
+            listitem.children(".ui-btn").removeClass("ui-btn-active");
+        }
     },
 
     isLeader = function isLeader(funcIS) {

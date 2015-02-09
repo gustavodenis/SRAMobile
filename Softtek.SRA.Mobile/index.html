@@ -207,84 +207,16 @@
         </div>
         <div role="main" class="ui-content">
             <ul id="listApproveHours" class="touch" data-role="listview" data-filter="true" data-split-theme="c" data-split-icon="check">
-                <li>
-                    <a href="#" style="padding-top: 0px;padding-bottom: 0px;padding-right: 42px;padding-left: 0px;">
-                        <label style="border-top-width: 0px;margin-top: 0px;border-bottom-width: 0px;margin-bottom: 0px;border-left-width: 0px;border-right-width: 0px;" data-corners="false">
-                            <fieldset data-role="controlgroup">
-                                <input id="SelectedSensors_0__Value" name="SelectedSensors[0].Value" type="checkbox" value="true" />
-                                <input id="SelectedSensors_0__Id" name="SelectedSensors[0].Id" type="hidden" value="16" />
-                                <label for="SelectedSensors_0__Value" style="border-top-width: 0px;margin-top: 0px;border-bottom-width: 0px;margin-bottom: 0px;border-left-width: 0px;border-right-width: 0px;">
-                                    <label style="padding:10px 0px 0px 10px;">
-                                        <h3>GUDE - Gustavo Denis</h3>
-                                        <p class="topic"><strong>ADAC - Atividades Administrativas</strong></p>
-                                        <p>8 Horas : 10/01/2015 - 11/01/2015</p>
-                                        <p>descrição da atividade xpto</p>
-                                        <p>B. Horas: 0, P. Férias: 0, Abono: 0</p>
-                                    </label>
-                                </label>
-                            </fieldset>
-                        </label>
-                    </a>
-                    <a href="#" class="btnApproveItem"></a>
-                </li>
-                <li>
-                    <a href="#" style="padding-top: 0px;padding-bottom: 0px;padding-right: 42px;padding-left: 0px;">
-                        <label style="border-top-width: 0px;margin-top: 0px;border-bottom-width: 0px;margin-bottom: 0px;border-left-width: 0px;border-right-width: 0px;" data-corners="false">
-                            <fieldset data-role="controlgroup">
-                                <input id="SelectedSensors_0__Value" name="SelectedSensors[0].Value" type="checkbox" value="true" />
-                                <input id="SelectedSensors_0__Id" name="SelectedSensors[0].Id" type="hidden" value="16" />
-                                <label for="SelectedSensors_0__Value" style="border-top-width: 0px;margin-top: 0px;border-bottom-width: 0px;margin-bottom: 0px;border-left-width: 0px;border-right-width: 0px;">
-                                    <label style="padding:10px 0px 0px 10px;">
-                                        <h3>GUDE - Gustavo Denis</h3>
-                                        <p class="topic"><strong>ADAC - Atividades Administrativas</strong></p>
-                                        <p>8 Horas : 10/01/2015 - 11/01/2015</p>
-                                        <p>descrição da atividade xpto</p>
-                                        <p>B. Horas: 0, P. Férias: 0, Abono: 0</p>
-                                    </label>
-                                </label>
-                            </fieldset>
-                        </label>
-                    </a>
-                    <a href="#" class="btnApproveItem"></a>
-                </li>
-                <li>
-                    <a href="#" style="padding-top: 0px;padding-bottom: 0px;padding-right: 42px;padding-left: 0px;">
-                        <label style="border-top-width: 0px;margin-top: 0px;border-bottom-width: 0px;margin-bottom: 0px;border-left-width: 0px;border-right-width: 0px;" data-corners="false">
-                            <fieldset data-role="controlgroup">
-                                <input id="SelectedSensors_0__Value" name="SelectedSensors[0].Value" type="checkbox" value="true" />
-                                <input id="SelectedSensors_0__Id" name="SelectedSensors[0].Id" type="hidden" value="16" />
-                                <label for="SelectedSensors_0__Value" style="border-top-width: 0px;margin-top: 0px;border-bottom-width: 0px;margin-bottom: 0px;border-left-width: 0px;border-right-width: 0px;">
-                                    <label style="padding:10px 0px 0px 10px;">
-                                        <h3>ADLC - Adriano Luciano Candido</h3>
-                                        <p class="topic"><strong>HOLI - Feriado</strong></p>
-                                        <p>8 Horas : 10/01/2015 - 11/01/2015</p>
-                                        <p>Aprovações</p>
-                                        <p>B. Horas: 0, P. Férias: 0, Abono: 0</p>
-                                    </label>
-                                </label>
-                            </fieldset>
-                        </label>
-                    </a>
-                    <a href="#" class="btnApproveItem"></a>
-                </li>
             </ul>
         </div>
-        <div data-role="popup" id="popupApprove" data-theme="a" class="ui-corner-all">
-            <form>
-                <div style="padding:10px 20px;">
-                    <h3>Aprovação</h3>
-                    <ul data-role="listview" data-inset="true" style="min-width:210px;">
-                        <li id="labelTypeDiscount" data-role="list-divider">Tipo de Desconto</li>
-                        <li><a href="#">Desconto em Banco de Horas</a></li>
-                        <li><a href="#">Desconto no Passivo de Férias</a></li>
-                        <li><a href="#">Desconto em Salário</a></li>
-                        <li><a href="#">Abonar</a></li>
-                        <li><a href="#">Aprovar</a></li>
-                    </ul>
-                    <button type="button" id="btnSaveApprove" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-check">Gravar</button>
-                    <button type="button" id="btnReproveApprove" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-delete">Reprovar</button>
-                </div>
-            </form>
+        <div data-role="popup" id="popupApprove" data-theme="a" class="ui-corner-all" data-dismissible="false">
+            <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a>
+            <div style="padding:10px 20px;">
+                <h3>Aprovação</h3>
+                <ul id="listtypeDiscount" data-role="listview" data-inset="true" style="min-width:210px;"></ul>
+                <button type="button" id="btnSaveApprove" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-check">Gravar</button>
+                <button type="button" id="btnReproveApprove" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-delete">Reprovar</button>
+            </div>
         </div>
         <div data-role="footer" data-theme="b" data-position="fixed" data-tap-toggle="false">
             <div data-role="navbar" data-iconpos="bottom">
@@ -305,7 +237,7 @@
         </div>
         <div role="main" class="ui-content">
             <h3 id="labelHourAditional">Minhas Ausências</h3>
-            <ul id="listFault" class="touch" data-role="listview" data-filter="true" data-icon="false" data-split-icon="edit"></ul>
+            <ul id="listFault" class="touch" data-role="listview" data-filter="true" data-icon="false" data-split-icon="delete"></ul>
         </div>
         <div data-role="footer" data-theme="b" data-position="fixed" data-tap-toggle="false">
             <div data-role="navbar" data-iconpos="bottom">
@@ -331,10 +263,7 @@
             <span id="labelDateEnd">Data Fim</span>
             <input name="data" id="txtDtEndFault" type="text" data-role="datebox" data-options='{"mode":"datebox","useFocus":true}' readonly="readonly" class="" maxlength="10" />
             <span id="labelAcitivity">Atividade:</span>
-            <select name="ddlActivityFault" id="ddlActivityFault" data-mini="true">
-                <option value="1">DEBH</option>
-                <option value="2">XPTO</option>
-            </select>
+            <select name="ddlActivityFault" id="ddlActivityFault" data-mini="true"></select>
             <span id="labelHours">Horas:</span>
             <input name="horas" id="txtHourFault" type="tel" max="8">
             <span id="labelDescription">Descrição:</span>
