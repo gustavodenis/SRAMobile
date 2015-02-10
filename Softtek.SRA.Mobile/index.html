@@ -33,7 +33,7 @@
                     <li><a href="#normalPage" id="hrNormal" data-transition="slide" data-icon="clock">Normais</a></li>
                     <li><a href="#aditionalPage" id="hrAditional" data-transition="slide" data-icon="bars">Adicionais</a></li>
                     <li><a href="#faultPage" id="hrFault" data-transition="slide" data-icon="action">Ausência</a></li>
-                    <li><a href="#approvePage" id="hrAprove" data-transition="slide" data-icon="check">Aprovar</a></li>
+                    <li><a href="#" id="hrAprove" data-transition="slide" data-icon="check">Aprovar</a></li>
                 </ul>
             </div>
         </div>
@@ -206,8 +206,7 @@
             <a href="#settingPage" data-transition="slide" style="margin-left: 10px; margin-top: 10px; margin-bottom: 15px; float: left;" class="ui-btn header-button-right ui-btn-icon-right ui-btn-icon-notext ui-shadow ui-corner-all ui-icon-gear"></a>
         </div>
         <div role="main" class="ui-content">
-            <ul id="listApproveHours" class="touch" data-role="listview" data-filter="true" data-split-theme="c" data-split-icon="check">
-            </ul>
+            <ul id="listApproveHours" class="touch" data-role="listview" data-filter="true" data-split-theme="c" data-split-icon="check"></ul>
         </div>
         <div data-role="popup" id="popupApprove" data-theme="a" class="ui-corner-all" data-dismissible="false">
             <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a>
@@ -346,6 +345,7 @@
             //        alert('Ativei a paradinha!');
             //    }, 60000);
             //}
+
         };
 
         function onPause() {
