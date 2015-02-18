@@ -2,7 +2,6 @@
 
 stkApp.prototype = function () {
 
-    var erro = '';
     var aLancamentos = [];
     var aLancamentosAditional = [];
     var aAbsence = [];
@@ -40,12 +39,13 @@ stkApp.prototype = function () {
         }
 
         $('#btnLogoff').on('click', function () {
+            window.localStorage.clear();
             $.mobile.changePage('#logon', { transition: 'flip' });
         });
 
         $('.loginBtn').on('click', function () {
             if (window.localStorage.getItem("userInfo") === null) {
-                erro = '';
+                var erro = '';
                 if ($('#is_stk').val() == '')
                     erro += getMsgLang(langPref, 'ValidIS');
                 if ($('#pass_stk').val() == '')
@@ -172,7 +172,7 @@ stkApp.prototype = function () {
             }, getMsgLang(langPref, 'Loading'), this);
         });
 
-        $('#btnLangBR, #btnLangES, #btnLangEN').on('click', function () {
+        $('#btnLangpt, #btnLanges, #btnLangen').on('click', function () {
             changeLang($(this).attr('id').substr(7, 2));
             window.localStorage.setItem("langPreference", $(this).attr('id').substr(7, 2));
         });
@@ -200,10 +200,6 @@ stkApp.prototype = function () {
             if (Desc == '')
                 erros += getMsgLang(langPref, 'ValidDescription');
 
-            //var dtValid = checkDateWeek(getFirstDateOfWeek(week), getLastDateOfWeek(week));
-            //if(!dtValid)
-            //    erros += '- Data Selecionada fora da Semana\n';
-
             if (erros.length > 0)
                 alert(getMsgLang(langPref, 'ErrorFound') + erros);
             else {
@@ -211,14 +207,11 @@ stkApp.prototype = function () {
                 body += '<addRecordHoraRecursoMobile xmlns="http://tempuri.org/">';
                 body += '<IntYear>' + dtParse.getFullYear() + '</IntYear>';
                 body += '<strFuncIS>' + FuncIS + '</strFuncIS>';
-                //body += '<intWeek>' + Week + '</intWeek>';
                 body += '<intWeek>' + dtParse.getWeek() + '</intWeek>';
                 body += '<intWeekDay>' + GetWeekDay(dtParse.getDay()) + '</intWeekDay>';
                 body += '<intSequencial>' + $('#idSeq').val() + '</intSequencial>';
                 body += '<strDescription>' + Desc + '</strDescription>';
                 body += '<strActivityCode>' + Activity + '</strActivityCode>';
-                //body += '<intOpportunity>0</intOpportunity>';
-                //body += '<intDescHoursCode>' + intDescHoursCode + '</intDescHoursCode>';
                 body += '<dblHours>' + Hour + '</dblHours>';
                 body += '<intMonth>' + (dtParse.getMonth() + 1) + '</intMonth>';
                 body += '<intMonthDay>' + dtParse.getDate() + '</intMonthDay>';
@@ -228,10 +221,11 @@ stkApp.prototype = function () {
                 body += '<strCreatedBy>' + FuncIS + '</strCreatedBy>';
                 body += '<HourEnter></HourEnter>';
                 body += '<segmentId>' + IdSegment.trim() + '</segmentId>';
+                body += '<dteRepBegin>' + DtRepBegin + '</dteRepBegin>';
+                body += '<dteRepEnd>' + DtRepEnd + '</dteRepEnd>';
                 body += '</addRecordHoraRecursoMobile>';
                 body += '<soap12:Body>';
                 var envelope = getEnvelope(body);
-                console.log(envelope);
 
                 $.ajax({
                     type: 'POST',
@@ -248,7 +242,7 @@ stkApp.prototype = function () {
             }
         });
 
-        $('btnAddAditionalHour').on('click', function () {
+        $('#btnAddAditionalHour').on('click', function () {
             var HourBegin = $('#txtHourBegin').val();
             var Dt = $('#txtDtAditional').val();
             var Hour = $('#txtHourAditional').val();
@@ -281,14 +275,11 @@ stkApp.prototype = function () {
                 body += '<addRecordHoraRecursoMobile xmlns="http://tempuri.org/">';
                 body += '<IntYear>' + dtParse.getFullYear() + '</IntYear>';
                 body += '<strFuncIS>' + FuncIS + '</strFuncIS>';
-                //body += '<intWeek>' + Week + '</intWeek>';
                 body += '<intWeek>' + dtParse.getWeek() + '</intWeek>';
                 body += '<intWeekDay>' + GetWeekDay(dtParse.getDay()) + '</intWeekDay>';
                 body += '<intSequencial>' + $('#idSeq').val() + '</intSequencial>';
                 body += '<strDescription>' + Desc + '</strDescription>';
                 body += '<strActivityCode>' + Activity + '</strActivityCode>';
-                //body += '<intOpportunity>0</intOpportunity>';
-                //body += '<intDescHoursCode>' + intDescHoursCode + '</intDescHoursCode>';
                 body += '<dblHours>' + Hour + '</dblHours>';
                 body += '<intMonth>' + (dtParse.getMonth() + 1) + '</intMonth>';
                 body += '<intMonthDay>' + dtParse.getDate() + '</intMonthDay>';
@@ -298,6 +289,8 @@ stkApp.prototype = function () {
                 body += '<strCreatedBy>' + FuncIS + '</strCreatedBy>';
                 body += '<HourEnter>' + HourBegin + '</HourEnter>';
                 body += '<segmentId>' + IdSegment.trim() + '</segmentId>';
+                body += '<dteRepBegin>' + DtRepBegin + '</dteRepBegin>';
+                body += '<dteRepEnd>' + DtRepEnd + '</dteRepEnd>';
                 body += '</addRecordHoraRecursoMobile>';
                 body += '<soap12:Body>';
                 var envelope = getEnvelope(body);
@@ -317,7 +310,7 @@ stkApp.prototype = function () {
             }
         });
 
-        $('btnSaveFaultHours').on('click', function () {
+        $('#btnSaveFaultHours').on('click', function () {
             var DtBegin = $('#txtDtBeginFault').val();
             var DtEnd = $('#txtDtEndFault').val();
             var Hour = $('#txtHourFault').val();
@@ -345,7 +338,7 @@ stkApp.prototype = function () {
                 body += '<strFuncIs>' + FuncIS + '</strFuncIs>';
                 body += '<strActivityId>' + dtParse.getWeek() + '</strActivityId>';
                 body += '<intTypeOfActivity>' + GetWeekDay(dtParse.getDay()) + '</intTypeOfActivity>';
-                body += '<dteFromDate>' + $('#idSeq').val() + '</dteFromDate    >';
+                body += '<dteFromDate>' + $('#idSeq').val() + '</dteFromDate>';
                 body += '<dteToDate>' + Desc + '</dteToDate>';
                 body += '<decTotalHours>' + Activity + '</decTotalHours>';
                 body += '<strOrderDescription>' + Hour + '</strOrderDescription>';
@@ -395,6 +388,16 @@ stkApp.prototype = function () {
         $('#btnAddFaultHours').on('click', function () {
             $('#txtDtBeginFault,#txtDtEndFault,#txtHourFault,#txtDescFault').val('');
             $('#ddlActivityFault, #OrderId').val(0);
+        });
+
+        $('#btnApprove').on('click', function () {
+            $('#listApproveHours li').each(function () {
+                if ($(this).attr('IsCertificateRule') == 'true') {
+                    alert(getMsgLang(langPref, 'ApproveMass'));
+                    return;
+                }
+            });
+            $('#popupApprove').show();
         });
 
         $('#btnSaveApprove, #btnReproveApprove').on('click', function () {
@@ -531,13 +534,18 @@ stkApp.prototype = function () {
 
     DeleteHourAditional = function (listitem, transition) {
 
+        if (listitem.attr('Validado') == 'true') {
+            alert(getMsgLang(langPref, 'RegValidated'));
+            return;
+        }
+
         listitem.children(".ui-btn").addClass("ui-btn-active");
 
         if (confirm(getMsgLang(langPref, 'ConfirmDelete'))) {
             fauxAjax(function () {
                 var ano, mes, dia, seq;
-                seq = $(this).attr('Seq');
-                dia = $(this).attr('Dia');
+                seq = listitem.attr('Seq');
+                dia = listitem.attr('Dia');
                 $.each(aLancamentosAditional, function (index, el) {
                     if (seq == aLancamentosAditional[index].Sequencial && dia == aLancamentosAditional[index].DiaMes) {
                         ano = aLancamentosAditional[index].Ano;
@@ -597,13 +605,18 @@ stkApp.prototype = function () {
 
     DeleteHourNormal = function (listitem, transition) {
 
+        if (listitem.attr('Validado') == 'true') {
+            alert(getMsgLang(langPref, 'RegValidated'));
+            return;
+        }
+
         listitem.children(".ui-btn").addClass("ui-btn-active");
 
         if (confirm(getMsgLang(langPref, 'ConfirmDelete'))) {
             fauxAjax(function () {
                 var ano, mes, dia, seq;
-                seq = $(this).attr('Seq');
-                dia = $(this).attr('Dia');
+                seq = listitem.attr('seq');
+                dia = listitem.attr('dia');
                 $.each(aLancamentos, function (index, el) {
                     if (seq == aLancamentos[index].Sequencial && dia == aLancamentos[index].DiaMes) {
                         ano = aLancamentos[index].Ano;
@@ -630,7 +643,7 @@ stkApp.prototype = function () {
                     data: envelope
                 })
                 .done(function (data) {
-                    if (data == "True") {
+                    if (data == "1") {
                         if (transition) {
                             listitem
                             .addClass(transition)
@@ -685,6 +698,7 @@ stkApp.prototype = function () {
                     data: envelope
                 })
                 .done(function (xml) {
+                    console.log(xml);
                     var rows = '';
                     var total = 0;
                     aLancamentos = [];
@@ -703,13 +717,14 @@ stkApp.prototype = function () {
                             'DiaSemana': $(this).find('DiaSemana').text().trim(),
                             'Mes': $(this).find('Mes').text().trim(),
                             'AnoCalendario': $(this).find('AnoCalendario').text().trim(),
-                            'Descricao': $(this).find('Descricao').text().trim()
+                            'Descricao': $(this).find('Descricao').text().trim(),
+                            'Validado': $(this).find('Validado').text().trim()
                         });
 
-                        rows += '<li Seq=' + $(this).find('Sequencial').text().trim() + ' Dia=' + $(this).find('DiaMes').text().trim() + ' class="btnDelHN">';
+                        rows += '<li Seq=' + $(this).find('Sequencial').text().trim() + ' Dia=' + $(this).find('DiaMes').text().trim() + ' Validado=' + $(this).find('Validado').text().trim() + ' class="btnDelHN">';
                         rows += '<a href="#"><h3>' + getDateString($(this).find('DiaMes').text().trim(), $(this).find('Mes').text().trim(), $(this).find('Ano').text().trim()) + '</h3><p class="topic"><strong>';
                         rows += $(this).find('CodigoAlternativo').text().trim() + '</strong> ' + $(this).find('Descricao').text().trim() + '</p><p class="ui-li-aside"><strong>' + parseInt($(this).find('Horas').text()).toString() + getMsgLang(langPref, 'LabelHours') + '</strong></p></a>';
-                        rows += '<a href="#" Seq=' + $(this).find('Sequencial').text().trim() + ' Dia=' + $(this).find('DiaMes').text().trim() + ' class="btnEditHN"></a>';
+                        rows += '<a href="#" Seq=' + $(this).find('Sequencial').text().trim() + ' Dia=' + $(this).find('DiaMes').text().trim() + ' Validado=' + $(this).find('Validado').text().trim() + ' class="btnEditHN"></a>';
                         rows += '</li>';
 
                         total += parseFloat($(this).find('Horas').text().replace(':', '.'));
@@ -720,7 +735,12 @@ stkApp.prototype = function () {
                     $("#listHours").listview("refresh");
 
                     $('.btnEditHN').on('click', function () {
-                        LoadDataNormalHours($(this).attr('Seq'));
+                        if ($(this).attr('Validado') == 'true') {
+                            alert(getMsgLang(langPref, 'RegValidated'));
+                        }
+                        else {
+                            LoadDataNormalHours($(this).attr('Seq'));
+                        }
                     });
                 })
                 .fail(function (jqXHR, textStatus, errorThrown) {
@@ -794,13 +814,14 @@ stkApp.prototype = function () {
                             'Mes': $(this).find('Mes').text().trim(),
                             'AnoCalendario': $(this).find('AnoCalendario').text().trim(),
                             'Entrada': $(this).find('Entrada').text().trim(),
-                            'Descricao': $(this).find('Descricao').text().trim()
+                            'Descricao': $(this).find('Descricao').text().trim(),
+                            'Validado': $(this).find('Validado').text().trim()
                         });
 
-                        rows += '<li Seq=' + $(this).find('Sequencial').text().trim() + ' Dia=' + $(this).find('DiaMes').text().trim() + ' class="btnDelHA">';
+                        rows += '<li Seq=' + $(this).find('Sequencial').text().trim() + ' Dia=' + $(this).find('DiaMes').text().trim() + ' Validado=' + $(this).find('Validado').text().trim() + ' class="btnDelHA">';
                         rows += '<a href="#"><h3>' + getDateString($(this).find('DiaMes').text().trim(), $(this).find('Mes').text().trim(), $(this).find('Ano').text().trim()) + ' / ' + $(this).find('Entrada').text().trim() + '</h3><p class="topic"><strong>';
                         rows += $(this).find('CodigoAlternativo').text().trim() + '</strong> ' + $(this).find('Descricao').text().trim() + '</p><p class="ui-li-aside"><strong>' + parseInt($(this).find('Horas').text()).toString() + getMsgLang(langPref, 'LabelHours') + '</strong></p></a>';
-                        rows += '<a href="#" Seq=' + $(this).find('Sequencial').text().trim() + ' Dia=' + $(this).find('DiaMes').text().trim() + ' class="btnEditHA"></a>';
+                        rows += '<a href="#" Seq=' + $(this).find('Sequencial').text().trim() + ' Dia=' + $(this).find('DiaMes').text().trim() + ' Validado=' + $(this).find('Validado').text().trim() + ' class="btnEditHA"></a>';
                         rows += '</li>';
 
                         total += parseFloat($(this).find('Horas').text().replace(':', '.'));
@@ -811,7 +832,12 @@ stkApp.prototype = function () {
                     $("#listAditionalHours").listview("refresh");
 
                     $('.btnEditHA').on('click', function () {
-                        LoadDataAditionalHours($(this).attr('Seq'));
+                        if ($(this).attr('Validado') == 'true') {
+                            alert(getMsgLang(langPref, 'RegValidated'));
+                        }
+                        else {
+                            LoadDataAditionalHours($(this).attr('Seq'));
+                        }
                     });
                 })
                 .fail(function (jqXHR, textStatus, errorThrown) {
@@ -936,8 +962,8 @@ stkApp.prototype = function () {
                 $('#listApproveHours').empty();
 
                 $(xml).find('cAbsence').each(function () {
-                    rows += '<li OrderId=' + $(this).find('OrderId').text().trim() + '>';
-                    rows += '<a href="#" style="padding-top: 0px;padding-bottom: 0px;padding-right: 42px;padding-left: 0px;">';
+                    rows += '<li OrderId=' + $(this).find('OrderId').text().trim() + ' IsCertificateRule=' + $(this).find('IsCertificateRule').text().trim() + '>';
+                    rows += '  <a href="#" style="padding-top: 0px;padding-bottom: 0px;padding-right: 42px;padding-left: 0px;">';
                     rows += '    <label style="border-top-width: 0px;margin-top: 0px;border-bottom-width: 0px;margin-bottom: 0px;border-left-width: 0px;border-right-width: 0px;" data-corners="false">';
                     rows += '        <fieldset data-role="controlgroup">';
                     rows += '            <input id="SelectedSensors_' + i + '__Value" name="SelectedSensors[' + i + '].Value" type="checkbox" value="' + $(this).find('OrderId').text().trim() + '" />';
@@ -953,9 +979,10 @@ stkApp.prototype = function () {
                     rows += '            </label>';
                     rows += '        </fieldset>';
                     rows += '    </label>';
-                    rows += '</a>';
-                    rows += '<a href="#" class="btnApproveItem" OrderId=' + $(this).find('OrderId').text().trim() + '></a>';
+                    rows += '  </a>';
+                    rows += '  <a href="#" class="btnApproveItem" OrderId=' + $(this).find('OrderId').text().trim() + '></a>';
                     rows += '</li>';
+                    i++;
                 });
 
                 $('#listApproveHours').append(rows);
@@ -1012,7 +1039,6 @@ stkApp.prototype = function () {
     },
 
     changeLang = function changeLang(lang) {
-        console.log(lang);
         if (lang.indexOf("pt") === 0) {
             $(dictionarySTKControls.lang.PT).each(function (i, item) {
                 changeLangObj(item.Controle, item.Label);
@@ -1414,9 +1440,10 @@ var dictionarySTKMsg = {
             { "IdMsg": "TypeOfDiscount", "Msg": "Tipo de Desconto" },
             { "IdMsg": "LabelHours", "Msg": "Horas" },
             { "IdMsg": "LabelTotal", "Msg": "Total" },
-            { "IdMsg": "LabelBHour", "Msg": "B. Horas: "},
-            { "IdMsg": "LabelPVaca", "Msg": "P. Férias: "},
-            { "IdMsg": "LabelAllow", "Msg": "Abono: "}
+            { "IdMsg": "LabelBHour", "Msg": "B. Horas: " },
+            { "IdMsg": "LabelPVaca", "Msg": "P. Férias: " },
+            { "IdMsg": "LabelAllow", "Msg": "Abono: " },
+            { "IdMsg": "RegValidated", "Msg": "Os Tipo de Atividade devem ser iguais para aprovação em lote!" }
         ],
         "EN": [
             { "IdMsg": "Loading", "Msg": "Loading..." },
@@ -1445,7 +1472,9 @@ var dictionarySTKMsg = {
             { "IdMsg": "LabelTotal", "Msg": "Total" },
             { "IdMsg": "LabelBHour", "Msg": "B. Hours: " },
             { "IdMsg": "LabelPVaca", "Msg": "P. Vaca: " },
-            { "IdMsg": "LabelAllow", "Msg": "Allowance: " }
+            { "IdMsg": "LabelAllow", "Msg": "Allowance: " },
+            { "IdMsg": "RegValidated", "Msg": "Record was validate by your Manager!" },
+            { "IdMsg": "RegValidated", "Msg": "The activity type must be the same for batch approval!" }
         ],
         "ES": [
             { "IdMsg": "Loading", "Msg": "Carregando..." },
@@ -1474,7 +1503,9 @@ var dictionarySTKMsg = {
             { "IdMsg": "LabelTotal", "Msg": "Total" },
             { "IdMsg": "LabelBHour", "Msg": "B. Horas: " },
             { "IdMsg": "LabelPVaca", "Msg": "P. Férias: " },
-            { "IdMsg": "LabelAllow", "Msg": "Abono: " }
+            { "IdMsg": "LabelAllow", "Msg": "Abono: " },
+            { "IdMsg": "RegValidated", "Msg": "Registro ha sido validado por el Gerente!" },
+            { "IdMsg": "RegValidated", "Msg": "El tipo de actividad debe ser el mismo para su aprobación por lotes!" }
         ]
     }
 };
@@ -1486,7 +1517,6 @@ var dictionarySTKControls = {
             { "Controle": "hrAditional", "Label": "Adicionais" },
             { "Controle": "hrFault", "Label": "Ausência" },
             { "Controle": "hrAprove", "Label": "Aprovar" },
-            { "Controle": "hrNormal", "Label": "Normal" },
             { "Controle": "labelIS", "Label": "IS:" },
             { "Controle": "labelPass", "Label": "Senha:" },
             { "Controle": "loginBtn", "Label": "Login" },
@@ -1527,7 +1557,6 @@ var dictionarySTKControls = {
             { "Controle": "hrAditional", "Label": "Aditional" },
             { "Controle": "hrFault", "Label": "Vacation" },
             { "Controle": "hrAprove", "Label": "Approve" },
-            { "Controle": "hrNormal", "Label": "Normal" },
             { "Controle": "labelIS", "Label": "IS:" },
             { "Controle": "labelPass", "Label": "Password:" },
             { "Controle": "loginBtn", "Label": "Login" },
@@ -1565,44 +1594,43 @@ var dictionarySTKControls = {
         ],
         "ES": [
             { "Controle": "hrNormal", "Label": "Normal" },
-            { "Controle": "hrAditional", "Label": "Aditional" },
-            { "Controle": "hrFault", "Label": "Vacation" },
-            { "Controle": "hrAprove", "Label": "Approve" },
-            { "Controle": "hrNormal", "Label": "Normal" },
+            { "Controle": "hrAditional", "Label": "Adicional" },
+            { "Controle": "hrFault", "Label": "Ausencia" },
+            { "Controle": "hrAprove", "Label": "Aprobar" },
             { "Controle": "labelIS", "Label": "IS:" },
-            { "Controle": "labelPass", "Label": "Password:" },
-            { "Controle": "loginBtn", "Label": "Login" },
-            { "Controle": "labelDateBegin", "Label": "Date Begin:" },
-            { "Controle": "labelDateEnd", "Label": "Date End:" },
-            { "Controle": "labelHours", "Label": "Hour:" },
-            { "Controle": "labelHourNormal", "Label": "Hours Normals" },
-            { "Controle": "labelWeek", "Label": "Week:" },
-            { "Controle": "btnAddHours", "Label": "Add" },
-            { "Controle": "btnCancelHour", "Label": "Cancel" },
-            { "Controle": "labelProject", "Label": "Project:" },
-            { "Controle": "labelAcitivity", "Label": "Activity" },
-            { "Controle": "labelDescription", "Label": "Description" },
-            { "Controle": "labelReplyLanc", "Label": "Reply Hours" },
-            { "Controle": "btnAddNormalHour", "Label": "Save" },
-            { "Controle": "btnCancelNormalHour", "Label": "Cancel" },
-            { "Controle": "labelHourAditional", "Label": "Aditional Hours" },
-            { "Controle": "btnAddAditionalHours", "Label": "Add" },
-            { "Controle": "btnCancelHour", "Label": "Cancel" },
-            { "Controle": "labelDate", "Label": "Date:" },
-            { "Controle": "labelHourBegin", "Label": "Hour Entrance:" },
-            { "Controle": "btnAddAditionalHour", "Label": "Save" },
-            { "Controle": "btnCancelAditionalHour", "Label": "Cancel" },
-            { "Controle": "btnSaveApprove", "Label": "Save" },
-            { "Controle": "btnReproveApprove", "Label": "Disapprove" },
-            { "Controle": "btnApprove", "Label": "Approve" },
-            { "Controle": "btnCancelAprove", "Label": "Cancel" },
-            { "Controle": "labelFault", "Label": "Absence" },
-            { "Controle": "btnSaveFaultHours", "Label": "Save" },
-            { "Controle": "btnCancelFaultHours", "Label": "Cancel" },
-            { "Controle": "label_ISName", "Label": "Resource Name:" },
-            { "Controle": "label_Lang", "Label": "Language:" },
-            { "Controle": "label_Platform", "Label": "Plataform:" },
-            { "Controle": "btnLogoff", "Label": "Logoff" }
+            { "Controle": "labelPass", "Label": "Contasenã:" },
+            { "Controle": "loginBtn", "Label": "Iniciar sesión" },
+            { "Controle": "labelDateBegin", "Label": "Fecha de Inicio:" },
+            { "Controle": "labelDateEnd", "Label": "Fecha de Finalización:" },
+            { "Controle": "labelHours", "Label": "Hora:" },
+            { "Controle": "labelHourNormal", "Label": "Horas Normales" },
+            { "Controle": "labelWeek", "Label": "Semana:" },
+            { "Controle": "btnAddHours", "Label": "Anãdir" },
+            { "Controle": "btnCancelHour", "Label": "Cancelar" },
+            { "Controle": "labelProject", "Label": "Proyecto:" },
+            { "Controle": "labelAcitivity", "Label": "Actividad" },
+            { "Controle": "labelDescription", "Label": "Descripción" },
+            { "Controle": "labelReplyLanc", "Label": "Replicar Horas" },
+            { "Controle": "btnAddNormalHour", "Label": "Guardar" },
+            { "Controle": "btnCancelNormalHour", "Label": "Cancelar" },
+            { "Controle": "labelHourAditional", "Label": "Horas Adicionales" },
+            { "Controle": "btnAddAditionalHours", "Label": "Anãdir" },
+            { "Controle": "btnCancelHour", "Label": "Cancelar" },
+            { "Controle": "labelDate", "Label": "Fecha:" },
+            { "Controle": "labelHourBegin", "Label": "Hora de llegada:" },
+            { "Controle": "btnAddAditionalHour", "Label": "Guardar" },
+            { "Controle": "btnCancelAditionalHour", "Label": "Cancelar" },
+            { "Controle": "btnSaveApprove", "Label": "Guardar" },
+            { "Controle": "btnReproveApprove", "Label": "Disaprobar" },
+            { "Controle": "btnApprove", "Label": "Aprobar" },
+            { "Controle": "btnCancelAprove", "Label": "Cancelar" },
+            { "Controle": "labelFault", "Label": "Ausencia" },
+            { "Controle": "btnSaveFaultHours", "Label": "Guardar" },
+            { "Controle": "btnCancelFaultHours", "Label": "Cancelar" },
+            { "Controle": "label_ISName", "Label": "Nombre Colaborador:" },
+            { "Controle": "label_Lang", "Label": "Lengua:" },
+            { "Controle": "label_Platform", "Label": "Plataforma:" },
+            { "Controle": "btnLogoff", "Label": "Desconectar" }
         ]
     }
 };
