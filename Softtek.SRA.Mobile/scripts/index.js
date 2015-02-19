@@ -200,6 +200,8 @@ stkApp.prototype = function () {
             if (Desc == '')
                 erros += getMsgLang(langPref, 'ValidDescription');
 
+            ///ajustar a data de replicação para mm/dd/yyyy e que a inicial nao seja menor que a final, tem método para isto... No adicional tb.
+
             if (erros.length > 0)
                 alert(getMsgLang(langPref, 'ErrorFound') + erros);
             else {
