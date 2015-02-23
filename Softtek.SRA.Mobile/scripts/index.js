@@ -222,18 +222,12 @@ stkApp.prototype = function () {
             else {
                 var body = '<soap12:Body>';
                 body += '<addRecordHoraRecursoMobile xmlns="http://tempuri.org/">';
-                body += '<IntYear>' + dtParse.getFullYear() + '</IntYear>';
                 body += '<strFuncIS>' + FuncIS + '</strFuncIS>';
-                body += '<intWeek>' + dtParse.getWeek() + '</intWeek>';
-                body += '<intWeekDay>' + GetWeekDay(dtParse.getDay()) + '</intWeekDay>';
                 body += '<intSequencial>' + $('#idSeq').val() + '</intSequencial>';
                 body += '<strDescription>' + Desc + '</strDescription>';
                 body += '<strActivityCode>' + Activity + '</strActivityCode>';
                 body += '<dblHours>' + Hour + '</dblHours>';
-                body += '<intMonth>' + (dtParse.getMonth() + 1) + '</intMonth>';
-                body += '<intMonthDay>' + dtParse.getDate() + '</intMonthDay>';
                 body += '<strAlternativeCode>' + Proj + '</strAlternativeCode>';
-                body += '<intCalendarYear>' + dtParse.getFullYear() + '</intCalendarYear>';
                 body += '<intAdditionalHour>0</intAdditionalHour>';
                 body += '<strCreatedBy>' + FuncIS + '</strCreatedBy>';
                 body += '<strHourEnter></strHourEnter>';
@@ -308,18 +302,12 @@ stkApp.prototype = function () {
             else {
                 var body = '<soap12:Body>';
                 body += '<addRecordHoraRecursoMobile xmlns="http://tempuri.org/">';
-                body += '<IntYear>' + dtParse.getFullYear() + '</IntYear>';
                 body += '<strFuncIS>' + FuncIS + '</strFuncIS>';
-                body += '<intWeek>' + dtParse.getWeek() + '</intWeek>';
-                body += '<intWeekDay>' + GetWeekDay(dtParse.getDay()) + '</intWeekDay>';
                 body += '<intSequencial>' + $('#idSeq').val() + '</intSequencial>';
                 body += '<strDescription>' + Desc + '</strDescription>';
                 body += '<strActivityCode>' + Activity + '</strActivityCode>';
                 body += '<dblHours>' + Hour + '</dblHours>';
-                body += '<intMonth>' + (dtParse.getMonth() + 1) + '</intMonth>';
-                body += '<intMonthDay>' + dtParse.getDate() + '</intMonthDay>';
                 body += '<strAlternativeCode>' + Proj + '</strAlternativeCode>';
-                body += '<intCalendarYear>' + dtParse.getFullYear() + '</intCalendarYear>';
                 body += '<intAdditionalHour>1</intAdditionalHour>';
                 body += '<strCreatedBy>' + FuncIS + '</strCreatedBy>';
                 body += '<strHourEnter>' + HourBegin + '</strHourEnter>';
