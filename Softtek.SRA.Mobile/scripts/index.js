@@ -186,7 +186,9 @@ stkApp.prototype = function () {
             var DtRepBegin = $('#txtDtRepNormalBegin').val();
             var DtRepEnd = $('#txtDtRepNormalEnd').val();
             var Week = $('#ddlWeek option:selected').val();
-            var dtParse = new Date(Dt);
+
+            var dtnew = Dt.split("/");
+            var dtParse = new Date(dtnew[2] + "/" + dtnew[1] + "/" + dtnew[0]);
 
             var erros = '';
             if (Dt == '')
@@ -200,7 +202,20 @@ stkApp.prototype = function () {
             if (Desc == '')
                 erros += getMsgLang(langPref, 'ValidDescription');
 
-            ///ajustar a data de replicação para mm/dd/yyyy e que a inicial nao seja menor que a final, tem método para isto... No adicional tb.
+            if (DtRepBegin.length > 0 && DtRepEnd.length > 0) {
+                if (compareDate(DtRepBegin, DtRepEnd)) {
+                    var dtrepInew = DtRepBegin.split("/");
+                    DtRepBegin = dtrepInew[2] + "/" + dtrepInew[1] + "/" + dtrepInew[0];
+                    var dtrepFnew = DtRepEnd.split("/");
+                    DtRepEnd = dtrepFnew[2] + "/" + dtrepFnew[1] + "/" + dtrepFnew[0];
+                } else {
+                    erros += getMsgLang(langPref, 'DateRepInvalid');
+                }
+            }
+            else {
+                DtRepBegin = dtnew[2] + "/" + dtnew[1] + "/" + dtnew[0];
+                DtRepEnd = dtnew[2] + "/" + dtnew[1] + "/" + dtnew[0];
+            }
 
             if (erros.length > 0)
                 alert(getMsgLang(langPref, 'ErrorFound') + erros);
@@ -221,14 +236,15 @@ stkApp.prototype = function () {
                 body += '<intCalendarYear>' + dtParse.getFullYear() + '</intCalendarYear>';
                 body += '<intAdditionalHour>0</intAdditionalHour>';
                 body += '<strCreatedBy>' + FuncIS + '</strCreatedBy>';
-                body += '<HourEnter></HourEnter>';
-                body += '<segmentId>' + IdSegment.trim() + '</segmentId>';
-                body += '<dteRepBegin>' + DtRepBegin + '</dteRepBegin>';
-                body += '<dteRepEnd>' + DtRepEnd + '</dteRepEnd>';
+                body += '<strHourEnter></strHourEnter>';
+                body += '<strSegmentId>' + IdSegment.trim() + '</strSegmentId>';
+                body += '<strStartDate>' + DtRepBegin + '</strStartDate>';
+                body += '<strEndDate>' + DtRepEnd + '</strEndDate>';
+                body += '<strLanguageId>' + langPref + '</strLanguageId>';
                 body += '</addRecordHoraRecursoMobile>';
                 body += '<soap12:Body>';
                 var envelope = getEnvelope(body);
-
+                console.log(envelope);
                 $.ajax({
                     type: 'POST',
                     url: MountURLWS('addRecordHoraRecursoMobile'),
@@ -254,7 +270,9 @@ stkApp.prototype = function () {
             var DtReplEnd = $('#txtDtRepAditionalEnd').val();
             var Proj = $('#txtProjAditional').val();
             var Week = $('#ddlWeek option:selected').val();
-            var dtParse = new Date(dt);
+
+            var dtnew = Dt.split("/");
+            var dtParse = new Date(dtnew[2] + "/" + dtnew[1] + "/" + dtnew[0]);
 
             var erros = '';
             if (Dt == '')
@@ -269,6 +287,21 @@ stkApp.prototype = function () {
                 erros += getMsgLang(langPref, 'ValidActivity');
             if (Desc == '')
                 erros += getMsgLang(langPref, 'ValidDescription');
+
+            if (DtRepBegin.length > 0 && DtRepEnd.length > 0) {
+                if (compareDate(DtRepBegin, DtRepEnd)) {
+                    var dtrepInew = DtRepBegin.split("/");
+                    DtRepBegin = dtrepInew[2] + "/" + dtrepInew[1] + "/" + dtrepInew[0];
+                    var dtrepFnew = DtRepEnd.split("/");
+                    DtRepEnd = dtrepFnew[2] + "/" + dtrepFnew[1] + "/" + dtrepFnew[0];
+                } else {
+                    erros += getMsgLang(langPref, 'DateRepInvalid');
+                }
+            }
+            else {
+                DtRepBegin = dtnew[2] + "/" + dtnew[1] + "/" + dtnew[0];
+                DtRepEnd = dtnew[2] + "/" + dtnew[1] + "/" + dtnew[0];
+            }
 
             if (erros.length > 0)
                 alert(getMsgLang(langPref, 'ErrorFound') + erros);
@@ -289,10 +322,11 @@ stkApp.prototype = function () {
                 body += '<intCalendarYear>' + dtParse.getFullYear() + '</intCalendarYear>';
                 body += '<intAdditionalHour>1</intAdditionalHour>';
                 body += '<strCreatedBy>' + FuncIS + '</strCreatedBy>';
-                body += '<HourEnter>' + HourBegin + '</HourEnter>';
-                body += '<segmentId>' + IdSegment.trim() + '</segmentId>';
-                body += '<dteRepBegin>' + DtRepBegin + '</dteRepBegin>';
-                body += '<dteRepEnd>' + DtRepEnd + '</dteRepEnd>';
+                body += '<strHourEnter>' + HourBegin + '</strHourEnter>';
+                body += '<strSegmentId>' + IdSegment.trim() + '</strSegmentId>';
+                body += '<strStartDate>' + DtRepBegin + '</strStartDate>';
+                body += '<strEndDate>' + DtRepEnd + '</strEndDate>';
+                body += '<strLanguageId>' + langPref + '</strLanguageId>';
                 body += '</addRecordHoraRecursoMobile>';
                 body += '<soap12:Body>';
                 var envelope = getEnvelope(body);
@@ -515,7 +549,7 @@ stkApp.prototype = function () {
             MountActivityCombo();
         }
 
-        //getCollaborator();
+        getCollaborator();
     },
 
     MountWeekCombo = function MountWeekCombo() {
@@ -725,7 +759,7 @@ stkApp.prototype = function () {
 
                         rows += '<li Seq=' + $(this).find('Sequencial').text().trim() + ' Dia=' + $(this).find('DiaMes').text().trim() + ' Validado=' + $(this).find('Validado').text().trim() + ' class="btnDelHN">';
                         rows += '<a href="#"><h3>' + getDateString($(this).find('DiaMes').text().trim(), $(this).find('Mes').text().trim(), $(this).find('Ano').text().trim()) + '</h3><p class="topic"><strong>';
-                        rows += $(this).find('CodigoAlternativo').text().trim() + '</strong> ' + $(this).find('Descricao').text().trim() + '</p><p class="ui-li-aside"><strong>' + parseInt($(this).find('Horas').text()).toString() + getMsgLang(langPref, 'LabelHours') + '</strong></p></a>';
+                        rows += $(this).find('CodigoAlternativo').text().trim() + '</strong> ' + $(this).find('Descricao').text().trim() + '</p><p class="ui-li-aside"><strong>' + parseInt($(this).find('Horas').text()).toString() + getMsgLang(langPref, 'LabelHours') + '</strong> - ' + ($(this).find('Validado').text().trim() == 'true' ? 'Validado' : 'Não Validado') + '</p></a>';
                         rows += '<a href="#" Seq=' + $(this).find('Sequencial').text().trim() + ' Dia=' + $(this).find('DiaMes').text().trim() + ' Validado=' + $(this).find('Validado').text().trim() + ' class="btnEditHN"></a>';
                         rows += '</li>';
 
@@ -822,7 +856,7 @@ stkApp.prototype = function () {
 
                         rows += '<li Seq=' + $(this).find('Sequencial').text().trim() + ' Dia=' + $(this).find('DiaMes').text().trim() + ' Validado=' + $(this).find('Validado').text().trim() + ' class="btnDelHA">';
                         rows += '<a href="#"><h3>' + getDateString($(this).find('DiaMes').text().trim(), $(this).find('Mes').text().trim(), $(this).find('Ano').text().trim()) + ' / ' + $(this).find('Entrada').text().trim() + '</h3><p class="topic"><strong>';
-                        rows += $(this).find('CodigoAlternativo').text().trim() + '</strong> ' + $(this).find('Descricao').text().trim() + '</p><p class="ui-li-aside"><strong>' + parseInt($(this).find('Horas').text()).toString() + getMsgLang(langPref, 'LabelHours') + '</strong></p></a>';
+                        rows += $(this).find('CodigoAlternativo').text().trim() + '</strong> ' + $(this).find('Descricao').text().trim() + '</p><p class="ui-li-aside"><strong>' + parseInt($(this).find('Horas').text()).toString() + getMsgLang(langPref, 'LabelHours') + '</strong> - ' + ($(this).find('Validado').text().trim() == 'true' ? 'Validado' : 'Não Validado') + '</p></a>';
                         rows += '<a href="#" Seq=' + $(this).find('Sequencial').text().trim() + ' Dia=' + $(this).find('DiaMes').text().trim() + ' Validado=' + $(this).find('Validado').text().trim() + ' class="btnEditHA"></a>';
                         rows += '</li>';
 
@@ -1127,39 +1161,41 @@ stkApp.prototype = function () {
     },
 
     getCollaborator = function getCollaborator() {
-        var body = '<soap12:Body>';
-        body += '  <getCollaborator xmlns="http://Stk.org/">';
-        body += '     <strFuncIs>' + FuncIS + '</strFuncIs>';
-        body += '   </getCollaborator>';
-        body += '</soap12:Body>';
-        var envelope = getEnvelopeAbs(body);
+        if (window.localStorage.getItem("colabInfo") == null) {
+            var body = '<soap12:Body>';
+            body += '  <getCollaborator xmlns="http://Stk.org/">';
+            body += '     <strFuncIs>' + FuncIS + '</strFuncIs>';
+            body += '   </getCollaborator>';
+            body += '</soap12:Body>';
+            var envelope = getEnvelopeAbs(body);
 
-        $.ajax({
-            type: 'POST',
-            url: MountURLSWSAbs('getCollaborator'),
-            contentType: 'application/soap+xml; charset=utf-8',
-            data: envelope
-        })
-        .done(function (data) {
-            EntityId = $(data).find('EntityId').text();
-            TeamId = $(data).find('TeamId').text();
+            $.ajax({
+                type: 'POST',
+                url: MountURLSWSAbs('getCollaborator'),
+                contentType: 'application/soap+xml; charset=utf-8',
+                data: envelope
+            })
+            .done(function (data) {
+                EntityId = $(data).find('EntityId').text();
+                TeamId = $(data).find('TeamId').text();
 
-            var colabdata = {
-                EntityId: $(data).find('EntityId').text(),
-                TeamId: $(data).find('TeamId').text(),
-                EntityLeaderName: $(data).find('EntityLeaderName').text(),
-                //TotalBankHours: $(data).find('TotalBankHours').text(),
-                //TotalVacations: $(data).find('TotalVacations').text(),
-                //TotalAllowance: $(data).find('TotalAllowance').text(),
-                //IsCovenant: $(data).find('IsCovenant').text(),
-                TeamLeaderName: $(data).find('TeamLeaderName').text()
-            };
+                var colabdata = {
+                    EntityId: $(data).find('EntityId').text(),
+                    TeamId: $(data).find('TeamId').text(),
+                    EntityLeaderName: $(data).find('EntityLeaderName').text(),
+                    //TotalBankHours: $(data).find('TotalBankHours').text(),
+                    //TotalVacations: $(data).find('TotalVacations').text(),
+                    //TotalAllowance: $(data).find('TotalAllowance').text(),
+                    //IsCovenant: $(data).find('IsCovenant').text(),
+                    TeamLeaderName: $(data).find('TeamLeaderName').text()
+                };
 
-            window.localStorage.setItem("colabInfo", JSON.stringify(colabdata));
-        })
-        .fail(function (jqXHR, textStatus, errorThrown) {
-            alert(getMsgLang(langPref, 'ErrorAjax') + textStatus + "," + errorThrown);
-        });
+                window.localStorage.setItem("colabInfo", JSON.stringify(colabdata));
+            })
+            .fail(function (jqXHR, textStatus, errorThrown) {
+                alert(getMsgLang(langPref, 'ErrorAjax') + textStatus + "," + errorThrown);
+            });
+        }
     },
 
     getActivities = function getActivities() {
@@ -1445,7 +1481,8 @@ var dictionarySTKMsg = {
             { "IdMsg": "LabelBHour", "Msg": "B. Horas: " },
             { "IdMsg": "LabelPVaca", "Msg": "P. Férias: " },
             { "IdMsg": "LabelAllow", "Msg": "Abono: " },
-            { "IdMsg": "RegValidated", "Msg": "Os Tipo de Atividade devem ser iguais para aprovação em lote!" }
+            { "IdMsg": "RegValidated", "Msg": "Os Tipo de Atividade devem ser iguais para aprovação em lote!" },
+            { "IdMsg": "DateRepInvalid", "Msg": "Data de Replicação inválida!" }
         ],
         "EN": [
             { "IdMsg": "Loading", "Msg": "Loading..." },
@@ -1476,7 +1513,8 @@ var dictionarySTKMsg = {
             { "IdMsg": "LabelPVaca", "Msg": "P. Vaca: " },
             { "IdMsg": "LabelAllow", "Msg": "Allowance: " },
             { "IdMsg": "RegValidated", "Msg": "Record was validate by your Manager!" },
-            { "IdMsg": "RegValidated", "Msg": "The activity type must be the same for batch approval!" }
+            { "IdMsg": "RegValidated", "Msg": "The activity type must be the same for batch approval!" },
+            { "IdMsg": "DateRepInvalid", "Msg": "Replication Date is invalid!" }
         ],
         "ES": [
             { "IdMsg": "Loading", "Msg": "Carregando..." },
@@ -1507,7 +1545,8 @@ var dictionarySTKMsg = {
             { "IdMsg": "LabelPVaca", "Msg": "P. Férias: " },
             { "IdMsg": "LabelAllow", "Msg": "Abono: " },
             { "IdMsg": "RegValidated", "Msg": "Registro ha sido validado por el Gerente!" },
-            { "IdMsg": "RegValidated", "Msg": "El tipo de actividad debe ser el mismo para su aprobación por lotes!" }
+            { "IdMsg": "RegValidated", "Msg": "El tipo de actividad debe ser el mismo para su aprobación por lotes!" },
+            { "IdMsg": "DateRepInvalid", "Msg": "El fecha de replicacion es incorreta!" }
         ]
     }
 };
