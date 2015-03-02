@@ -9,11 +9,12 @@ stkApp.prototype = function () {
     var Weeks = [];
     var Activities = [];
     var IdSegment = 'BR';
-    var langPref = 'pt_br';
-    var FuncIS = 'ACFV';
+    var langPref = 'PT';
+    var FuncIS = 'ADLC';//'ACFV';
     var FuncName = 'Vidal';
     var TeamId = 'DEV';
-    var EntityId = '2690702';
+    var EntityId = '13280';
+    var TeamLeaderEmail = 'adriano.candido@softtek.com';
     var _login = true, //false para ativar o login;
 
     run = function () {
@@ -158,7 +159,7 @@ stkApp.prototype = function () {
                     data: envelope
                 })
                 .done(function (data) {
-                    if (data === '1') {
+                    if ($(data).find('isLeaderResult').text() == 'true') {
                         $.mobile.changePage('#approvePage', { transition: 'flip' });
                     }
                     else {
@@ -205,16 +206,16 @@ stkApp.prototype = function () {
             if (DtRepBegin.length > 0 && DtRepEnd.length > 0) {
                 if (compareDate(DtRepBegin, DtRepEnd)) {
                     var dtrepInew = DtRepBegin.split("/");
-                    DtRepBegin = dtrepInew[2] + "/" + dtrepInew[1] + "/" + dtrepInew[0];
+                    DtRepBegin = dtrepInew[1] + "/" + dtrepInew[0] + "/" + dtrepInew[2];
                     var dtrepFnew = DtRepEnd.split("/");
-                    DtRepEnd = dtrepFnew[2] + "/" + dtrepFnew[1] + "/" + dtrepFnew[0];
+                    DtRepEnd = dtrepFnew[1] + "/" + dtrepFnew[0] + "/" + dtrepFnew[2];
                 } else {
                     erros += getMsgLang(langPref, 'DateRepInvalid');
                 }
             }
             else {
-                DtRepBegin = dtnew[2] + "/" + dtnew[1] + "/" + dtnew[0];
-                DtRepEnd = dtnew[2] + "/" + dtnew[1] + "/" + dtnew[0];
+                DtRepBegin = dtnew[1] + "/" + dtnew[0] + "/" + dtnew[2];
+                DtRepEnd = dtnew[1] + "/" + dtnew[0] + "/" + dtnew[2];
             }
 
             if (erros.length > 0)
@@ -236,7 +237,7 @@ stkApp.prototype = function () {
                 body += '<strEndDate>' + DtRepEnd + '</strEndDate>';
                 body += '<strLanguageId>' + langPref + '</strLanguageId>';
                 body += '</addRecordHoraRecursoMobile>';
-                body += '<soap12:Body>';
+                body += '</soap12:Body>';
                 var envelope = getEnvelope(body);
                 console.log(envelope);
                 $.ajax({
@@ -246,7 +247,7 @@ stkApp.prototype = function () {
                     data: envelope
                 })
                 .done(function (data) {
-                    alert((data == 'Sucesso' ? getMsgLang(langPref, 'DataSaveSuccess') : data));
+                    alert(($(data).find('addRecordHoraRecursoMobileResult').text() == 'Sucesso!' ? getMsgLang(langPref, 'DataSaveSuccess') : $(data).find('addRecordHoraRecursoMobileResult').text()));
                 })
                 .fail(function (jqXHR, textStatus, errorThrown) {
                     alert(getMsgLang(langPref, 'ErrorAjax') + textStatus + "," + errorThrown);
@@ -285,16 +286,16 @@ stkApp.prototype = function () {
             if (DtRepBegin.length > 0 && DtRepEnd.length > 0) {
                 if (compareDate(DtRepBegin, DtRepEnd)) {
                     var dtrepInew = DtRepBegin.split("/");
-                    DtRepBegin = dtrepInew[2] + "/" + dtrepInew[1] + "/" + dtrepInew[0];
+                    DtRepBegin = dtrepInew[1] + "/" + dtrepInew[0] + "/" + dtrepInew[2];
                     var dtrepFnew = DtRepEnd.split("/");
-                    DtRepEnd = dtrepFnew[2] + "/" + dtrepFnew[1] + "/" + dtrepFnew[0];
+                    DtRepEnd = dtrepFnew[1] + "/" + dtrepFnew[0] + "/" + dtrepFnew[2];
                 } else {
                     erros += getMsgLang(langPref, 'DateRepInvalid');
                 }
             }
             else {
-                DtRepBegin = dtnew[2] + "/" + dtnew[1] + "/" + dtnew[0];
-                DtRepEnd = dtnew[2] + "/" + dtnew[1] + "/" + dtnew[0];
+                DtRepBegin = dtnew[1] + "/" + dtnew[0] + "/" + dtnew[2];
+                DtRepEnd = dtnew[1] + "/" + dtnew[0] + "/" + dtnew[2];
             }
 
             if (erros.length > 0)
@@ -303,7 +304,7 @@ stkApp.prototype = function () {
                 var body = '<soap12:Body>';
                 body += '<addRecordHoraRecursoMobile xmlns="http://tempuri.org/">';
                 body += '<strFuncIS>' + FuncIS + '</strFuncIS>';
-                body += '<intSequencial>' + $('#idSeq').val() + '</intSequencial>';
+                body += '<intSequencial>' + $('#idSeqAditional').val() + '</intSequencial>';
                 body += '<strDescription>' + Desc + '</strDescription>';
                 body += '<strActivityCode>' + Activity + '</strActivityCode>';
                 body += '<dblHours>' + Hour + '</dblHours>';
@@ -316,7 +317,7 @@ stkApp.prototype = function () {
                 body += '<strEndDate>' + DtRepEnd + '</strEndDate>';
                 body += '<strLanguageId>' + langPref + '</strLanguageId>';
                 body += '</addRecordHoraRecursoMobile>';
-                body += '<soap12:Body>';
+                body += '</soap12:Body>';
                 var envelope = getEnvelope(body);
 
                 $.ajax({
@@ -326,7 +327,7 @@ stkApp.prototype = function () {
                     data: envelope
                 })
                 .done(function (data) {
-                    alert((data == 'Sucesso' ? getMsgLang(langPref, 'DataSaveSuccess') : data));
+                    alert(($(data).find('addRecordHoraRecursoMobileResult').text() == 'Sucesso!' ? getMsgLang(langPref, 'DataSaveSuccess') : $(data).find('addRecordHoraRecursoMobileResult').text()));
                 })
                 .fail(function (jqXHR, textStatus, errorThrown) {
                     alert(getMsgLang(langPref, 'ErrorAjax') + textStatus + "," + errorThrown);
@@ -339,7 +340,9 @@ stkApp.prototype = function () {
             var DtEnd = $('#txtDtEndFault').val();
             var Hour = $('#txtHourFault').val();
             var Activity = $('#ddlActivityFault option:selected').val();
+            var TypeofActivity = $('#ddlActivityFault option:selected').attr('typeofact');
             var Desc = $('#txtDescFault').val();
+            var totcertifcate = 1;
 
             var erros = '';
             if (DtBegin == '')
@@ -353,25 +356,38 @@ stkApp.prototype = function () {
             if (Desc == '')
                 erros += getMsgLang(langPref, 'ValidDescription');
 
+            if (DtBegin.length > 0 && DtEnd.length > 0) {
+                if (compareDate(DtBegin, DtEnd)) {
+                    var dtrepInew = DtBegin.split("/");
+                    DtBegin = dtrepInew[1] + "/" + dtrepInew[0] + "/" + dtrepInew[2];
+                    var dtrepFnew = DtEnd.split("/");
+                    DtEnd = dtrepFnew[1] + "/" + dtrepFnew[0] + "/" + dtrepFnew[2];
+                    totcertifcate = (parseInt(dtrepFnew[0]) - parseInt(dtrepInew[0])) == 0 ? 0 : 1;
+                } else {
+                    erros += getMsgLang(langPref, 'DateRepInvalid');
+                }
+            }
+
             if (erros.length > 0)
                 alert(getMsgLang(langPref, 'ErrorFound') + erros);
             else {
                 var body = '<soap12:Body>';
                 body += '<setInsertOrderMobile xmlns="http://Stk.org/">';
-                body += '<strLanguageId>' + dtParse.getFullYear() + '</strLanguageId>';
+                body += '<strLanguageId>' + langPref + '</strLanguageId>';
                 body += '<strFuncIs>' + FuncIS + '</strFuncIs>';
-                body += '<strActivityId>' + dtParse.getWeek() + '</strActivityId>';
-                body += '<intTypeOfActivity>' + GetWeekDay(dtParse.getDay()) + '</intTypeOfActivity>';
-                body += '<dteFromDate>' + $('#idSeq').val() + '</dteFromDate>';
-                body += '<dteToDate>' + Desc + '</dteToDate>';
-                body += '<decTotalHours>' + Activity + '</decTotalHours>';
-                body += '<strOrderDescription>' + Hour + '</strOrderDescription>';
-                body += '<intTotalCertificates>' + (dtParse.getMonth() + 1) + '</intTotalCertificates>';
-                body += '<strCreatedBy>' + dtParse.getDate() + '</strCreatedBy>';
-                body += '<intTypeOfDiscount>' + Proj + '</intTypeOfDiscount>';
-                body += '<intOrderStatus>' + dtParse.getFullYear() + '</intOrderStatus>';
+                body += '<strActivityId>' + Activity + '</strActivityId>';
+                body += '<intTypeOfActivity>' + TypeofActivity + '</intTypeOfActivity>';
+                body += '<strFromDate>' + DtBegin + '</strFromDate>';
+                body += '<strToDate>' + DtEnd + '</strToDate>';
+                body += '<decTotalHours>' + Hour + '</decTotalHours>';
+                body += '<strOrderDescription>' + Desc + '</strOrderDescription>';
+                body += '<intTotalCertificates>' + totcertifcate + '</intTotalCertificates>';
+                body += '<strCreatedBy>' + FuncIS + '</strCreatedBy>';
+                body += '<intTypeOfDiscount>0</intTypeOfDiscount>';
+                body += '<intOrderStatus>1</intOrderStatus>';
+                body += '<strLeaderEmail>' + TeamLeaderEmail + '</strLeaderEmail>';
                 body += '</setInsertOrderMobile>';
-                body += '<soap12:Body>';
+                body += '</soap12:Body>';
                 var envelope = getEnvelopeAbs(body);
 
                 $.ajax({
@@ -381,7 +397,7 @@ stkApp.prototype = function () {
                     data: envelope
                 })
                 .done(function (data) {
-                    alert((data > 0 ? getMsgLang(langPref, 'DataSaveSuccess') : getMsgLang(langPref, 'DataSaveError')));
+                    alert(($(data).find('setInsertOrderMobileResult').text() == '0' ? getMsgLang(langPref, 'DataSaveError') : getMsgLang(langPref, 'DataSaveSuccess')));
                 })
                 .fail(function (jqXHR, textStatus, errorThrown) {
                     alert(getMsgLang(langPref, 'ErrorAjax') + textStatus + "," + errorThrown);
@@ -421,7 +437,7 @@ stkApp.prototype = function () {
                     return;
                 }
             });
-            $('#popupApprove').show();
+            $('#popupApprove').popup('open');
         });
 
         $('#btnSaveApprove, #btnReproveApprove').on('click', function () {
@@ -429,19 +445,23 @@ stkApp.prototype = function () {
             $('#listApproveHours input[type="checkbox"]:checked').each(function () {
                 OrderIds += $(this).val() + ",";
             });
+
+            var TypeOfActivityID = 0;
+            var ActivityId = 0;
+
             var body = '<soap12:Body>';
             body += '<setUpdateStatusMobile xmlns="http://Stk.org/">';
-            body += '<strLanguageId>' + IdSegment + '</strLanguageId>';
+            body += '<strLanguageId>' + langPref + '</strLanguageId>';
             body += '<OrderIds>' + OrderIds + '</OrderIds>';
-            body += '<OrderStatus>' + Status + '</OrderStatus>';
-            body += '<OrderDescription>' + Desc + '</OrderDescription>';
-            body += '<ApprovalDescription>' + AprDesc + '</ApprovalDescription>';
-            body += '<ValidationDescription>' + ValDesc + '</ValidationDescription>';
+            body += '<OrderStatus>' + ($(this).attr('id') == 'btnSaveApprove' ? '1' : '2') + '</OrderStatus>';
+            body += '<OrderDescription></OrderDescription>';
+            body += '<ApprovalDescription></ApprovalDescription>';
+            body += '<ValidationDescription></ValidationDescription>';
             body += '<UpdatedBy>' + FuncIS + '</UpdatedBy>';
-            body += '<IsCertificate>' + 0 + '</IsCertificate>';
-            body += '<TypeOfDiscount>' + ddlTypeDiscount + '</TypeOfDiscount>';
+            body += '<IsCertificate>0</IsCertificate>';
+            body += '<TypeOfDiscount>' + $('.TypeOfDiscountSelected').attr('idTypeOfDiscount') + '</TypeOfDiscount>';
             body += '</setUpdateStatusMobile>';
-            body += '<soap12:Body>';
+            body += '</soap12:Body>';
             var envelope = getEnvelopeAbs(body);
 
             $.ajax({
@@ -456,6 +476,13 @@ stkApp.prototype = function () {
             .fail(function (jqXHR, textStatus, errorThrown) {
                 alert(getMsgLang(langPref, 'ErrorAjax') + textStatus + "," + errorThrown);
             });
+        });
+
+        $(document).on("swiperight", "#label_DevName", function (event) {
+            var msg = 'Version: 1.0 - Module Online\n';
+            msg += 'Notes: This application is for Softtek employees realize their appointments of hours.\n';
+            msg += 'Developed by: Gustavo Denis \nSofttek Brazil - Application Developer Team';
+            alert(msg);
         });
     },
 
@@ -596,7 +623,7 @@ stkApp.prototype = function () {
                     data: envelope
                 })
                 .done(function (data) {
-                    if (data == "True") {
+                    if ($(data).find('deleteRecordByDayMobileResult').text() == "true") {
                         if (transition) {
                             listitem
                             .addClass(transition)
@@ -654,7 +681,7 @@ stkApp.prototype = function () {
                 bodyxml += '<intYear>' + ano + '</intYear>';
                 bodyxml += '<intMonth>' + mes + '</intMonth>';
                 bodyxml += '<intDay>' + dia + '</intDay>';
-                bodyxml += '<intAdditionalHour>0</intAdditionalHour>';
+                bodyxml += '<intAdditionalHour>-666</intAdditionalHour>';
                 bodyxml += '<intSequencial>' + seq + '</intSequencial>';
                 bodyxml += '</deleteRecordByDayMobile>';
                 bodyxml += '</soap12:Body>';
@@ -667,7 +694,7 @@ stkApp.prototype = function () {
                     data: envelope
                 })
                 .done(function (data) {
-                    if (data == "1") {
+                    if ($(data).find('deleteRecordByDayMobileResult').text() == "true") {
                         if (transition) {
                             listitem
                             .addClass(transition)
@@ -703,7 +730,7 @@ stkApp.prototype = function () {
     },
 
     LoadNormalHours = function (Semana) {
-        if (Semana > 0) {
+        if (Semana != '0') {
             fauxAjax(function () {
                 var body = '<soap12:Body>';
                 body += '<getListHoraRecursoMobile  xmlns="http://tempuri.org/">';
@@ -800,7 +827,7 @@ stkApp.prototype = function () {
     },
 
     LoadAditionalHours = function (Semana) {
-        if (Semana > 0) {
+        if (Semana != '0') {
             fauxAjax(function () {
                 var body = '<soap12:Body>';
                 body += '<getListHoraRecursoMobile  xmlns="http://tempuri.org/">';
@@ -882,7 +909,7 @@ stkApp.prototype = function () {
 
             $.each(aLancamentosAditional, function (index, el) {
                 if (aLancamentosAditional[index].Sequencial == Seq) {
-                    $('#idSeq').val(Seq);
+                    $('#idSeqAditional').val(Seq);
                     $('#txtDtAditional').val(getDateString(aLancamentosAditional[index].DiaMes, aLancamentosAditional[index].Mes, aLancamentosAditional[index].Ano));
                     $('#txtHourAditional').val(aLancamentosAditional[index].Horas);
                     $('#txtProjAditional').val(aLancamentosAditional[index].CodigoAlternativo);
@@ -903,8 +930,8 @@ stkApp.prototype = function () {
             body += '<getOrders xmlns="http://Stk.org/">';
             body += '<strFuncIs>' + FuncIS + '</strFuncIs>';
             body += '<strSegmentId>' + IdSegment + '</strSegmentId>';
-            body += '<strEntityId>' + EntityId + '</strEntityId>';
-            body += '<strTeamId>' + TeamId + '</strTeamId>';
+            body += '<strEntityId></strEntityId>';
+            body += '<strTeamId></strTeamId>';
             body += '<strActivityId></strActivityId>';
             body += '<intTypeOfActivity>-1</intTypeOfActivity>';
             body += '<dteFromDate>' + dtBegin + '</dteFromDate>';
@@ -934,9 +961,9 @@ stkApp.prototype = function () {
                     rows += '<li OrderId=' + $(this).find('OrderId').text().trim() + ' class="btnDelF"><a href="#">';
                     rows += '<h3>' + FuncIS + ' - ' + FuncName + '</h3>';
                     rows += '<p class="topic"><strong>' + $(this).find('ActivityId').text().trim() + ' - ' + $(this).find('ActivityName').text().trim() + '</strong></p>';
-                    rows += '<p>' + $(this).find('TotalHours').text().trim() + getMsgLang(langPref, 'LabelHours') + ' : ' + $(this).find('FromDate').text().trim() + " - " + +$(this).find('ToDate').text().trim() + '</p>';
+                    rows += '<p>' + $(this).find('TotalHours').text().trim() + getMsgLang(langPref, 'LabelHours') + ' : ' + getDateLang($(this).find('FromDate').text().trim(), langPref) + " - " + getDateLang($(this).find('ToDate').text().trim(), langPref) + '</p>';
                     rows += '<p>' + $(this).find('OrderDescription').text().trim() + '</p>';
-                    rows += '<p>' + $(this).find('OrderStatus').text().trim() + ' - ' + $(this).find('ApprovedBy').text().trim() + ' - ' + $(this).find('AprovalDate').text().trim() + '</p>';
+                    rows += '<p>' + $(this).find('OrderStatus').text().trim() + ' - ' + $(this).find('ApprovedBy').text().trim() + ' - ' + getDateLang($(this).find('AprovalDate').text().trim(), langPref) + '</p>';
                     rows += '</a><a href="#" class="btnFaultItem" OrderId=' + $(this).find('OrderId').text().trim() + '></a></li>';
                 });
 
@@ -957,10 +984,10 @@ stkApp.prototype = function () {
         fauxAjax(function () {
             var body = '<soap12:Body>';
             body += '<getOrders xmlns="http://Stk.org/">';
-            body += '<strFuncIs>' + FuncIS + '</strFuncIs>';
+            body += '<strFuncIs></strFuncIs>';
             body += '<strSegmentId>' + IdSegment + '</strSegmentId>';
             body += '<strEntityId>' + EntityId + '</strEntityId>';
-            body += '<strTeamId>' + TeamId + '</strTeamId>';
+            body += '<strTeamId></strTeamId>';
             body += '<strActivityId></strActivityId>';
             body += '<intTypeOfActivity>-1</intTypeOfActivity>';
             body += '<dteFromDate>' + dtBegin + '</dteFromDate>';
@@ -982,7 +1009,7 @@ stkApp.prototype = function () {
             })
             .done(function (xml) {
                 var rows = '';
-                var i = 1;
+                var i = 0;
                 $('#listApproveHours').empty();
 
                 $(xml).find('cAbsence').each(function () {
@@ -996,7 +1023,7 @@ stkApp.prototype = function () {
                     rows += '                <label style="padding:10px 0px 0px 10px;">';
                     rows += '                    <h3>' + FuncIS + ' - ' + FuncName + '</h3>';
                     rows += '                    <p class="topic"><strong>' + $(this).find('ActivityId').text().trim() + ' - ' + $(this).find('ActivityName').text().trim() + '</strong></p>';
-                    rows += '                    <p>' + $(this).find('TotalHours').text().trim() + getMsgLang(langPref, 'LabelHours') + ' : ' + $(this).find('FromDate').text().trim() + " - " + +$(this).find('ToDate').text().trim() + '</p>';
+                    rows += '                    <p>' + $(this).find('TotalHours').text().trim() + getMsgLang(langPref, 'LabelHours') + ' : ' + getDateLang($(this).find('FromDate').text().trim(), langPref) + " - " + getDateLang($(this).find('ToDate').text().trim(), langPref) + '</p>';
                     rows += '                    <p>' + $(this).find('OrderDescription').text().trim() + '</p>';
                     rows += '                    <p>' + getMsgLang(langPref, 'LabelBHour') + $(this).find('TotalBankHours').text().trim() + ', ' + getMsgLang(langPref, 'LabelPVaca') + $(this).find('TotalVacations').text().trim() + ', ' + getMsgLang(langPref, 'LabelAllow') + $(this).find('TotalAllowance').text().trim() + '</p>';
                     rows += '                </label>';
@@ -1010,10 +1037,13 @@ stkApp.prototype = function () {
                 });
 
                 $('#listApproveHours').append(rows);
+                $("#listApproveHours").trigger('create');
                 $("#listApproveHours").listview("refresh");
 
-                $('#btnApproveItem').on('click', function () {
-                    $('#popupApprove').show();
+                $('.btnApproveItem').on('click', function () {
+                    $(this).parent().find('input[type="checkbox"]').click();
+                    $(this).parent().find('input[type="checkbox"]').prop('checked', true);
+                    $('#popupApprove').popup('open');
                 });
             })
             .fail(function (jqXHR, textStatus, errorThrown) {
@@ -1063,17 +1093,17 @@ stkApp.prototype = function () {
     },
 
     changeLang = function changeLang(lang) {
-        if (lang.indexOf("pt") === 0) {
+        if (lang.indexOf("PT") === 0) {
             $(dictionarySTKControls.lang.PT).each(function (i, item) {
                 changeLangObj(item.Controle, item.Label);
             });
         }
-        else if (lang.indexOf("en") === 0) {
+        else if (lang.indexOf("EN") === 0) {
             $(dictionarySTKControls.lang.EN).each(function (i, item) {
                 changeLangObj(item.Controle, item.Label);
             });
         }
-        else if (lang.indexOf("es") === 0) {
+        else if (lang.indexOf("ES") === 0) {
             $(dictionarySTKControls.lang.ES).each(function (i, item) {
                 changeLangObj(item.Controle, item.Label);
             });
@@ -1166,16 +1196,18 @@ stkApp.prototype = function () {
             .done(function (data) {
                 EntityId = $(data).find('EntityId').text();
                 TeamId = $(data).find('TeamId').text();
+                TeamLeaderEmail: $(data).find('TeamLeaderEMail').text().trim();
 
                 var colabdata = {
-                    EntityId: $(data).find('EntityId').text(),
-                    TeamId: $(data).find('TeamId').text(),
-                    EntityLeaderName: $(data).find('EntityLeaderName').text(),
+                    EntityId: $(data).find('EntityId').text().trim(),
+                    TeamId: $(data).find('TeamId').text().trim(),
+                    EntityLeaderName: $(data).find('EntityLeaderName').text().trim(),
                     //TotalBankHours: $(data).find('TotalBankHours').text(),
                     //TotalVacations: $(data).find('TotalVacations').text(),
                     //TotalAllowance: $(data).find('TotalAllowance').text(),
                     //IsCovenant: $(data).find('IsCovenant').text(),
-                    TeamLeaderName: $(data).find('TeamLeaderName').text()
+                    TeamLeaderName: $(data).find('TeamLeaderName').text().trim(),
+                    TeamLeaderEMail: $(data).find('TeamLeaderEMail').text().trim()
                 };
 
                 window.localStorage.setItem("colabInfo", JSON.stringify(colabdata));
@@ -1205,7 +1237,7 @@ stkApp.prototype = function () {
             })
             .done(function (xml) {
                 $(xml).find('cActivity').each(function () {
-                    AcitivityFaults.push({ 'ActivityId': $(this).find('ActivityId').text(), 'Description_BR': $(this).find('Description_BR').text(), 'Description_SP': $(this).find('Description_SP').text(), 'Description_EN': $(this).find('Description_EN').text() });
+                    AcitivityFaults.push({ 'ActivityId': $(this).find('ActivityId').text(), 'Description_BR': $(this).find('Description_PT').text(), 'Description_SP': $(this).find('Description_SP').text(), 'Description_EN': $(this).find('Description_EN').text(), 'TypeOfActivity': $(this).find('TypeOfActivity').text() });
                 });
 
                 MountActivityFaultCombo();
@@ -1232,7 +1264,7 @@ stkApp.prototype = function () {
             else
                 desc = AcitivityFaults[index].Description_EN;
 
-            $('#ddlActivityFault').append("<option value=" + AcitivityFaults[index].ActivityId + ">" + desc + "</option>");
+            $('#ddlActivityFault').append("<option typeofact=" + AcitivityFaults[index].TypeOfActivity + " value=" + AcitivityFaults[index].ActivityId + ">" + desc + "</option>");
         });
     },
 
@@ -1256,17 +1288,23 @@ stkApp.prototype = function () {
             $(data).find('Table').each(function () {
                 var desc = '';
                 if (IdSegment == 'BR')
-                    desc = $(this).find('descr').text();
+                    desc = $(this).find('descr').text().trim();
                 else if (IdSegment == 'CL' || IdSegment == 'CO' || IdSegment == 'AR')
-                    desc = $(this).find('descr_sp').text();
+                    desc = $(this).find('descr_sp').text().trim();
                 else
-                    desc = $(this).find('descr_en').text();
+                    desc = $(this).find('descr_en').text().trim();
 
-                rows += '<li><a href="#" id=' + $(this).find('value') + '>' + desc + '</a></li>';
+                rows += '<li idTypeOfDiscount=' + $(this).find('value').text().trim() + '><a href="#" id=' + $(this).find('value').text().trim() + '>' + desc + '</a></li>';
             });
 
             $('#listtypeDiscount').append(rows);
+            $('#listtypeDiscount').trigger('create');
             $('#listtypeDiscount').listview("refresh");
+
+            $('#listtypeDiscount').children('li').on('vclick', function () {
+                $('#listtypeDiscount li').removeClass('TypeOfDiscountSelected');
+                $(this).addClass('TypeOfDiscountSelected');
+            });
         })
         .fail(function (jqXHR, textStatus, errorThrown) {
             alert(getMsgLang(langPref, 'ErrorAjax') + textStatus + "," + errorThrown);
@@ -1334,20 +1372,20 @@ stkApp.prototype = function () {
             var language = window.navigator.userLanguage || window.navigator.language;
             switch (language) {
                 case "en_us":
-                    changeLang("en_us");
-                    langPref = "en_us";
+                    changeLang("EN");
+                    langPref = "EN";
                     break;
                 case "es":
-                    changeLang("es");
-                    langPref = "es";
+                    changeLang("ES");
+                    langPref = "ES";
                     break;
                 case "pt_br":
-                    changeLang("pt_br");
-                    langPref = "pt_br";
+                    changeLang("PT");
+                    langPref = "PT";
                     break;
                 default:
-                    changeLang("en_us");
-                    langPref = "en_us";
+                    changeLang("EN");
+                    langPref = "EN";
                     break;
             }
         }
@@ -1368,6 +1406,15 @@ stkApp.prototype = function () {
 
 function getDateString(dia, mes, ano) {
     return zeroPad(dia, 2) + "/" + zeroPad(mes, 2) + "/" + ano;
+}
+
+function getDateLang(data, lang) {
+    if (data != '') {
+        var dt = new Date(data);
+        return zeroPad(dt.getDate(), 2) + "/" + zeroPad(dt.getMonth() + 1, 2) + "/" + dt.getFullYear();
+    }
+    else
+        return "";
 }
 
 function zeroPad(num, numZeros) {
@@ -1470,7 +1517,8 @@ var dictionarySTKMsg = {
             { "IdMsg": "LabelPVaca", "Msg": "P. Férias: " },
             { "IdMsg": "LabelAllow", "Msg": "Abono: " },
             { "IdMsg": "RegValidated", "Msg": "Os Tipo de Atividade devem ser iguais para aprovação em lote!" },
-            { "IdMsg": "DateRepInvalid", "Msg": "Data de Replicação inválida!" }
+            { "IdMsg": "DateRepInvalid", "Msg": "Data de Replicação inválida!" },
+            { "IdMsg": "ApproveMass", "Msg": "Não é possível aprovar em massa!" }
         ],
         "EN": [
             { "IdMsg": "Loading", "Msg": "Loading..." },
@@ -1502,7 +1550,8 @@ var dictionarySTKMsg = {
             { "IdMsg": "LabelAllow", "Msg": "Allowance: " },
             { "IdMsg": "RegValidated", "Msg": "Record was validate by your Manager!" },
             { "IdMsg": "RegValidated", "Msg": "The activity type must be the same for batch approval!" },
-            { "IdMsg": "DateRepInvalid", "Msg": "Replication Date is invalid!" }
+            { "IdMsg": "DateRepInvalid", "Msg": "Replication Date is invalid!" },
+            { "IdMsg": "ApproveMass", "Msg": "Don´t is possible mass approvation!" }
         ],
         "ES": [
             { "IdMsg": "Loading", "Msg": "Carregando..." },
@@ -1534,7 +1583,8 @@ var dictionarySTKMsg = {
             { "IdMsg": "LabelAllow", "Msg": "Abono: " },
             { "IdMsg": "RegValidated", "Msg": "Registro ha sido validado por el Gerente!" },
             { "IdMsg": "RegValidated", "Msg": "El tipo de actividad debe ser el mismo para su aprobación por lotes!" },
-            { "IdMsg": "DateRepInvalid", "Msg": "El fecha de replicacion es incorreta!" }
+            { "IdMsg": "DateRepInvalid", "Msg": "El fecha de replicacion es incorreta!" },
+            { "IdMsg": "ApproveMass", "Msg": "No es possible aprobar em massa!" }
         ]
     }
 };
@@ -1664,15 +1714,6 @@ var dictionarySTKControls = {
     }
 };
 
-function MountURLWS(operation) {
-    //return 'http://intrasoft.softtek.com:8081/wsSRAPDK/cResourceHours.asmx?op=' + operation;
-    return 'http://172.16.128.71:8028/wsSRAPDK/cResourceHours.asmx?op=' + operation;
-}
-
-function MountURLSWSAbs(operation) {
-    return 'http://172.16.128.71:8028/wsStkiAbsence/cService.asmx?op=' + operation;
-}
-
 function GetWeekDay(day) {
     switch (day) {
         case 0: //Sunday
@@ -1710,4 +1751,13 @@ function TestConnectivity() {
     }).fail(function (jqXHR, textStatus, errorThrown) {
         onLinePhone = false;
     });
+}
+
+function MountURLWS(operation) {
+    //return 'http://intrasoft.softtek.com:8081/wsSRAPDK/cResourceHours.asmx?op=' + operation;
+    return 'http://172.16.128.71:8028/wsSRAPDK/cResourceHours.asmx?op=' + operation;
+}
+
+function MountURLSWSAbs(operation) {
+    return 'http://172.16.128.71:8028/wsStkiAbsence/cService.asmx?op=' + operation;
 }
