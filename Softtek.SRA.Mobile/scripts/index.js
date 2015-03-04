@@ -8,14 +8,14 @@ stkApp.prototype = function () {
     var AcitivityFaults = [];
     var Weeks = [];
     var Activities = [];
-    var IdSegment = 'BR';
-    var langPref = 'PT';
-    var FuncIS = 'ADLC';//'ACFV';
-    var FuncName = 'Vidal';
-    var TeamId = 'DEV';
-    var EntityId = '13280';
-    var TeamLeaderEmail = 'adriano.candido@softtek.com';
-    var _login = true, //false para ativar o login;
+    var IdSegment = 'EN';
+    var langPref = 'EN';
+    var FuncIS = '';
+    var FuncName = '';
+    var TeamId = '';
+    var EntityId = '';
+    var TeamLeaderEmail = '';
+    var _login = false, //false para ativar o login;
 
     run = function () {
 
@@ -35,8 +35,7 @@ stkApp.prototype = function () {
 
         if (window.localStorage.getItem("userInfo") != null) {
             _login = true;
-            _loadHome(window.localStorage.getItem("userInfo"));
-            $.mobile.changePage('#home', { transition: 'flip' });
+            _loadHome(JSON.parse(window.localStorage.getItem("userInfo")));
         }
 
         $('#btnLogoff').on('click', function () {
@@ -58,12 +57,12 @@ stkApp.prototype = function () {
                 else {
 
                     fauxAjax(function () {
-                        var bodyxml = '  <soap:Body>';
-                        bodyxml += '    <getAuthColabInfo xmlns="http://tempuri.org/">';
-                        bodyxml += '      <strFuncIS>GUDE</strFuncIS>';
-                        bodyxml += '      <strPass>d#nis1309</strPass>';
-                        bodyxml += '    </getAuthColabInfo>';
-                        bodyxml += '  </soap:Body>';
+                        var bodyxml = '<soap12:Body>';
+                        bodyxml += '<getAuthColabInfo xmlns="http://tempuri.org/">';
+                        bodyxml += '<strFuncIS>' + $('#is_stk').val().toUpperCase() + '</strFuncIS>';
+                        bodyxml += '<strPass>' + $('#pass_stk').val() + '</strPass>';
+                        bodyxml += '</getAuthColabInfo>';
+                        bodyxml += '</soap12:Body>';
                         var envelope = getEnvelope(bodyxml);
 
                         $.ajax({
@@ -76,23 +75,24 @@ stkApp.prototype = function () {
                             var usrdata;
                             $(xml).find('Table').each(function () {
                                 usrdata = {
-                                    FuncIs: $(this).find('FuncIs').text(),
-                                    Tipo: $(this).find('Tipo').text(),
-                                    Nome: $(this).find('Nome').text(),
-                                    Email: $(this).find('Email').text(),
-                                    UserID: $(this).find('UserID').text(),
-                                    Billable: $(this).find('Billable').text(),
-                                    CodSegmento: $(this).find('CodigoSegmento').text()
+                                    FuncIs: $(this).find('FuncIs').text().trim(),
+                                    Tipo: $(this).find('Tipo').text().trim(),
+                                    Nome: $(this).find('Nome').text().trim(),
+                                    Email: $(this).find('Email').text().trim(),
+                                    UserID: $(this).find('UserID').text().trim(),
+                                    Billable: $(this).find('Billable').text().trim(),
+                                    CodSegmento: $(this).find('CodigoSegmento').text().trim()
                                 };
+                                _login = true;
                             });
-
-                            window.localStorage.setItem("userInfo", JSON.stringify(usrdata));
-                            _loadHome(usrdata);
-
-                            $(this).hide();
-                            _login = true;
-
-                            $.mobile.changePage('#home', { transition: 'flip' });
+                            if (_login) {
+                                window.localStorage.setItem("userInfo", JSON.stringify(usrdata));
+                                $(this).hide();
+                                _loadHome(usrdata);
+                            }
+                            else {
+                                alert(getMsgLang(langPref, 'ErrorLogin'));
+                            }
                         })
                         .fail(function (jqXHR, textStatus, errorThrown) {
                             alert(getMsgLang(langPref, 'ErrorAjax') + textStatus + "," + errorThrown);
@@ -173,7 +173,7 @@ stkApp.prototype = function () {
             }, getMsgLang(langPref, 'Loading'), this);
         });
 
-        $('#btnLangpt, #btnLanges, #btnLangen').on('click', function () {
+        $('#btnLangBR, #btnLangES, #btnLangEN').on('click', function () {
             changeLang($(this).attr('id').substr(7, 2));
             window.localStorage.setItem("langPreference", $(this).attr('id').substr(7, 2));
         });
@@ -239,7 +239,7 @@ stkApp.prototype = function () {
                 body += '</addRecordHoraRecursoMobile>';
                 body += '</soap12:Body>';
                 var envelope = getEnvelope(body);
-                console.log(envelope);
+
                 $.ajax({
                     type: 'POST',
                     url: MountURLWS('addRecordHoraRecursoMobile'),
@@ -442,8 +442,10 @@ stkApp.prototype = function () {
 
         $('#btnSaveApprove, #btnReproveApprove').on('click', function () {
             var OrderIds = '';
+            var iscertificate = 0;
             $('#listApproveHours input[type="checkbox"]:checked').each(function () {
                 OrderIds += $(this).val() + ",";
+                iscertificate = ($(this).parent().attr('IsCertificateRule') == 'true' ? 1 : 0);
             });
 
             var TypeOfActivityID = 0;
@@ -453,12 +455,10 @@ stkApp.prototype = function () {
             body += '<setUpdateStatusMobile xmlns="http://Stk.org/">';
             body += '<strLanguageId>' + langPref + '</strLanguageId>';
             body += '<OrderIds>' + OrderIds + '</OrderIds>';
-            body += '<OrderStatus>' + ($(this).attr('id') == 'btnSaveApprove' ? '1' : '2') + '</OrderStatus>';
-            body += '<OrderDescription></OrderDescription>';
-            body += '<ApprovalDescription></ApprovalDescription>';
-            body += '<ValidationDescription></ValidationDescription>';
+            body += '<OrderStatus>' + ($(this).attr('id') == 'btnSaveApprove' ? '2' : '4') + '</OrderStatus>';
+            body += '<ApprovalDescription>' + ($(this).attr('id') == 'btnSaveApprove' ? getMsgLang(langPref, 'Approved') : getMsgLang(langPref, 'Repproved')) + '</ApprovalDescription>';
             body += '<UpdatedBy>' + FuncIS + '</UpdatedBy>';
-            body += '<IsCertificate>0</IsCertificate>';
+            body += '<IsCertificate>' + iscertificate + '</IsCertificate>';
             body += '<TypeOfDiscount>' + $('.TypeOfDiscountSelected').attr('idTypeOfDiscount') + '</TypeOfDiscount>';
             body += '</setUpdateStatusMobile>';
             body += '</soap12:Body>';
@@ -471,7 +471,9 @@ stkApp.prototype = function () {
                 data: envelope
             })
             .done(function (data) {
-                alert((data > 0 ? getMsgLang(langPref, 'DataSaveSuccess') : getMsgLang(langPref, 'DataSaveError')));
+                $('#popupApprove').popup('close');
+                alert(($(data).find('setUpdateStatusMobileResult').text().length > 0 ? getMsgLang(langPref, 'DataSaveError') : getMsgLang(langPref, 'DataSaveSuccess')));
+                LoadApproveGrid();
             })
             .fail(function (jqXHR, textStatus, errorThrown) {
                 alert(getMsgLang(langPref, 'ErrorAjax') + textStatus + "," + errorThrown);
@@ -479,10 +481,7 @@ stkApp.prototype = function () {
         });
 
         $(document).on("swiperight", "#label_DevName", function (event) {
-            var msg = 'Version: 1.0 - Module Online\n';
-            msg += 'Notes: This application is for Softtek employees realize their appointments of hours.\n';
-            msg += 'Developed by: Gustavo Denis \nSofttek Brazil - Application Developer Team';
-            alert(msg);
+            alert('Version: 1.0 - Module Online\nNotes: This application is for Softtek employees realize their appointments of hours.\nDeveloped by: Gustavo Denis \nSofttek Brazil - Application Developer Team');
         });
     },
 
@@ -493,16 +492,14 @@ stkApp.prototype = function () {
     },
 
     _loadHome = function (userInfo) {
-        var datauser = JSON.parse(userInfo);
-        IdSegment = datauser.CodSegmento;
-        FuncIS = datauser.FuncIs;
+        IdSegment = userInfo.CodSegmento;
+        FuncIS = userInfo.FuncIs;
+        FuncName = userInfo.Nome;
 
-        $('#ISFunc').val(datauser.FuncIs);
-        $('#ISName').val(datauser.Nome);
+        $('#ISFunc').html(userInfo.FuncIs);
+        $('#ISName').html(userInfo.Nome);
 
-        fauxAjax(function () {
-            $.mobile.changePage('#home', { transition: 'flip' });
-        }, getMsgLang(langPref, 'Loading'), this);
+        $.mobile.changePage('#home', { transition: 'flip' });
     },
 
     _initLoadHome = function () {
@@ -564,7 +561,39 @@ stkApp.prototype = function () {
             MountActivityCombo();
         }
 
-        getCollaborator();
+        if (window.localStorage.getItem("colabInfo") == null) {
+            var body = '<soap12:Body>';
+            body += '  <getCollaborator xmlns="http://Stk.org/">';
+            body += '     <strFuncIs>' + FuncIS + '</strFuncIs>';
+            body += '   </getCollaborator>';
+            body += '</soap12:Body>';
+            var envelope = getEnvelopeAbs(body);
+
+            $.ajax({
+                type: 'POST',
+                url: MountURLSWSAbs('getCollaborator'),
+                contentType: 'application/soap+xml; charset=utf-8',
+                data: envelope
+            })
+            .done(function (data) {
+                EntityId = $(data).find('EntityId').text();
+                TeamId = $(data).find('TeamId').text();
+                TeamLeaderEmail: $(data).find('TeamLeaderEMail').text().trim();
+
+                var colabdata = {
+                    EntityId: $(data).find('EntityId').text().trim(),
+                    TeamId: $(data).find('TeamId').text().trim(),
+                    EntityLeaderName: $(data).find('EntityLeaderName').text().trim(),
+                    TeamLeaderName: $(data).find('TeamLeaderName').text().trim(),
+                    TeamLeaderEMail: $(data).find('TeamLeaderEMail').text().trim()
+                };
+
+                window.localStorage.setItem("colabInfo", JSON.stringify(colabdata));
+            })
+            .fail(function (jqXHR, textStatus, errorThrown) {
+                alert(getMsgLang(langPref, 'ErrorAjax') + textStatus + "," + errorThrown);
+            });
+        }
     },
 
     MountWeekCombo = function MountWeekCombo() {
@@ -681,7 +710,7 @@ stkApp.prototype = function () {
                 bodyxml += '<intYear>' + ano + '</intYear>';
                 bodyxml += '<intMonth>' + mes + '</intMonth>';
                 bodyxml += '<intDay>' + dia + '</intDay>';
-                bodyxml += '<intAdditionalHour>-666</intAdditionalHour>';
+                bodyxml += '<intAdditionalHour>0</intAdditionalHour>';
                 bodyxml += '<intSequencial>' + seq + '</intSequencial>';
                 bodyxml += '</deleteRecordByDayMobile>';
                 bodyxml += '</soap12:Body>';
@@ -749,7 +778,6 @@ stkApp.prototype = function () {
                     data: envelope
                 })
                 .done(function (xml) {
-                    console.log(xml);
                     var rows = '';
                     var total = 0;
                     aLancamentos = [];
@@ -781,7 +809,7 @@ stkApp.prototype = function () {
                         total += parseFloat($(this).find('Horas').text().replace(':', '.'));
                     });
 
-                    rows += '<li><a href="#"><h3>' + getMsgLang(langPref, 'LabelTotal') + '</h3><p class="ui-li-aside"><strong>' + total.toString() + getMsgLang(langPref, 'LabelHours') + '</strong></p></a></li>'
+                    rows += '<li><a href="#"><h3>' + getMsgLang(langPref, 'LabelTotal') + '</h3><p class="ui-li-aside"><strong>' + total.toString() + ' ' + getMsgLang(langPref, 'LabelHours') + '</strong></p></a></li>'
                     $('#listHours').append(rows);
                     $("#listHours").listview("refresh");
 
@@ -878,7 +906,7 @@ stkApp.prototype = function () {
                         total += parseFloat($(this).find('Horas').text().replace(':', '.'));
                     });
 
-                    rows += '<li><a href="#"><h3>' + getMsgLang(langPref, 'LabelTotal') + '</h3><p class="ui-li-aside"><strong>' + total.toString() + getMsgLang(langPref, 'LabelHours') + '</strong></p></a></li>'
+                    rows += '<li><a href="#"><h3>' + getMsgLang(langPref, 'LabelTotal') + '</h3><p class="ui-li-aside"><strong>' + total.toString() + ' ' + getMsgLang(langPref, 'LabelHours') + '</strong></p></a></li>'
                     $('#listAditionalHours').append(rows);
                     $("#listAditionalHours").listview("refresh");
 
@@ -994,7 +1022,7 @@ stkApp.prototype = function () {
             body += '<dteToDate>' + dtEnd + '</dteToDate>';
             body += '<strApproverId></strApproverId>';
             body += '<strValidatorId></strValidatorId>';
-            body += '<intOrderSatus>-1</intOrderSatus>';
+            body += '<intOrderSatus>1</intOrderSatus>';
             body += '<intIsCertificateRule>-1</intIsCertificateRule>';
             body += '<intTypeOfReport>0</intTypeOfReport>';
             body += '</getOrders>';
@@ -1093,7 +1121,7 @@ stkApp.prototype = function () {
     },
 
     changeLang = function changeLang(lang) {
-        if (lang.indexOf("PT") === 0) {
+        if (lang.indexOf("BR") === 0) {
             $(dictionarySTKControls.lang.PT).each(function (i, item) {
                 changeLangObj(item.Controle, item.Label);
             });
@@ -1112,19 +1140,19 @@ stkApp.prototype = function () {
 
     getMsgLang = function getMsgLang(lang, IdMsg) {
         var ret = "";
-        if (lang.indexOf("pt") === 0) {
+        if (lang.indexOf("BR") === 0) {
             $(dictionarySTKMsg.lang.PT).each(function (i, item) {
                 if (item.IdMsg == IdMsg)
                     ret = item.Msg;
             });
         }
-        else if (lang.indexOf("en") === 0) {
+        else if (lang.indexOf("EN") === 0) {
             $(dictionarySTKMsg.lang.EN).each(function (i, item) {
                 if (item.IdMsg == IdMsg)
                     ret = item.Msg;
             });
         }
-        else if (lang.indexOf("es") === 0) {
+        else if (lang.indexOf("ES") === 0) {
             $(dictionarySTKMsg.lang.ES).each(function (i, item) {
                 if (item.IdMsg == IdMsg)
                     ret = item.Msg;
@@ -1176,46 +1204,6 @@ stkApp.prototype = function () {
         dataXML += xmlBody;
         dataXML += '</soap12:Envelope>';
         return dataXML;
-    },
-
-    getCollaborator = function getCollaborator() {
-        if (window.localStorage.getItem("colabInfo") == null) {
-            var body = '<soap12:Body>';
-            body += '  <getCollaborator xmlns="http://Stk.org/">';
-            body += '     <strFuncIs>' + FuncIS + '</strFuncIs>';
-            body += '   </getCollaborator>';
-            body += '</soap12:Body>';
-            var envelope = getEnvelopeAbs(body);
-
-            $.ajax({
-                type: 'POST',
-                url: MountURLSWSAbs('getCollaborator'),
-                contentType: 'application/soap+xml; charset=utf-8',
-                data: envelope
-            })
-            .done(function (data) {
-                EntityId = $(data).find('EntityId').text();
-                TeamId = $(data).find('TeamId').text();
-                TeamLeaderEmail: $(data).find('TeamLeaderEMail').text().trim();
-
-                var colabdata = {
-                    EntityId: $(data).find('EntityId').text().trim(),
-                    TeamId: $(data).find('TeamId').text().trim(),
-                    EntityLeaderName: $(data).find('EntityLeaderName').text().trim(),
-                    //TotalBankHours: $(data).find('TotalBankHours').text(),
-                    //TotalVacations: $(data).find('TotalVacations').text(),
-                    //TotalAllowance: $(data).find('TotalAllowance').text(),
-                    //IsCovenant: $(data).find('IsCovenant').text(),
-                    TeamLeaderName: $(data).find('TeamLeaderName').text().trim(),
-                    TeamLeaderEMail: $(data).find('TeamLeaderEMail').text().trim()
-                };
-
-                window.localStorage.setItem("colabInfo", JSON.stringify(colabdata));
-            })
-            .fail(function (jqXHR, textStatus, errorThrown) {
-                alert(getMsgLang(langPref, 'ErrorAjax') + textStatus + "," + errorThrown);
-            });
-        }
     },
 
     getActivities = function getActivities() {
@@ -1311,7 +1299,7 @@ stkApp.prototype = function () {
         });
     },
 
-    deleteFault = function deleteFault(listitem, orderid) {
+    deleteFault = function deleteFault(listitem, transition) {
         listitem.children(".ui-btn").addClass("ui-btn-active");
 
         if (confirm(getMsgLang(langPref, 'ConfirmDelete'))) {
@@ -1320,7 +1308,7 @@ stkApp.prototype = function () {
                 var body = '<soap12:Body>';
                 body += '<setDeleteOrderMobile xmlns="http://Stk.org/">';
                 body += '<strLanguageId>' + IdSegment + '</strLanguageId>';
-                body += '<intOrderId>' + orderid + '</intOrderId>';
+                body += '<intOrderId>' + listitem.attr('OrderId') + '</intOrderId>';
                 body += '</setDeleteOrderMobile>';
                 body += '</soap12:Body>';
                 var envelope = getEnvelopeAbs(body);
@@ -1332,8 +1320,7 @@ stkApp.prototype = function () {
                     data: envelope
                 })
                 .done(function (data) {
-                    if (data == "true") {
-
+                    if ($(data).find('setDeleteOrderMobileResult').text().trim() == "true") {
                         if (transition) {
                             listitem
                             .addClass(transition)
@@ -1380,8 +1367,8 @@ stkApp.prototype = function () {
                     langPref = "ES";
                     break;
                 case "pt_br":
-                    changeLang("PT");
-                    langPref = "PT";
+                    changeLang("BR");
+                    langPref = "BR";
                     break;
                 default:
                     changeLang("EN");
@@ -1518,7 +1505,10 @@ var dictionarySTKMsg = {
             { "IdMsg": "LabelAllow", "Msg": "Abono: " },
             { "IdMsg": "RegValidated", "Msg": "Os Tipo de Atividade devem ser iguais para aprovação em lote!" },
             { "IdMsg": "DateRepInvalid", "Msg": "Data de Replicação inválida!" },
-            { "IdMsg": "ApproveMass", "Msg": "Não é possível aprovar em massa!" }
+            { "IdMsg": "ApproveMass", "Msg": "Não é possível aprovar em massa!" },
+            { "IdMsg": "Approved", "Msg": "Aprovado" },
+            { "IdMsg": "Repproved", "Msg": "Reprovado" },
+            { "IdMsg": "ErrorLogin", "Msg": "Usuário ou senha inválidos!" }            
         ],
         "EN": [
             { "IdMsg": "Loading", "Msg": "Loading..." },
@@ -1551,7 +1541,10 @@ var dictionarySTKMsg = {
             { "IdMsg": "RegValidated", "Msg": "Record was validate by your Manager!" },
             { "IdMsg": "RegValidated", "Msg": "The activity type must be the same for batch approval!" },
             { "IdMsg": "DateRepInvalid", "Msg": "Replication Date is invalid!" },
-            { "IdMsg": "ApproveMass", "Msg": "Don´t is possible mass approvation!" }
+            { "IdMsg": "ApproveMass", "Msg": "Don´t is possible mass approvation!" },
+            { "IdMsg": "Approved", "Msg": "Aprovado" },
+            { "IdMsg": "Repproved", "Msg": "Reprovado" },
+            { "IdMsg": "ErrorLogin", "Msg": "Invalid user or password!" }
         ],
         "ES": [
             { "IdMsg": "Loading", "Msg": "Carregando..." },
@@ -1584,7 +1577,10 @@ var dictionarySTKMsg = {
             { "IdMsg": "RegValidated", "Msg": "Registro ha sido validado por el Gerente!" },
             { "IdMsg": "RegValidated", "Msg": "El tipo de actividad debe ser el mismo para su aprobación por lotes!" },
             { "IdMsg": "DateRepInvalid", "Msg": "El fecha de replicacion es incorreta!" },
-            { "IdMsg": "ApproveMass", "Msg": "No es possible aprobar em massa!" }
+            { "IdMsg": "ApproveMass", "Msg": "No es possible aprobar em massa!" },
+            { "IdMsg": "Approved", "Msg": "Aprobado" },
+            { "IdMsg": "Repproved", "Msg": "Reprobado" },
+            { "IdMsg": "ErrorLogin", "Msg": "Usuário ou senha inválidos!" }
         ]
     }
 };
@@ -1629,7 +1625,8 @@ var dictionarySTKControls = {
             { "Controle": "label_ISName", "Label": "Nome Colaborador:" },
             { "Controle": "label_Lang", "Label": "Idioma:" },
             { "Controle": "label_Platform", "Label": "Plataforma:" },
-            { "Controle": "btnLogoff", "Label": "Logoff" }
+            { "Controle": "btnLogoff", "Label": "Logoff" },
+            { "Controle": "labelApprovation", "Label": "Aprovação" }
         ],
         "EN": [
             { "Controle": "hrNormal", "Label": "Normal" },
@@ -1669,7 +1666,8 @@ var dictionarySTKControls = {
             { "Controle": "label_ISName", "Label": "Resource Name:" },
             { "Controle": "label_Lang", "Label": "Language:" },
             { "Controle": "label_Platform", "Label": "Plataform:" },
-            { "Controle": "btnLogoff", "Label": "Logoff" }
+            { "Controle": "btnLogoff", "Label": "Logoff" },
+            { "Controle": "labelApprovation", "Label": "Approvation" }
         ],
         "ES": [
             { "Controle": "hrNormal", "Label": "Normal" },
@@ -1709,7 +1707,8 @@ var dictionarySTKControls = {
             { "Controle": "label_ISName", "Label": "Nombre Colaborador:" },
             { "Controle": "label_Lang", "Label": "Lengua:" },
             { "Controle": "label_Platform", "Label": "Plataforma:" },
-            { "Controle": "btnLogoff", "Label": "Desconectar" }
+            { "Controle": "btnLogoff", "Label": "Desconectar" },
+            { "Controle": "labelApprovation", "Label": "Aprobacion" }
         ]
     }
 };
