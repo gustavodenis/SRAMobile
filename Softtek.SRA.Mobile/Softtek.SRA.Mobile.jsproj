@@ -130,10 +130,6 @@
     <Content Include="css\phone-1280.css" />
     <Content Include="css\phone-800.css" />
     <Content Include="css\tablet-1024-ldpi.css" />
-    <Content Include="images\320x480px.png" />
-    <Content Include="images\480x800px.png" />
-    <Content Include="images\720x1280px.png" />
-    <Content Include="images\768x1024px.png" />
     <Content Include="images\BandeiraBr.png" />
     <Content Include="images\BandeiraGB.png" />
     <Content Include="images\BandeiraSpain.png" />
@@ -338,7 +334,6 @@
     <Content Include="images\icons-svg\user-white.svg" />
     <Content Include="images\icons-svg\video-black.svg" />
     <Content Include="images\icons-svg\video-white.svg" />
-    <Content Include="images\logo-splash.png" />
     <Content Include="images\logo.png" />
     <Content Include="scripts\jquery.mobile.datebox.js" />
   </ItemGroup>
