@@ -1,4 +1,5 @@
-﻿var stkApp = function () { }
+﻿var onLinePhone = false;
+var stkApp = function () { }
 
 stkApp.prototype = function () {
 
@@ -8,6 +9,7 @@ stkApp.prototype = function () {
     var AcitivityFaults = [];
     var Weeks = [];
     var Activities = [];
+    var TypeofDiscount = [];
     var IdSegment = 'EN';
     var langPref = 'EN';
     var FuncIS = '';
@@ -247,7 +249,12 @@ stkApp.prototype = function () {
                     data: envelope
                 })
                 .done(function (data) {
-                    alert(($(data).find('addRecordHoraRecursoMobileResult').text() == 'Sucesso!' ? getMsgLang(langPref, 'DataSaveSuccess') : $(data).find('addRecordHoraRecursoMobileResult').text()));
+                    if ($(data).find('addRecordHoraRecursoMobileResult').text() == 'Sucesso!') {
+                        alert(getMsgLang(langPref, 'DataSaveSuccess'));
+                        $('#txtDt,#txtHour,#txtProj,#txtDesc,#txtDtRepNormalBegin,#txtDtRepNormalEnd').val('');
+                        $('#ddlActivity, #idSeq').val(0);
+                    } else
+                        alert($(data).find('addRecordHoraRecursoMobileResult').text());
                 })
                 .fail(function (jqXHR, textStatus, errorThrown) {
                     alert(getMsgLang(langPref, 'ErrorAjax') + textStatus + "," + errorThrown);
@@ -327,7 +334,12 @@ stkApp.prototype = function () {
                     data: envelope
                 })
                 .done(function (data) {
-                    alert(($(data).find('addRecordHoraRecursoMobileResult').text() == 'Sucesso!' ? getMsgLang(langPref, 'DataSaveSuccess') : $(data).find('addRecordHoraRecursoMobileResult').text()));
+                    if ($(data).find('addRecordHoraRecursoMobileResult').text() == 'Sucesso!') {
+                        alert(getMsgLang(langPref, 'DataSaveSuccess'));
+                        $('#txtHourBegin,#txtDtAditional,#txtHourAditional,#txtDescAditional,#txtDtRepAditionalBegin,#txtDtRepAditionalEnd').val('');
+                        $('#ddlActivityAditional, #idSeqAditional').val(0);
+                    } else
+                        alert($(data).find('addRecordHoraRecursoMobileResult').text());
                 })
                 .fail(function (jqXHR, textStatus, errorThrown) {
                     alert(getMsgLang(langPref, 'ErrorAjax') + textStatus + "," + errorThrown);
@@ -503,7 +515,7 @@ stkApp.prototype = function () {
     },
 
     _initLoadHome = function () {
-        if (Weeks.length == 0) {
+        if (window.localStorage.getItem("Weeks") == null) {
             var body = '<soap12:Body>';
             body += '<getRangeSRADaysMobile xmlns="http://tempuri.org/">';
             body += '<strSegmentId>' + IdSegment + '</strSegmentId>';
@@ -521,7 +533,7 @@ stkApp.prototype = function () {
                 $(xml).find('Table1').each(function () {
                     Weeks.push({ 'WeekNumber': $(this).find('WeekNumber').text(), 'DateStartWeek': $(this).find('DateStartWeek').text(), 'DateFinishWeek': $(this).find('DateFinishWeek').text() });
                 });
-
+                window.localStorage.setItem("Weeks", JSON.stringify(Weeks));
                 MountWeekCombo();
             })
             .fail(function (jqXHR, textStatus, errorThrown) {
@@ -532,7 +544,7 @@ stkApp.prototype = function () {
             MountWeekCombo();
         }
 
-        if (Activities.length == 0) {
+        if (window.localStorage.getItem("Activities") == null) {
             var body = '<soap12:Body>';
             body += '<getCombodataAbsence xmlns="http://tempuri.org/">';
             body += '<segmentId>' + IdSegment + '</segmentId>';
@@ -551,6 +563,7 @@ stkApp.prototype = function () {
                 $(xml).find('Table').each(function () {
                     Activities.push({ 'ord': $(this).find('ord').text(), 'value': $(this).find('value').text(), 'descr': $(this).find('descr').text() });
                 });
+                window.localStorage.setItem("Activities", JSON.stringify(Activities));
                 MountActivityCombo();
             })
             .fail(function (jqXHR, textStatus, errorThrown) {
@@ -597,6 +610,7 @@ stkApp.prototype = function () {
     },
 
     MountWeekCombo = function MountWeekCombo() {
+        Weeks = JSON.parse(window.localStorage.getItem("Weeks"));
         $('#ddlWeek, #ddlWeekAditional').empty();
         $('#ddlWeek, #ddlWeekAditional').append("<option value='0' selected='selected'>" + getMsgLang(langPref, 'SelCombo') + "</option>");
         $.each(Weeks, function (index, el) {
@@ -605,6 +619,7 @@ stkApp.prototype = function () {
     },
 
     MountActivityCombo = function MountActivityCombo() {
+        Activities = JSON.parse(window.localStorage.getItem('Activities'));
         $('#ddlActivity, #ddlActivityAditional').empty();
         $('#ddlActivity, #ddlActivityAditional').append("<option value='0' selected='selected'>" + getMsgLang(langPref, 'SelCombo') + "</option>");
         $.each(Activities, function (index, el) {
@@ -1207,7 +1222,7 @@ stkApp.prototype = function () {
     },
 
     getActivities = function getActivities() {
-        if (AcitivityFaults.length == 0) {
+        if (window.localStorage.getItem("AcitivityFaults") == null) {
             var body = '<soap12:Body>';
             body += '<getActivities xmlns="http://Stk.org/">';
             body += '<strSegmentId>' + IdSegment + '</strSegmentId>';
@@ -1227,7 +1242,7 @@ stkApp.prototype = function () {
                 $(xml).find('cActivity').each(function () {
                     AcitivityFaults.push({ 'ActivityId': $(this).find('ActivityId').text(), 'Description_BR': $(this).find('Description_PT').text(), 'Description_SP': $(this).find('Description_SP').text(), 'Description_EN': $(this).find('Description_EN').text(), 'TypeOfActivity': $(this).find('TypeOfActivity').text() });
                 });
-
+                window.localStorage.setItem("AcitivityFaults", JSON.stringify(AcitivityFaults));
                 MountActivityFaultCombo();
             })
             .fail(function (jqXHR, textStatus, errorThrown) {
@@ -1240,6 +1255,7 @@ stkApp.prototype = function () {
     },
 
     MountActivityFaultCombo = function () {
+        AcitivityFaults = JSON.parse(window.localStorage.getItem('AcitivityFaults'));
         $('#ddlActivityFault').empty();
         $('#ddlActivityFault').append("<option value='0' selected='selected'>" + getMsgLang(langPref, 'SelCombo') + "</option>");
 
@@ -1257,45 +1273,56 @@ stkApp.prototype = function () {
     },
 
     getTypeofDiscount = function getTypeofDiscount() {
-        var body = '<soap12:Body>';
-        body += '<getTypeOfDiscount xmlns="http://Stk.org/">';
-        body += '</getTypeOfDiscount>';
-        body += '</soap12:Body>';
-        var envelope = getEnvelopeAbs(body);
+        if (window.localStorage.getItem("TypeofDiscount") == null) {
+            var body = '<soap12:Body>';
+            body += '<getTypeOfDiscount xmlns="http://Stk.org/">';
+            body += '</getTypeOfDiscount>';
+            body += '</soap12:Body>';
+            var envelope = getEnvelopeAbs(body);
 
-        $.ajax({
-            type: 'POST',
-            url: MountURLSWSAbs('getTypeOfDiscount'),
-            contentType: 'application/soap+xml; charset=utf-8',
-            data: envelope
-        })
-        .done(function (data) {
-            $('#listtypeDiscount').empty();
-            var rows = '<li id="labelTypeDiscount" data-role="list-divider">' + getMsgLang(langPref, 'TypeOfDiscount') + '</li>';
-
-            $(data).find('Table').each(function () {
-                var desc = '';
-                if (IdSegment == 'BR')
-                    desc = $(this).find('descr').text().trim();
-                else if (IdSegment == 'CL' || IdSegment == 'CO' || IdSegment == 'AR')
-                    desc = $(this).find('descr_sp').text().trim();
-                else
-                    desc = $(this).find('descr_en').text().trim();
-
-                rows += '<li idTypeOfDiscount=' + $(this).find('value').text().trim() + '><a href="#" id=' + $(this).find('value').text().trim() + '>' + desc + '</a></li>';
+            $.ajax({
+                type: 'POST',
+                url: MountURLSWSAbs('getTypeOfDiscount'),
+                contentType: 'application/soap+xml; charset=utf-8',
+                data: envelope
+            })
+            .done(function (data) {
+                $(data).find('Table').each(function () {
+                    TypeofDiscount.push({ 'value': $(this).find('value').text().trim(), 'descr': $(this).find('descr').text().trim(), 'descr_sp': $(this).find('descr_sp').text().trim(), 'descr_en': $(this).find('descr_en').text().trim() });
+                });
+                window.localStorage.setItem("TypeofDiscount", JSON.stringify(TypeofDiscount));
+                MountTypeofDiscountCombo();
+            })
+            .fail(function (jqXHR, textStatus, errorThrown) {
+                alert(getMsgLang(langPref, 'ErrorAjax') + textStatus + "," + errorThrown);
             });
+        } else { MountTypeofDiscountCombo(); }
+    },
 
-            $('#listtypeDiscount').append(rows);
-            $('#listtypeDiscount').trigger('create');
-            $('#listtypeDiscount').listview("refresh");
+    MountTypeofDiscountCombo = function () {
+        TypeofDiscount = JSON.parse(window.localStorage.getItem('TypeofDiscount'));
+        $('#listtypeDiscount').empty();
+        var rows = '<li id="labelTypeDiscount" data-role="list-divider">' + getMsgLang(langPref, 'TypeOfDiscount') + '</li>';
 
-            $('#listtypeDiscount').children('li').on('vclick', function () {
-                $('#listtypeDiscount li').removeClass('TypeOfDiscountSelected');
-                $(this).addClass('TypeOfDiscountSelected');
-            });
-        })
-        .fail(function (jqXHR, textStatus, errorThrown) {
-            alert(getMsgLang(langPref, 'ErrorAjax') + textStatus + "," + errorThrown);
+        $.each(TypeofDiscount, function (index, el) {
+            var desc = '';
+            if (IdSegment == 'BR')
+                desc = TypeofDiscount[index].descr
+            else if (IdSegment == 'CL' || IdSegment == 'CO' || IdSegment == 'AR')
+                desc = TypeofDiscount[index].descr_sp
+            else
+                desc = TypeofDiscount[index].descr_en
+
+            rows += '<li idTypeOfDiscount=' + TypeofDiscount[index].value + '><a href="#" id=' + TypeofDiscount[index].value + '>' + desc + '</a></li>';
+        });
+
+        $('#listtypeDiscount').append(rows);
+        $('#listtypeDiscount').trigger('create');
+        $('#listtypeDiscount').listview("refresh");
+
+        $('#listtypeDiscount').children('li').on('vclick', function () {
+            $('#listtypeDiscount li').removeClass('TypeOfDiscountSelected');
+            $(this).addClass('TypeOfDiscountSelected');
         });
     },
 
@@ -1508,7 +1535,7 @@ var dictionarySTKMsg = {
             { "IdMsg": "ApproveMass", "Msg": "Não é possível aprovar em massa!" },
             { "IdMsg": "Approved", "Msg": "Aprovado" },
             { "IdMsg": "Repproved", "Msg": "Reprovado" },
-            { "IdMsg": "ErrorLogin", "Msg": "Usuário ou senha inválidos!" }            
+            { "IdMsg": "ErrorLogin", "Msg": "Usuário ou senha inválidos!" }
         ],
         "EN": [
             { "IdMsg": "Loading", "Msg": "Loading..." },
