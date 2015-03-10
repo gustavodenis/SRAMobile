@@ -39,8 +39,7 @@ stkApp.prototype = function () {
 
         if (window.localStorage.getItem("userInfo") != null) {
             _login = true;
-            _loadHome();
-            //_loadHome(JSON.parse(window.localStorage.getItem("userInfo")));
+            $.mobile.changePage('#home', { transition: 'flip' });
         }
 
         $('.RemoveEspecialCharacter').on('keyup', function () {
@@ -99,8 +98,7 @@ stkApp.prototype = function () {
                             if (_login) {
                                 window.localStorage.setItem("userInfo", JSON.stringify(usrdata));
                                 $(this).hide();
-                                //_loadHome(usrdata);
-                                _loadHome();
+                                $.mobile.changePage('#home', { transition: 'flip' });
                             }
                             else {
                                 alert(getMsgLang(langPref, 'ErrorLogin'));
@@ -187,7 +185,7 @@ stkApp.prototype = function () {
 
         $('#btnLangPT, #btnLangSP, #btnLangEN').on('click', function () {
             window.localStorage.setItem("langPreference", $(this).attr('id').substr(7, 2));
-            changeLang($(this).attr('id').substr(7, 2));            
+            changeLang($(this).attr('id').substr(7, 2));
         });
 
         $('#btnAddNormalHour').on('click', function () {
@@ -202,12 +200,16 @@ stkApp.prototype = function () {
 
             var dtnew = Dt.split("/");
             var dtParse = new Date(dtnew[2] + "/" + dtnew[1] + "/" + dtnew[0]);
+            var dtBeginParse;
+            var dtEndParse;
 
             var erros = '';
             if (Dt == '')
                 erros += getMsgLang(langPref, 'ValidDate');
             if (Hour == '')
                 erros += getMsgLang(langPref, 'ValidHour');
+            if (parseFloat(Hour) > 8)
+                erros += getMsgLang(langPref, 'ValidMaxNormalHour');
             if (Proj == '')
                 erros += getMsgLang(langPref, 'ValidProject');
             if (Activity == '')
@@ -219,23 +221,30 @@ stkApp.prototype = function () {
                 if (compareDate(DtRepBegin, DtRepEnd)) {
                     var dtrepInew = DtRepBegin.split("/");
                     DtRepBegin = dtrepInew[1] + "/" + dtrepInew[0] + "/" + dtrepInew[2];
+
+                    dtBeginParse = dtrepInew[0] + "/" + dtrepInew[1] + "/" + dtrepInew[2];
+
                     var dtrepFnew = DtRepEnd.split("/");
                     DtRepEnd = dtrepFnew[1] + "/" + dtrepFnew[0] + "/" + dtrepFnew[2];
+
+                    dtEndParse = dtrepFnew[0] + "/" + dtrepFnew[1] + "/" + dtrepFnew[2];
                 } else {
                     erros += getMsgLang(langPref, 'DateRepInvalid');
                 }
             }
             else {
                 DtRepBegin = dtnew[1] + "/" + dtnew[0] + "/" + dtnew[2];
+                dtBeginParse = dtnew[0] + "/" + dtnew[1] + "/" + dtnew[2];
+
                 DtRepEnd = dtnew[1] + "/" + dtnew[0] + "/" + dtnew[2];
+                dtEndParse = dtnew[0] + "/" + dtnew[1] + "/" + dtnew[2];
             }
 
-            if(!checkWeekDate(DtRepBegin,firstWeekDisp,lastWeekDisp))
-                erros+= getMsgLang(langPref, 'DateWeekStartInvalid');
+            if (!checkWeekDate(dtBeginParse, firstWeekDisp, lastWeekDisp))
+                erros += getMsgLang(langPref, 'DateWeekStartInvalid');
 
-            if(!checkWeekDate(DtRepEnd,firstWeekDisp,lastWeekDisp))
-                erros+= getMsgLang(langPref, 'DateWeekFinishInvalid');
-
+            if (!checkWeekDate(dtEndParse, firstWeekDisp, lastWeekDisp))
+                erros += getMsgLang(langPref, 'DateWeekFinishInvalid');
 
             if (erros.length > 0)
                 alert(getMsgLang(langPref, 'ErrorFound') + erros);
@@ -300,6 +309,8 @@ stkApp.prototype = function () {
                 erros += getMsgLang(langPref, 'ValidHourEntrance');
             if (Hour == '')
                 erros += getMsgLang(langPref, 'ValidHour');
+            if (parseFloat(Hour) > 8)
+                erros += getMsgLang(langPref, 'ValidMaxAditionalHour');
             if (Proj == '')
                 erros += getMsgLang(langPref, 'ValidProject');
             if (Activity == '')
@@ -322,11 +333,11 @@ stkApp.prototype = function () {
                 DtRepEnd = dtnew[1] + "/" + dtnew[0] + "/" + dtnew[2];
             }
 
-            if(!checkWeekDate(DtRepBegin,firstWeekDisp,lastWeekDisp))
-                erros+= getMsgLang(langPref, 'DateWeekStartInvalid');
+            if (!checkWeekDate(DtRepBegin, firstWeekDisp, lastWeekDisp))
+                erros += getMsgLang(langPref, 'DateWeekStartInvalid');
 
-            if(!checkWeekDate(DtRepEnd,firstWeekDisp,lastWeekDisp))
-                erros+= getMsgLang(langPref, 'DateWeekFinishInvalid');
+            if (!checkWeekDate(DtRepEnd, firstWeekDisp, lastWeekDisp))
+                erros += getMsgLang(langPref, 'DateWeekFinishInvalid');
 
             if (erros.length > 0)
                 alert(getMsgLang(langPref, 'ErrorFound') + erros);
@@ -386,6 +397,8 @@ stkApp.prototype = function () {
                 erros += getMsgLang(langPref, 'ValidDateEnd');
             if (Hour == '')
                 erros += getMsgLang(langPref, 'ValidHour');
+            if (parseFloat(Hour) > 8)
+                erros += getMsgLang(langPref, 'ValidMaxNormalHour');
             if (Activity == '')
                 erros += getMsgLang(langPref, 'ValidActivity');
             if (Desc == '')
@@ -526,18 +539,19 @@ stkApp.prototype = function () {
         }
     },
 
-    _loadHome = function () {
-        $.mobile.changePage('#home', { transition: 'flip' });
-    },
-
     _initLoadHome = function () {
         var userInfo = JSON.parse(window.localStorage.getItem("userInfo"));
-        IdSegment = userInfo.CodSegmento;
-        FuncIS = userInfo.FuncIs;
-        FuncName = userInfo.Nome;
+        if (userInfo != null) {
+            IdSegment = userInfo.CodSegmento;
+            FuncIS = userInfo.FuncIs;
+            FuncName = userInfo.Nome;
 
-        $('#ISFunc').html(userInfo.FuncIs);
-        $('#ISName').html(userInfo.Nome);
+            $('#ISFunc').html(userInfo.FuncIs);
+            $('#ISName').html(userInfo.Nome);
+        }
+        else {
+            IdSegment = "BR";
+        }
 
         if (window.localStorage.getItem("Weeks") == null) {
             var body = '<soap12:Body>';
@@ -1493,7 +1507,7 @@ function checkWeekDate(data, first, last) {
     var dataInicio = parseInt(dtIni[2] + dtIni[1] + dtIni[0]);
     var dataFinal = parseInt(dtFim[2] + dtFim[1] + dtFim[0]);
     var dataComp = parseInt(dtComp[2] + dtComp[1] + dtComp[0]);
-    
+
     if (dataComp < dataInicio || dataComp > dataFinal) {
         return false;
     } else {
@@ -1520,8 +1534,9 @@ function checkDateWeek(dt_sel, dt_ini, dt_fim) {
 window.jQuery.fn.ForceNumericOnly = function () {
     return this.each(function () {
         $(this).keydown(function (event) {
-            // Allow: backspace, delete, tab, escape, and enter
-            if (event.keyCode == 46 || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 27 || event.keyCode == 13 ||
+            console.log(event.keyCode);
+            // Allow: backspace, delete, tab, escape, enter, "," and dot
+            if (event.keyCode == 46 || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 27 || event.keyCode == 13 || event.keyCode == 188 || event.keyCode == 190 ||
                 // Allow: Ctrl+A
                 (event.keyCode == 65 && event.ctrlKey === true) ||
                 // Allow: home, end, left, right
@@ -1530,7 +1545,7 @@ window.jQuery.fn.ForceNumericOnly = function () {
                 return;
             } else {
                 // Ensure that it is a number and stop the keypress
-                if (event.shiftKey || (event.keyCode < 48 || event.keyCode > 57) && (event.keyCode < 96 || event.keyCode > 105) && (event.keyCode == 188 || event.keyCode == 190)) {
+                if (event.shiftKey || (event.keyCode < 48 || event.keyCode > 57) && (event.keyCode < 96 || event.keyCode > 105)) {
                     event.preventDefault();
                 }
             }
@@ -1609,6 +1624,8 @@ var dictionarySTKMsg = {
             { "IdMsg": "Repproved", "Msg": "Reprovado" },
             { "IdMsg": "DateWeekStartInvalid", "Msg": "- Data Inicial não liberada para lançamento.\n" },
             { "IdMsg": "DateWeekFinishInvalid", "Msg": "- Data Final não liberada para lançamento.\n" },
+            { "IdMsg": "ValidMaxNormalHour", "Msg": "- Máximo 8 horas permitido.\n" },
+            { "IdMsg": "ValidMaxAditionalHour", "Msg": "- Máximo 16 horas permitido.\n" },
             { "IdMsg": "ErrorLogin", "Msg": "Usuário ou senha inválidos!" }
         ],
         "EN": [
@@ -1647,6 +1664,8 @@ var dictionarySTKMsg = {
             { "IdMsg": "Repproved", "Msg": "Disapproved" },
             { "IdMsg": "DateWeekStartInvalid", "Msg": "- Start Date don´t avaliable.\n" },
             { "IdMsg": "DateWeekFinishInvalid", "Msg": "- Finish Date don´t avaliable.\n" },
+            { "IdMsg": "ValidMaxNormalHour", "Msg": "- Max 8 hours allowed.\n" },
+            { "IdMsg": "ValidMaxAditionalHour", "Msg": "- Max 16 hours allowed.\n" },
             { "IdMsg": "ErrorLogin", "Msg": "Invalid user or password!" }
         ],
         "ES": [
@@ -1685,6 +1704,8 @@ var dictionarySTKMsg = {
             { "IdMsg": "Repproved", "Msg": "Reprobado" },
             { "IdMsg": "DateWeekStartInvalid", "Msg": "- Fecha Inicial sin despachar para la liberación.\n" },
             { "IdMsg": "DateWeekFinishInvalid", "Msg": "- Fecha Final sin despachar para la liberación.\n" },
+            { "IdMsg": "ValidMaxNormalHour", "Msg": "- Máximo 8 horas permitido.\n" },
+            { "IdMsg": "ValidMaxAditionalHour", "Msg": "- Máximo 16 horas permitido.\n" },
             { "IdMsg": "ErrorLogin", "Msg": "Usuário o contraseña no válidos!" }
         ]
     }
