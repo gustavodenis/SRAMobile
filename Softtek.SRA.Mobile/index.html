@@ -94,14 +94,14 @@
             <span id="labelDate">Data</span>
             <input name="data" id="txtDt" type="text" data-role="datebox" data-options='{"mode":"datebox","useFocus":true}' readonly="readonly" class="" maxlength="10" />
             <span id="labelHours">Horas:</span>
-            <input name="horas" id="txtHour" type="tel" max="8">
+            <input name="horas" id="txtHour" type="tel" max="8" class="ForceNumeric">
             <span id="labelProject">Projeto:</span>
-            <input type="text" id="txtProj" />
+            <input type="text" id="txtProj" maxlength="8" />
             <span id="labelAcitivity">Atividade:</span>
             <select name="ddlActivity" id="ddlActivity" data-mini="true">
             </select>
             <span id="labelDescription">Descrição:</span>
-            <input type="text" id="txtDesc" />
+            <input type="text" id="txtDesc" placeholder="250 caracteres" maxlength="250" class="RemoveEspecialCharacter" />
             <div id="divRepLanc" data-role="collapsible">
                 <h3 id="labelReplyLanc">Replicar Lançamentos</h3>
                 <div class="ui-body ui-body-a">
@@ -111,8 +111,8 @@
                     <input name="data" id="txtDtRepNormalEnd" type="text" data-role="datebox" data-options='{"mode":"datebox","useFocus":true}' readonly="readonly" class="" maxlength="10" />
                 </div>
             </div>
+            <div style="height:150px;"></div>
         </div>
-
         <div data-role="footer" data-theme="b" data-position="fixed" data-tap-toggle="false">
             <div data-role="navbar" data-iconpos="bottom">
                 <ul>
@@ -137,7 +137,6 @@
             <hr />
             <ul id="listAditionalHours" class="touch" data-role="listview" data-icon="false" data-split-icon="edit"></ul>
         </div>
-
         <div data-role="footer" data-theme="b" data-position="fixed" data-tap-toggle="false">
             <div data-role="navbar" data-iconpos="bottom">
                 <ul>
@@ -164,14 +163,14 @@
             <span id="labelHourBegin">Hora Entrada:</span>
             <input type="text" id="txtHourBegin" data-role="datebox" data-options='{"mode":"timebox", "overrideTimeFormat": "24", "overrideTimeOutput": "%k:%M"}' maxlength="5" readonly="readonly" class="">
             <span id="labelHours">Horas:</span>
-            <input name="horas" id="txtHourAditional" type="tel" max="16">
+            <input name="horas" id="txtHourAditional" type="tel" max="16" class="ForceNumeric">
             <span id="labelProject">Projeto:</span>
-            <input type="text" id="txtProjAditional" />
+            <input type="text" id="txtProjAditional" maxlength="8" />
             <span id="labelAcitivity">Atividade:</span>
             <select name="ddlActivityAditional" id="ddlActivityAditional" data-mini="true">
             </select>
             <span id="labelDescription">Descrição:</span>
-            <input type="text" id="txtDescAditional" />
+            <input type="text" id="txtDescAditional" placeholder="250 caracteres" maxlength="250" class="RemoveEspecialCharacter" />
             <div id="divRepLancAditional" data-role="collapsible">
                 <h3 id="labelReplyLanc">Replicar Lançamentos</h3>
                 <div class="ui-body ui-body-a">
@@ -181,8 +180,8 @@
                     <input name="data" id="txtDtRepAditionalEnd" type="text" data-role="datebox" data-options='{"mode":"datebox","useFocus":true}' readonly="readonly" class="" maxlength="10" />
                 </div>
             </div>
+            <div style="height:150px;"></div>
         </div>
-
         <div data-role="footer" data-theme="b" data-position="fixed" data-tap-toggle="false">
             <div data-role="navbar" data-iconpos="bottom">
                 <ul>
@@ -231,7 +230,7 @@
         </div>
         <div role="main" class="ui-content">
             <h3 id="labelHourAditional">Minhas Ausências</h3>
-            <ul id="listFault" class="touch" data-role="listview" data-filter="true" data-icon="false" data-split-icon="delete"></ul>
+            <ul id="listFault" class="touch" data-role="listview" data-filter="true" data-filter-placeholder="" data-icon="false" data-split-icon="delete"></ul>
         </div>
         <div data-role="footer" data-theme="b" data-position="fixed" data-tap-toggle="false">
             <div data-role="navbar" data-iconpos="bottom">
@@ -259,9 +258,10 @@
             <span id="labelAcitivity">Atividade:</span>
             <select name="ddlActivityFault" id="ddlActivityFault" data-mini="true"></select>
             <span id="labelHours">Horas:</span>
-            <input name="horas" id="txtHourFault" type="tel" max="8">
+            <input name="horas" id="txtHourFault" type="tel" max="8" class="ForceNumeric">
             <span id="labelDescription">Descrição:</span>
-            <input type="text" id="txtDescFault" style="height:60px;" placeholder="255 caracteres" maxlength="255" />
+            <input type="text" id="txtDescFault" style="height:60px;" placeholder="250 caracteres" class="RemoveEspecialCharacter" maxlength="250" />
+            <div style="height:150px;"></div>
         </div>
         <div data-role="footer" data-theme="b" data-position="fixed" data-tap-toggle="false">
             <div data-role="navbar" data-iconpos="bottom">
@@ -287,7 +287,7 @@
             <p><span id="ISName"></span></p>
             <hr />
             <p><span id="label_Lang">Idioma:</span></p>
-            <p><a href="#" id="btnLangBR"><img src="images/BandeiraBr.png" alt="" style="width:30px;" /></a><a href="#" id="btnLangEN"><img src="images/BandeiraGB.png" alt="" style="width:30px;" /></a><a href="#" id="btnLangES"><img src="images/BandeiraSpain.png" alt="" style="width:30px;" /></a></p>
+            <p><a href="#" id="btnLangPT"><img src="images/BandeiraBr.png" alt="" style="width:30px;" /></a><a href="#" id="btnLangEN"><img src="images/BandeiraGB.png" alt="" style="width:30px;" /></a><a href="#" id="btnLangSP"><img src="images/BandeiraSpain.png" alt="" style="width:30px;" /></a></p>
             <hr />
             <p><span id="label_Platform">Plataforma:</span></p>
             <p><span id="Platform"></span></p>

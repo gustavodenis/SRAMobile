@@ -10,13 +10,15 @@ stkApp.prototype = function () {
     var Weeks = [];
     var Activities = [];
     var TypeofDiscount = [];
-    var IdSegment = 'EN';
-    var langPref = 'EN';
+    var IdSegment = '';
+    var langPref = '';
     var FuncIS = '';
     var FuncName = '';
     var TeamId = '';
     var EntityId = '';
     var TeamLeaderEmail = '';
+    var firstWeekDisp = '';
+    var lastWeekDisp = '';
     var _login = false, //false para ativar o login;
 
     run = function () {
@@ -37,8 +39,15 @@ stkApp.prototype = function () {
 
         if (window.localStorage.getItem("userInfo") != null) {
             _login = true;
-            _loadHome(JSON.parse(window.localStorage.getItem("userInfo")));
+            _loadHome();
+            //_loadHome(JSON.parse(window.localStorage.getItem("userInfo")));
         }
+
+        $('.RemoveEspecialCharacter').on('keyup', function () {
+            $(this).val($(this).val().RemoveEspecialCharacter());
+        });
+
+        $('.ForceNumeric').ForceNumericOnly();
 
         $('#btnLogoff').on('click', function () {
             window.localStorage.clear();
@@ -90,14 +99,15 @@ stkApp.prototype = function () {
                             if (_login) {
                                 window.localStorage.setItem("userInfo", JSON.stringify(usrdata));
                                 $(this).hide();
-                                _loadHome(usrdata);
+                                //_loadHome(usrdata);
+                                _loadHome();
                             }
                             else {
                                 alert(getMsgLang(langPref, 'ErrorLogin'));
                             }
                         })
                         .fail(function (jqXHR, textStatus, errorThrown) {
-                            alert(getMsgLang(langPref, 'ErrorAjax') + textStatus + "," + errorThrown);
+                            alert(getMsgLang(langPref, 'ErrorAjax'));
                         });
                     }, getMsgLang(langPref, 'Authenticating'), this);
                 }
@@ -170,20 +180,20 @@ stkApp.prototype = function () {
                     }
                 })
                 .fail(function (jqXHR, textStatus, errorThrown) {
-                    alert(getMsgLang(langPref, 'ErrorAjax') + textStatus + "," + errorThrown);
+                    alert(getMsgLang(langPref, 'ErrorAjax'));
                 });
             }, getMsgLang(langPref, 'Loading'), this);
         });
 
-        $('#btnLangBR, #btnLangES, #btnLangEN').on('click', function () {
-            changeLang($(this).attr('id').substr(7, 2));
+        $('#btnLangPT, #btnLangSP, #btnLangEN').on('click', function () {
             window.localStorage.setItem("langPreference", $(this).attr('id').substr(7, 2));
+            changeLang($(this).attr('id').substr(7, 2));            
         });
 
         $('#btnAddNormalHour').on('click', function () {
             var Dt = $('#txtDt').val();
             var Hour = $('#txtHour').val();
-            var Proj = $('#txtProj').val();
+            var Proj = $('#txtProj').val().toUpperCase();
             var Activity = $('#ddlActivity  option:selected').val();
             var Desc = $('#txtDesc').val();
             var DtRepBegin = $('#txtDtRepNormalBegin').val();
@@ -219,6 +229,13 @@ stkApp.prototype = function () {
                 DtRepBegin = dtnew[1] + "/" + dtnew[0] + "/" + dtnew[2];
                 DtRepEnd = dtnew[1] + "/" + dtnew[0] + "/" + dtnew[2];
             }
+
+            if(!checkWeekDate(DtRepBegin,firstWeekDisp,lastWeekDisp))
+                erros+= getMsgLang(langPref, 'DateWeekStartInvalid');
+
+            if(!checkWeekDate(DtRepEnd,firstWeekDisp,lastWeekDisp))
+                erros+= getMsgLang(langPref, 'DateWeekFinishInvalid');
+
 
             if (erros.length > 0)
                 alert(getMsgLang(langPref, 'ErrorFound') + erros);
@@ -257,7 +274,7 @@ stkApp.prototype = function () {
                         alert($(data).find('addRecordHoraRecursoMobileResult').text());
                 })
                 .fail(function (jqXHR, textStatus, errorThrown) {
-                    alert(getMsgLang(langPref, 'ErrorAjax') + textStatus + "," + errorThrown);
+                    alert(getMsgLang(langPref, 'ErrorAjax'));
                 });
             }
         });
@@ -270,7 +287,7 @@ stkApp.prototype = function () {
             var Desc = $('#txtDescAditional').val();
             var DtRepBegin = $('#txtDtRepAditionalBegin').val();
             var DtReplEnd = $('#txtDtRepAditionalEnd').val();
-            var Proj = $('#txtProjAditional').val();
+            var Proj = $('#txtProjAditional').val().toUpperCase();
             var Week = $('#ddlWeek option:selected').val();
 
             var dtnew = Dt.split("/");
@@ -304,6 +321,12 @@ stkApp.prototype = function () {
                 DtRepBegin = dtnew[1] + "/" + dtnew[0] + "/" + dtnew[2];
                 DtRepEnd = dtnew[1] + "/" + dtnew[0] + "/" + dtnew[2];
             }
+
+            if(!checkWeekDate(DtRepBegin,firstWeekDisp,lastWeekDisp))
+                erros+= getMsgLang(langPref, 'DateWeekStartInvalid');
+
+            if(!checkWeekDate(DtRepEnd,firstWeekDisp,lastWeekDisp))
+                erros+= getMsgLang(langPref, 'DateWeekFinishInvalid');
 
             if (erros.length > 0)
                 alert(getMsgLang(langPref, 'ErrorFound') + erros);
@@ -342,7 +365,7 @@ stkApp.prototype = function () {
                         alert($(data).find('addRecordHoraRecursoMobileResult').text());
                 })
                 .fail(function (jqXHR, textStatus, errorThrown) {
-                    alert(getMsgLang(langPref, 'ErrorAjax') + textStatus + "," + errorThrown);
+                    alert(getMsgLang(langPref, 'ErrorAjax'));
                 });
             }
         });
@@ -353,7 +376,7 @@ stkApp.prototype = function () {
             var Hour = $('#txtHourFault').val();
             var Activity = $('#ddlActivityFault option:selected').val();
             var TypeofActivity = $('#ddlActivityFault option:selected').attr('typeofact');
-            var Desc = $('#txtDescFault').val();
+            var Desc = $('#txtDescFault').val().RemoveEspecialCharacter();
             var totcertifcate = 1;
 
             var erros = '';
@@ -412,16 +435,16 @@ stkApp.prototype = function () {
                     alert(($(data).find('setInsertOrderMobileResult').text() == '0' ? getMsgLang(langPref, 'DataSaveError') : getMsgLang(langPref, 'DataSaveSuccess')));
                 })
                 .fail(function (jqXHR, textStatus, errorThrown) {
-                    alert(getMsgLang(langPref, 'ErrorAjax') + textStatus + "," + errorThrown);
+                    alert(getMsgLang(langPref, 'ErrorAjax'));
                 });
             }
         });
 
-        $('#ddlWeek').on('click', function () {
+        $('#ddlWeek').on('change blur', function () {
             LoadNormalHours($(this).val());
         });
 
-        $('#ddlWeekAditional').on('click', function () {
+        $('#ddlWeekAditional').on('change blur', function () {
             LoadAditionalHours($(this).val());
         });
 
@@ -488,7 +511,7 @@ stkApp.prototype = function () {
                 LoadApproveGrid();
             })
             .fail(function (jqXHR, textStatus, errorThrown) {
-                alert(getMsgLang(langPref, 'ErrorAjax') + textStatus + "," + errorThrown);
+                alert(getMsgLang(langPref, 'ErrorAjax'));
             });
         });
 
@@ -503,7 +526,12 @@ stkApp.prototype = function () {
         }
     },
 
-    _loadHome = function (userInfo) {
+    _loadHome = function () {
+        $.mobile.changePage('#home', { transition: 'flip' });
+    },
+
+    _initLoadHome = function () {
+        var userInfo = JSON.parse(window.localStorage.getItem("userInfo"));
         IdSegment = userInfo.CodSegmento;
         FuncIS = userInfo.FuncIs;
         FuncName = userInfo.Nome;
@@ -511,10 +539,6 @@ stkApp.prototype = function () {
         $('#ISFunc').html(userInfo.FuncIs);
         $('#ISName').html(userInfo.Nome);
 
-        $.mobile.changePage('#home', { transition: 'flip' });
-    },
-
-    _initLoadHome = function () {
         if (window.localStorage.getItem("Weeks") == null) {
             var body = '<soap12:Body>';
             body += '<getRangeSRADaysMobile xmlns="http://tempuri.org/">';
@@ -537,7 +561,7 @@ stkApp.prototype = function () {
                 MountWeekCombo();
             })
             .fail(function (jqXHR, textStatus, errorThrown) {
-                alert(getMsgLang(langPref, 'ErrorAjax') + textStatus + "," + errorThrown);
+                alert(getMsgLang(langPref, 'ErrorAjax'));
             });
         }
         else {
@@ -567,7 +591,7 @@ stkApp.prototype = function () {
                 MountActivityCombo();
             })
             .fail(function (jqXHR, textStatus, errorThrown) {
-                alert(getMsgLang(langPref, 'ErrorAjax') + textStatus + "," + errorThrown);
+                alert(getMsgLang(langPref, 'ErrorAjax'));
             });
         }
         else {
@@ -604,18 +628,22 @@ stkApp.prototype = function () {
                 window.localStorage.setItem("colabInfo", JSON.stringify(colabdata));
             })
             .fail(function (jqXHR, textStatus, errorThrown) {
-                alert(getMsgLang(langPref, 'ErrorAjax') + textStatus + "," + errorThrown);
+                alert(getMsgLang(langPref, 'ErrorAjax'));
             });
         }
     },
 
     MountWeekCombo = function MountWeekCombo() {
+        var lastWeek = 0;
         Weeks = JSON.parse(window.localStorage.getItem("Weeks"));
         $('#ddlWeek, #ddlWeekAditional').empty();
         $('#ddlWeek, #ddlWeekAditional').append("<option value='0' selected='selected'>" + getMsgLang(langPref, 'SelCombo') + "</option>");
         $.each(Weeks, function (index, el) {
             $('#ddlWeek, #ddlWeekAditional').append("<option value=" + Weeks[index].WeekNumber + ">" + Weeks[index].WeekNumber + ' - ' + Weeks[index].DateStartWeek + ' - ' + Weeks[index].DateFinishWeek + "</option>");
+            lastWeek = index;
         });
+        firstWeekDisp = Weeks[0].DateStartWeek;
+        lastWeekDisp = Weeks[lastWeek].DateFinishWeek;
     },
 
     MountActivityCombo = function MountActivityCombo() {
@@ -689,7 +717,7 @@ stkApp.prototype = function () {
                     }
                 })
                 .fail(function (jqXHR, textStatus, errorThrown) {
-                    alert(getMsgLang(langPref, 'ErrorAjax') + textStatus + "," + errorThrown);
+                    alert(getMsgLang(langPref, 'ErrorAjax'));
                 });
             }, getMsgLang(langPref, 'Deleting'), this);
         }
@@ -761,7 +789,7 @@ stkApp.prototype = function () {
                     }
                 })
                 .fail(function (jqXHR, textStatus, errorThrown) {
-                    alert(getMsgLang(langPref, 'ErrorAjax') + textStatus + "," + errorThrown);
+                    alert(getMsgLang(langPref, 'ErrorAjax'));
                 });
             }, getMsgLang(langPref, 'Deleting'), this);
         }
@@ -838,7 +866,7 @@ stkApp.prototype = function () {
                     });
                 })
                 .fail(function (jqXHR, textStatus, errorThrown) {
-                    alert(getMsgLang(langPref, 'ErrorAjax') + textStatus + "," + errorThrown);
+                    alert(getMsgLang(langPref, 'ErrorAjax'));
                 });
             }, getMsgLang(langPref, 'Loading'), this);
         }
@@ -935,7 +963,7 @@ stkApp.prototype = function () {
                     });
                 })
                 .fail(function (jqXHR, textStatus, errorThrown) {
-                    alert(getMsgLang(langPref, 'ErrorAjax') + textStatus + "," + errorThrown);
+                    alert(getMsgLang(langPref, 'ErrorAjax'));
                 });
             }, getMsgLang(langPref, 'Loading'), this);
         }
@@ -1013,12 +1041,12 @@ stkApp.prototype = function () {
                 $('#listFault').append(rows);
                 $("#listFault").listview("refresh");
 
-                $('#btnFaultItem').on('click', function () {
+                $('.btnFaultItem').on('click', function () {
                     deleteFault($(this).parent(), $(this).attr('OrderId'));
                 });
             })
             .fail(function (jqXHR, textStatus, errorThrown) {
-                alert(getMsgLang(langPref, 'ErrorAjax') + textStatus + "," + errorThrown);
+                alert(getMsgLang(langPref, 'ErrorAjax'));
             });
         }, getMsgLang(langPref, 'Loading'), this);
     },
@@ -1090,7 +1118,7 @@ stkApp.prototype = function () {
                 });
             })
             .fail(function (jqXHR, textStatus, errorThrown) {
-                alert(getMsgLang(langPref, 'ErrorAjax') + textStatus + "," + errorThrown);
+                alert(getMsgLang(langPref, 'ErrorAjax'));
             });
         }, getMsgLang(langPref, 'Loading'), this);
     },
@@ -1136,7 +1164,8 @@ stkApp.prototype = function () {
     },
 
     changeLang = function changeLang(lang) {
-        if (lang.indexOf("BR") === 0) {
+        langPref = lang;
+        if (lang.indexOf("PT") === 0) {
             $(dictionarySTKControls.lang.PT).each(function (i, item) {
                 changeLangObj(item.Controle, item.Label);
             });
@@ -1146,16 +1175,17 @@ stkApp.prototype = function () {
                 changeLangObj(item.Controle, item.Label);
             });
         }
-        else if (lang.indexOf("ES") === 0) {
+        else if (lang.indexOf("SP") === 0) {
             $(dictionarySTKControls.lang.ES).each(function (i, item) {
                 changeLangObj(item.Controle, item.Label);
             });
         }
+        _initLoadHome();
     },
 
     getMsgLang = function getMsgLang(lang, IdMsg) {
         var ret = "";
-        if (lang.indexOf("BR") === 0) {
+        if (lang.indexOf("PT") === 0) {
             $(dictionarySTKMsg.lang.PT).each(function (i, item) {
                 if (item.IdMsg == IdMsg)
                     ret = item.Msg;
@@ -1167,7 +1197,7 @@ stkApp.prototype = function () {
                     ret = item.Msg;
             });
         }
-        else if (lang.indexOf("ES") === 0) {
+        else if (lang.indexOf("SP") === 0) {
             $(dictionarySTKMsg.lang.ES).each(function (i, item) {
                 if (item.IdMsg == IdMsg)
                     ret = item.Msg;
@@ -1246,7 +1276,7 @@ stkApp.prototype = function () {
                 MountActivityFaultCombo();
             })
             .fail(function (jqXHR, textStatus, errorThrown) {
-                alert(getMsgLang(langPref, 'ErrorAjax') + textStatus + "," + errorThrown);
+                alert(getMsgLang(langPref, 'ErrorAjax'));
             });
         }
         else {
@@ -1294,7 +1324,7 @@ stkApp.prototype = function () {
                 MountTypeofDiscountCombo();
             })
             .fail(function (jqXHR, textStatus, errorThrown) {
-                alert(getMsgLang(langPref, 'ErrorAjax') + textStatus + "," + errorThrown);
+                alert(getMsgLang(langPref, 'ErrorAjax'));
             });
         } else { MountTypeofDiscountCombo(); }
     },
@@ -1368,7 +1398,7 @@ stkApp.prototype = function () {
                     }
                 })
                 .fail(function (jqXHR, textStatus, errorThrown) {
-                    alert(getMsgLang(langPref, 'ErrorAjax') + textStatus + "," + errorThrown);
+                    alert(getMsgLang(langPref, 'ErrorAjax'));
                 });
             }, getMsgLang(langPref, 'Deleting'), this);
         }
@@ -1379,8 +1409,8 @@ stkApp.prototype = function () {
 
     ApplyLangStart = function ApplyLangStart() {
         if (window.localStorage.getItem("langPreference") != null) {
-            changeLang(window.localStorage.getItem("langPreference"));
             langPref = window.localStorage.getItem("langPreference");
+            changeLang(window.localStorage.getItem("langPreference"));
         }
         else {
             var language = window.navigator.userLanguage || window.navigator.language;
@@ -1390,12 +1420,12 @@ stkApp.prototype = function () {
                     langPref = "EN";
                     break;
                 case "es":
-                    changeLang("ES");
-                    langPref = "ES";
+                    changeLang("SP");
+                    langPref = "SP";
                     break;
                 case "pt_br":
-                    changeLang("BR");
-                    langPref = "BR";
+                    changeLang("PT");
+                    langPref = "PT";
                     break;
                 default:
                     changeLang("EN");
@@ -1455,6 +1485,23 @@ function compareDate(dt_ini, dt_fim) {
     }
 }
 
+function checkWeekDate(data, first, last) {
+    var dtIni = first.split("/");
+    var dtFim = last.split("/");
+    var dtComp = data.split("/");
+
+    var dataInicio = parseInt(dtIni[2] + dtIni[1] + dtIni[0]);
+    var dataFinal = parseInt(dtFim[2] + dtFim[1] + dtFim[0]);
+    var dataComp = parseInt(dtComp[2] + dtComp[1] + dtComp[0]);
+    
+    if (dataComp < dataInicio || dataComp > dataFinal) {
+        return false;
+    } else {
+        return true;
+    }
+}
+
+
 function checkDateWeek(dt_sel, dt_ini, dt_fim) {
     var dtIni = dt_ini.split("/");
     var dtFim = dt_fim.split("/");
@@ -1469,6 +1516,31 @@ function checkDateWeek(dt_sel, dt_ini, dt_fim) {
         return false;
     }
 }
+
+window.jQuery.fn.ForceNumericOnly = function () {
+    return this.each(function () {
+        $(this).keydown(function (event) {
+            // Allow: backspace, delete, tab, escape, and enter
+            if (event.keyCode == 46 || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 27 || event.keyCode == 13 ||
+                // Allow: Ctrl+A
+                (event.keyCode == 65 && event.ctrlKey === true) ||
+                // Allow: home, end, left, right
+                (event.keyCode >= 35 && event.keyCode <= 39)) {
+                // let it happen, don't do anything
+                return;
+            } else {
+                // Ensure that it is a number and stop the keypress
+                if (event.shiftKey || (event.keyCode < 48 || event.keyCode > 57) && (event.keyCode < 96 || event.keyCode > 105) && (event.keyCode == 188 || event.keyCode == 190)) {
+                    event.preventDefault();
+                }
+            }
+        });
+    });
+};
+
+String.prototype.RemoveEspecialCharacter = function (e) {
+    return this.replace(/[^a-z0-9]/gi, ' ');
+};
 
 Date.prototype.getWeek = function () {
     var onejan = new Date(this.getFullYear(), 0, 1);
@@ -1506,15 +1578,15 @@ var dictionarySTKMsg = {
             { "IdMsg": "Loading", "Msg": "Carregando..." },
             { "IdMsg": "Deleting", "Msg": "Excluindo..." },
             { "IdMsg": "ErrorFound", "Msg": "Erros econtrados:\n" },
-            { "IdMsg": "ErrorAjax", "Msg": "Erro na requisição Web. " },
-            { "IdMsg": "ConfirmDelete", "Msg": "Deseja Exluir o item?" },
+            { "IdMsg": "ErrorAjax", "Msg": "Erro no processamento!" },
+            { "IdMsg": "ConfirmDelete", "Msg": "Deseja Excluir o item?" },
             { "IdMsg": "ErrorDeleteReg", "Msg": "Erro ao excluir o registro!" },
             { "IdMsg": "PermissionPage", "Msg": "Você não possui permissão para acessar esta página!" },
             { "IdMsg": "Authenticating", "Msg": "Autenticando..." },
             { "IdMsg": "ValidIS", "Msg": "- IS\n" },
             { "IdMsg": "ValidPass", "Msg": "- Senha\n" },
             { "IdMsg": "ValidDate", "Msg": "- Data\n" },
-            { "IdMsg": "ValidDateBegin", "Msg": "- Data Inicio\n" },
+            { "IdMsg": "ValidDateBegin", "Msg": "- Data Início\n" },
             { "IdMsg": "ValidDateEnd", "Msg": "- Data Final\n" },
             { "IdMsg": "ValidHour", "Msg": "- Horas\n" },
             { "IdMsg": "ValidProject", "Msg": "- Projeto\n" },
@@ -1530,19 +1602,21 @@ var dictionarySTKMsg = {
             { "IdMsg": "LabelBHour", "Msg": "B. Horas: " },
             { "IdMsg": "LabelPVaca", "Msg": "P. Férias: " },
             { "IdMsg": "LabelAllow", "Msg": "Abono: " },
-            { "IdMsg": "RegValidated", "Msg": "Os Tipo de Atividade devem ser iguais para aprovação em lote!" },
-            { "IdMsg": "DateRepInvalid", "Msg": "Data de Replicação inválida!" },
+            { "IdMsg": "RegValidated", "Msg": "O Tipo de Atividade devem ser iguais para aprovação em lote!" },
+            { "IdMsg": "DateRepInvalid", "Msg": "- Data de Replicação inválida!\n" },
             { "IdMsg": "ApproveMass", "Msg": "Não é possível aprovar em massa!" },
             { "IdMsg": "Approved", "Msg": "Aprovado" },
             { "IdMsg": "Repproved", "Msg": "Reprovado" },
+            { "IdMsg": "DateWeekStartInvalid", "Msg": "- Data Inicial não liberada para lançamento.\n" },
+            { "IdMsg": "DateWeekFinishInvalid", "Msg": "- Data Final não liberada para lançamento.\n" },
             { "IdMsg": "ErrorLogin", "Msg": "Usuário ou senha inválidos!" }
         ],
         "EN": [
             { "IdMsg": "Loading", "Msg": "Loading..." },
             { "IdMsg": "Deleting", "Msg": "Deleting..." },
-            { "IdMsg": "ErrorFound", "Msg": "Erros econtrados:\n" },
-            { "IdMsg": "ErrorAjax", "Msg": "Web Requisition failed. " },
-            { "IdMsg": "ConfirmDelete", "Msg": "Would like delete this item?" },
+            { "IdMsg": "ErrorFound", "Msg": "Found errors:\n" },
+            { "IdMsg": "ErrorAjax", "Msg": "Error on proccess!" },
+            { "IdMsg": "ConfirmDelete", "Msg": "Comfirm delete this item?" },
             { "IdMsg": "ErrorDeleteReg", "Msg": "Error deleting the data!" },
             { "IdMsg": "PermissionPage", "Msg": "You don´t have permission to access this page!" },
             { "IdMsg": "Authenticating", "Msg": "Authenticating..." },
@@ -1556,7 +1630,7 @@ var dictionarySTKMsg = {
             { "IdMsg": "ValidActivity", "Msg": "- Activity\n" },
             { "IdMsg": "ValidDescription", "Msg": "- Description\n" },
             { "IdMsg": "ValidHourEntrance", "Msg": "- Entrance Hours\n" },
-            { "IdMsg": "DataSaveSuccess", "Msg": "Data updated!" },
+            { "IdMsg": "DataSaveSuccess", "Msg": "Data save!" },
             { "IdMsg": "DataSaveError", "Msg": "Error saving the data!" },
             { "IdMsg": "SelCombo", "Msg": "Select..." },
             { "IdMsg": "TypeOfDiscount", "Msg": "Type of Discount" },
@@ -1567,47 +1641,51 @@ var dictionarySTKMsg = {
             { "IdMsg": "LabelAllow", "Msg": "Allowance: " },
             { "IdMsg": "RegValidated", "Msg": "Record was validate by your Manager!" },
             { "IdMsg": "RegValidated", "Msg": "The activity type must be the same for batch approval!" },
-            { "IdMsg": "DateRepInvalid", "Msg": "Replication Date is invalid!" },
+            { "IdMsg": "DateRepInvalid", "Msg": "- Replication Date is invalid!\n" },
             { "IdMsg": "ApproveMass", "Msg": "Don´t is possible mass approvation!" },
-            { "IdMsg": "Approved", "Msg": "Aprovado" },
-            { "IdMsg": "Repproved", "Msg": "Reprovado" },
+            { "IdMsg": "Approved", "Msg": "Approved" },
+            { "IdMsg": "Repproved", "Msg": "Disapproved" },
+            { "IdMsg": "DateWeekStartInvalid", "Msg": "- Start Date don´t avaliable.\n" },
+            { "IdMsg": "DateWeekFinishInvalid", "Msg": "- Finish Date don´t avaliable.\n" },
             { "IdMsg": "ErrorLogin", "Msg": "Invalid user or password!" }
         ],
         "ES": [
             { "IdMsg": "Loading", "Msg": "Carregando..." },
             { "IdMsg": "Deleting", "Msg": "Excluindo..." },
-            { "IdMsg": "ErrorFound", "Msg": "Erros econtrados:\n" },
-            { "IdMsg": "ErrorAjax", "Msg": "Erro na requisição Web. " },
-            { "IdMsg": "ConfirmDelete", "Msg": "Deseja Exluir o item?" },
-            { "IdMsg": "ErrorDeleteReg", "Msg": "Erro ao excluir o registro!" },
-            { "IdMsg": "PermissionPage", "Msg": "Você não possui permissão para acessar esta página!" },
-            { "IdMsg": "Authenticating", "Msg": "Autenticando..." },
+            { "IdMsg": "ErrorFound", "Msg": "Errores econtrados:\n" },
+            { "IdMsg": "ErrorAjax", "Msg": "Error al processar!" },
+            { "IdMsg": "ConfirmDelete", "Msg": "Querer eliminar el registro?" },
+            { "IdMsg": "ErrorDeleteReg", "Msg": "Error al borrar el registro!" },
+            { "IdMsg": "PermissionPage", "Msg": "Usted no tiene permiso para acceder a esta página!" },
+            { "IdMsg": "Authenticating", "Msg": "Autenticación..." },
             { "IdMsg": "ValidIS", "Msg": "- IS\n" },
-            { "IdMsg": "ValidPass", "Msg": "- Senha\n" },
-            { "IdMsg": "ValidDate", "Msg": "- Data\n" },
-            { "IdMsg": "ValidDateBegin", "Msg": "- Data Inicio\n" },
-            { "IdMsg": "ValidDateEnd", "Msg": "- Data Final\n" },
+            { "IdMsg": "ValidPass", "Msg": "- Contraseña\n" },
+            { "IdMsg": "ValidDate", "Msg": "- Fecha\n" },
+            { "IdMsg": "ValidDateBegin", "Msg": "- Fecha Inicio\n" },
+            { "IdMsg": "ValidDateEnd", "Msg": "- Fecha Finalización\n" },
             { "IdMsg": "ValidHour", "Msg": "- Horas\n" },
-            { "IdMsg": "ValidProject", "Msg": "- Projeto\n" },
-            { "IdMsg": "ValidActivity", "Msg": "- Atividade\n" },
-            { "IdMsg": "ValidDescription", "Msg": "- Descrição\n" },
+            { "IdMsg": "ValidProject", "Msg": "- Proyecto\n" },
+            { "IdMsg": "ValidActivity", "Msg": "- Actividad\n" },
+            { "IdMsg": "ValidDescription", "Msg": "- Descripción\n" },
             { "IdMsg": "ValidHourEntrance", "Msg": "- Horas de Entrada\n" },
-            { "IdMsg": "DataSaveSuccess", "Msg": "Registro salvo com sucesso!" },
-            { "IdMsg": "DataSaveError", "Msg": "Erro ao salvar o registro!" },
-            { "IdMsg": "SelCombo", "Msg": "Selecione..." },
-            { "IdMsg": "TypeOfDiscount", "Msg": "Tipo de Desconto" },
+            { "IdMsg": "DataSaveSuccess", "Msg": "Registro guardado!" },
+            { "IdMsg": "DataSaveError", "Msg": "Erro al guardar lo registro!" },
+            { "IdMsg": "SelCombo", "Msg": "Seleccionar..." },
+            { "IdMsg": "TypeOfDiscount", "Msg": "Tipo de Descuento" },
             { "IdMsg": "LabelHours", "Msg": "Horas" },
             { "IdMsg": "LabelTotal", "Msg": "Total" },
             { "IdMsg": "LabelBHour", "Msg": "B. Horas: " },
-            { "IdMsg": "LabelPVaca", "Msg": "P. Férias: " },
-            { "IdMsg": "LabelAllow", "Msg": "Abono: " },
+            { "IdMsg": "LabelPVaca", "Msg": "P. Vacaciones: " },
+            { "IdMsg": "LabelAllow", "Msg": "Conseción: " },
             { "IdMsg": "RegValidated", "Msg": "Registro ha sido validado por el Gerente!" },
             { "IdMsg": "RegValidated", "Msg": "El tipo de actividad debe ser el mismo para su aprobación por lotes!" },
-            { "IdMsg": "DateRepInvalid", "Msg": "El fecha de replicacion es incorreta!" },
+            { "IdMsg": "DateRepInvalid", "Msg": "- El fecha de replicacion es incorreta!\n" },
             { "IdMsg": "ApproveMass", "Msg": "No es possible aprobar em massa!" },
             { "IdMsg": "Approved", "Msg": "Aprobado" },
             { "IdMsg": "Repproved", "Msg": "Reprobado" },
-            { "IdMsg": "ErrorLogin", "Msg": "Usuário ou senha inválidos!" }
+            { "IdMsg": "DateWeekStartInvalid", "Msg": "- Fecha Inicial sin despachar para la liberación.\n" },
+            { "IdMsg": "DateWeekFinishInvalid", "Msg": "- Fecha Final sin despachar para la liberación.\n" },
+            { "IdMsg": "ErrorLogin", "Msg": "Usuário o contraseña no válidos!" }
         ]
     }
 };
@@ -1652,7 +1730,7 @@ var dictionarySTKControls = {
             { "Controle": "label_ISName", "Label": "Nome Colaborador:" },
             { "Controle": "label_Lang", "Label": "Idioma:" },
             { "Controle": "label_Platform", "Label": "Plataforma:" },
-            { "Controle": "btnLogoff", "Label": "Logoff" },
+            { "Controle": "btnLogoff", "Label": "Sair" },
             { "Controle": "labelApprovation", "Label": "Aprovação" }
         ],
         "EN": [
@@ -1666,7 +1744,7 @@ var dictionarySTKControls = {
             { "Controle": "labelDateBegin", "Label": "Date Begin:" },
             { "Controle": "labelDateEnd", "Label": "Date End:" },
             { "Controle": "labelHours", "Label": "Hour:" },
-            { "Controle": "labelHourNormal", "Label": "Hours Normals" },
+            { "Controle": "labelHourNormal", "Label": "Normal Hours" },
             { "Controle": "labelWeek", "Label": "Week:" },
             { "Controle": "btnAddHours", "Label": "Add" },
             { "Controle": "btnCancelHour", "Label": "Cancel" },
