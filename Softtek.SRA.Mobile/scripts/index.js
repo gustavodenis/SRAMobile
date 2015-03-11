@@ -301,6 +301,8 @@ stkApp.prototype = function () {
 
             var dtnew = Dt.split("/");
             var dtParse = new Date(dtnew[2] + "/" + dtnew[1] + "/" + dtnew[0]);
+            var dtBeginParse;
+            var dtEndParse;
 
             var erros = '';
             if (Dt == '')
@@ -322,21 +324,29 @@ stkApp.prototype = function () {
                 if (compareDate(DtRepBegin, DtRepEnd)) {
                     var dtrepInew = DtRepBegin.split("/");
                     DtRepBegin = dtrepInew[1] + "/" + dtrepInew[0] + "/" + dtrepInew[2];
+
+                    dtBeginParse = dtrepInew[0] + "/" + dtrepInew[1] + "/" + dtrepInew[2];
+
                     var dtrepFnew = DtRepEnd.split("/");
                     DtRepEnd = dtrepFnew[1] + "/" + dtrepFnew[0] + "/" + dtrepFnew[2];
+
+                    dtEndParse = dtrepFnew[0] + "/" + dtrepFnew[1] + "/" + dtrepFnew[2];
                 } else {
                     erros += getMsgLang(langPref, 'DateRepInvalid');
                 }
             }
             else {
                 DtRepBegin = dtnew[1] + "/" + dtnew[0] + "/" + dtnew[2];
+                dtBeginParse = dtnew[0] + "/" + dtnew[1] + "/" + dtnew[2];
+
                 DtRepEnd = dtnew[1] + "/" + dtnew[0] + "/" + dtnew[2];
+                dtEndParse = dtnew[0] + "/" + dtnew[1] + "/" + dtnew[2];
             }
 
-            if (!checkWeekDate(DtRepBegin, firstWeekDisp, lastWeekDisp))
+            if (!checkWeekDate(dtBeginParse, firstWeekDisp, lastWeekDisp))
                 erros += getMsgLang(langPref, 'DateWeekStartInvalid');
 
-            if (!checkWeekDate(DtRepEnd, firstWeekDisp, lastWeekDisp))
+            if (!checkWeekDate(dtEndParse, firstWeekDisp, lastWeekDisp))
                 erros += getMsgLang(langPref, 'DateWeekFinishInvalid');
 
             if (erros.length > 0)
@@ -433,7 +443,7 @@ stkApp.prototype = function () {
                 body += '<strCreatedBy>' + FuncIS + '</strCreatedBy>';
                 body += '<intTypeOfDiscount>0</intTypeOfDiscount>';
                 body += '<intOrderStatus>1</intOrderStatus>';
-                body += '<strLeaderEmail>' + TeamLeaderEmail + '</strLeaderEmail>';
+                body += '<strSegmentId>' + IdSegment + '</strSegmentId>';
                 body += '</setInsertOrderMobile>';
                 body += '</soap12:Body>';
                 var envelope = getEnvelopeAbs(body);
@@ -445,7 +455,7 @@ stkApp.prototype = function () {
                     data: envelope
                 })
                 .done(function (data) {
-                    alert(($(data).find('setInsertOrderMobileResult').text() == '0' ? getMsgLang(langPref, 'DataSaveError') : getMsgLang(langPref, 'DataSaveSuccess')));
+                    alert(($(data).find('setInsertOrderMobileResult').text() == '0' ? getMsgLang(langPref, 'DataSaveSuccess') : $(data).find('setInsertOrderMobileResult').text()));
                 })
                 .fail(function (jqXHR, textStatus, errorThrown) {
                     alert(getMsgLang(langPref, 'ErrorAjax'));
@@ -691,25 +701,25 @@ stkApp.prototype = function () {
                 });
 
                 var bodyxml = '<soap12:Body>';
-                bodyxml += '<deleteRecordByDayMobile xmlns="http://tempuri.org/">';
+                bodyxml += '<deleteRecordMobile xmlns="http://tempuri.org/">';
                 bodyxml += '<strFuncIS>' + FuncIS + '</strFuncIS>';
                 bodyxml += '<intYear>' + ano + '</intYear>';
                 bodyxml += '<intMonth>' + mes + '</intMonth>';
                 bodyxml += '<intDay>' + dia + '</intDay>';
                 bodyxml += '<intAdditionalHour>1</intAdditionalHour>';
                 bodyxml += '<intSequencial>' + seq + '</intSequencial>';
-                bodyxml += '</deleteRecordByDayMobile>';
+                bodyxml += '</deleteRecordMobile>';
                 bodyxml += '</soap12:Body>';
                 var envelope = getEnvelope(bodyxml);
 
                 $.ajax({
                     type: 'POST',
-                    url: MountURLWS('deleteRecordByDayMobile'),
+                    url: MountURLWS('deleteRecordMobile'),
                     contentType: 'application/soap+xml; charset=utf-8',
                     data: envelope
                 })
                 .done(function (data) {
-                    if ($(data).find('deleteRecordByDayMobileResult').text() == "true") {
+                    if ($(data).find('deleteRecordMobileResult').text() == "true") {
                         if (transition) {
                             listitem
                             .addClass(transition)
@@ -762,25 +772,25 @@ stkApp.prototype = function () {
                 });
 
                 var bodyxml = '<soap12:Body>';
-                bodyxml += '<deleteRecordByDayMobile xmlns="http://tempuri.org/">';
+                bodyxml += '<deleteRecordMobile xmlns="http://tempuri.org/">';
                 bodyxml += '<strFuncIS>' + FuncIS + '</strFuncIS>';
                 bodyxml += '<intYear>' + ano + '</intYear>';
                 bodyxml += '<intMonth>' + mes + '</intMonth>';
                 bodyxml += '<intDay>' + dia + '</intDay>';
                 bodyxml += '<intAdditionalHour>0</intAdditionalHour>';
                 bodyxml += '<intSequencial>' + seq + '</intSequencial>';
-                bodyxml += '</deleteRecordByDayMobile>';
+                bodyxml += '</deleteRecordMobile>';
                 bodyxml += '</soap12:Body>';
                 var envelope = getEnvelope(bodyxml);
 
                 $.ajax({
                     type: 'POST',
-                    url: MountURLWS('deleteRecordByDayMobile'),
+                    url: MountURLWS('deleteRecordMobile'),
                     contentType: 'application/soap+xml; charset=utf-8',
                     data: envelope
                 })
                 .done(function (data) {
-                    if ($(data).find('deleteRecordByDayMobileResult').text() == "true") {
+                    if ($(data).find('deleteRecordMobileResult').text() == "true") {
                         if (transition) {
                             listitem
                             .addClass(transition)
@@ -1284,7 +1294,8 @@ stkApp.prototype = function () {
             })
             .done(function (xml) {
                 $(xml).find('cActivity').each(function () {
-                    AcitivityFaults.push({ 'ActivityId': $(this).find('ActivityId').text(), 'Description_BR': $(this).find('Description_PT').text(), 'Description_SP': $(this).find('Description_SP').text(), 'Description_EN': $(this).find('Description_EN').text(), 'TypeOfActivity': $(this).find('TypeOfActivity').text() });
+                    if ($(this).find('IsPrivate').text() == 'false')
+                        AcitivityFaults.push({ 'ActivityId': $(this).find('ActivityId').text(), 'Description_BR': $(this).find('Description_PT').text(), 'Description_SP': $(this).find('Description_SP').text(), 'Description_EN': $(this).find('Description_EN').text(), 'TypeOfActivity': $(this).find('TypeOfActivity').text() });
                 });
                 window.localStorage.setItem("AcitivityFaults", JSON.stringify(AcitivityFaults));
                 MountActivityFaultCombo();
@@ -1406,6 +1417,8 @@ stkApp.prototype = function () {
                             listitem.remove();
                             $("#listFault").listview("refresh");
                         }
+
+                        LoadFaultGrid();
                     }
                     else {
                         alert(getMsgLang(langPref, 'ErrorDeleteReg'));
@@ -1592,7 +1605,7 @@ var dictionarySTKMsg = {
         "PT": [
             { "IdMsg": "Loading", "Msg": "Carregando..." },
             { "IdMsg": "Deleting", "Msg": "Excluindo..." },
-            { "IdMsg": "ErrorFound", "Msg": "Erros econtrados:\n" },
+            { "IdMsg": "ErrorFound", "Msg": "Erros encontrados:\n" },
             { "IdMsg": "ErrorAjax", "Msg": "Erro no processamento!" },
             { "IdMsg": "ConfirmDelete", "Msg": "Deseja Excluir o item?" },
             { "IdMsg": "ErrorDeleteReg", "Msg": "Erro ao excluir o registro!" },
@@ -1600,14 +1613,14 @@ var dictionarySTKMsg = {
             { "IdMsg": "Authenticating", "Msg": "Autenticando..." },
             { "IdMsg": "ValidIS", "Msg": "- IS\n" },
             { "IdMsg": "ValidPass", "Msg": "- Senha\n" },
-            { "IdMsg": "ValidDate", "Msg": "- Data\n" },
-            { "IdMsg": "ValidDateBegin", "Msg": "- Data Início\n" },
-            { "IdMsg": "ValidDateEnd", "Msg": "- Data Final\n" },
-            { "IdMsg": "ValidHour", "Msg": "- Horas\n" },
-            { "IdMsg": "ValidProject", "Msg": "- Projeto\n" },
-            { "IdMsg": "ValidActivity", "Msg": "- Atividade\n" },
-            { "IdMsg": "ValidDescription", "Msg": "- Descrição\n" },
-            { "IdMsg": "ValidHourEntrance", "Msg": "- Horas de Entrada\n" },
+            { "IdMsg": "ValidDate", "Msg": "- Data é obrigatório\n" },
+            { "IdMsg": "ValidDateBegin", "Msg": "- Data Início é obrigatório\n" },
+            { "IdMsg": "ValidDateEnd", "Msg": "- Data Final é obrigatório\n" },
+            { "IdMsg": "ValidHour", "Msg": "- Horas é obrigatório\n" },
+            { "IdMsg": "ValidProject", "Msg": "- Projeto é obrigatório\n" },
+            { "IdMsg": "ValidActivity", "Msg": "- Atividade é obrigatório\n" },
+            { "IdMsg": "ValidDescription", "Msg": "- Descrição é obrigatório\n" },
+            { "IdMsg": "ValidHourEntrance", "Msg": "- Horas de Entrada é obrigatório\n" },
             { "IdMsg": "DataSaveSuccess", "Msg": "Registro salvo com sucesso!" },
             { "IdMsg": "DataSaveError", "Msg": "Erro ao salvar o registro!" },
             { "IdMsg": "SelCombo", "Msg": "Selecione..." },
@@ -1639,14 +1652,14 @@ var dictionarySTKMsg = {
             { "IdMsg": "Authenticating", "Msg": "Authenticating..." },
             { "IdMsg": "ValidIS", "Msg": "- IS\n" },
             { "IdMsg": "ValidPass", "Msg": "- Password\n" },
-            { "IdMsg": "ValidDate", "Msg": "- Date\n" },
-            { "IdMsg": "ValidDateBegin", "Msg": "- Date Begin\n" },
-            { "IdMsg": "ValidDateEnd", "Msg": "- Date End\n" },
-            { "IdMsg": "ValidHour", "Msg": "- Hours\n" },
-            { "IdMsg": "ValidProject", "Msg": "- Project\n" },
-            { "IdMsg": "ValidActivity", "Msg": "- Activity\n" },
-            { "IdMsg": "ValidDescription", "Msg": "- Description\n" },
-            { "IdMsg": "ValidHourEntrance", "Msg": "- Entrance Hours\n" },
+            { "IdMsg": "ValidDate", "Msg": "- Date is required.\n" },
+            { "IdMsg": "ValidDateBegin", "Msg": "- Date Begin is required.\n" },
+            { "IdMsg": "ValidDateEnd", "Msg": "- Date End is required.\n" },
+            { "IdMsg": "ValidHour", "Msg": "- Hours is required.\n" },
+            { "IdMsg": "ValidProject", "Msg": "- Project is required.\n" },
+            { "IdMsg": "ValidActivity", "Msg": "- Activity is required.\n" },
+            { "IdMsg": "ValidDescription", "Msg": "- Description is required.\n" },
+            { "IdMsg": "ValidHourEntrance", "Msg": "- Entrance Hours is required.\n" },
             { "IdMsg": "DataSaveSuccess", "Msg": "Data save!" },
             { "IdMsg": "DataSaveError", "Msg": "Error saving the data!" },
             { "IdMsg": "SelCombo", "Msg": "Select..." },
@@ -1679,14 +1692,14 @@ var dictionarySTKMsg = {
             { "IdMsg": "Authenticating", "Msg": "Autenticación..." },
             { "IdMsg": "ValidIS", "Msg": "- IS\n" },
             { "IdMsg": "ValidPass", "Msg": "- Contraseña\n" },
-            { "IdMsg": "ValidDate", "Msg": "- Fecha\n" },
-            { "IdMsg": "ValidDateBegin", "Msg": "- Fecha Inicio\n" },
-            { "IdMsg": "ValidDateEnd", "Msg": "- Fecha Finalización\n" },
-            { "IdMsg": "ValidHour", "Msg": "- Horas\n" },
-            { "IdMsg": "ValidProject", "Msg": "- Proyecto\n" },
-            { "IdMsg": "ValidActivity", "Msg": "- Actividad\n" },
-            { "IdMsg": "ValidDescription", "Msg": "- Descripción\n" },
-            { "IdMsg": "ValidHourEntrance", "Msg": "- Horas de Entrada\n" },
+            { "IdMsg": "ValidDate", "Msg": "- Fecha se requiere.\n" },
+            { "IdMsg": "ValidDateBegin", "Msg": "- Fecha Inicio se requiere.\n" },
+            { "IdMsg": "ValidDateEnd", "Msg": "- Fecha Finalización se requiere.\n" },
+            { "IdMsg": "ValidHour", "Msg": "- Horas se requiere.\n" },
+            { "IdMsg": "ValidProject", "Msg": "- Proyecto se requiere.\n" },
+            { "IdMsg": "ValidActivity", "Msg": "- Actividad se requiere.\n" },
+            { "IdMsg": "ValidDescription", "Msg": "- Descripción se requiere.\n" },
+            { "IdMsg": "ValidHourEntrance", "Msg": "- Horas de Entrada se requiere.\n" },
             { "IdMsg": "DataSaveSuccess", "Msg": "Registro guardado!" },
             { "IdMsg": "DataSaveError", "Msg": "Erro al guardar lo registro!" },
             { "IdMsg": "SelCombo", "Msg": "Seleccionar..." },
