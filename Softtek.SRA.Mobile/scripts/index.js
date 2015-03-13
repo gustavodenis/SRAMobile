@@ -1278,17 +1278,17 @@ stkApp.prototype = function () {
     getActivities = function getActivities() {
         if (window.localStorage.getItem("AcitivityFaults") == null) {
             var body = '<soap12:Body>';
-            body += '<getActivities xmlns="http://Stk.org/">';
+            body += '<getActivitiesMobile xmlns="http://Stk.org/">';
             body += '<strSegmentId>' + IdSegment + '</strSegmentId>';
             body += '<strEntityId>' + EntityId + '</strEntityId>';
             body += '<strTeamId>' + TeamId + '</strTeamId>';
-            body += '</getActivities>';
+            body += '</getActivitiesMobile>';
             body += '</soap12:Body>';
             var envelope = getEnvelopeAbs(body);
 
             $.ajax({
                 type: 'POST',
-                url: MountURLSWSAbs('getActivities'),
+                url: MountURLSWSAbs('getActivitiesMobile'),
                 contentType: 'application/soap+xml; charset=utf-8',
                 data: envelope
             })
