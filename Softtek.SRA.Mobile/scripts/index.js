@@ -252,7 +252,7 @@ stkApp.prototype = function () {
                 var body = '<soap12:Body>';
                 body += '<addRecordHoraRecursoMobile xmlns="http://tempuri.org/">';
                 body += '<strFuncIS>' + FuncIS + '</strFuncIS>';
-                body += '<intSequencial>' + $('#idSeq').val() + '</intSequencial>';
+                body += '<intSequential>' + $('#idSeq').val() + '</intSequential>';
                 body += '<strDescription>' + Desc + '</strDescription>';
                 body += '<strActivityCode>' + Activity + '</strActivityCode>';
                 body += '<dblHours>' + Hour + '</dblHours>';
@@ -311,7 +311,7 @@ stkApp.prototype = function () {
                 erros += getMsgLang(langPref, 'ValidHourEntrance');
             if (Hour == '')
                 erros += getMsgLang(langPref, 'ValidHour');
-            if (parseFloat(Hour) > 8)
+            if (parseFloat(Hour) > 16)
                 erros += getMsgLang(langPref, 'ValidMaxAditionalHour');
             if (Proj == '')
                 erros += getMsgLang(langPref, 'ValidProject');
@@ -355,7 +355,7 @@ stkApp.prototype = function () {
                 var body = '<soap12:Body>';
                 body += '<addRecordHoraRecursoMobile xmlns="http://tempuri.org/">';
                 body += '<strFuncIS>' + FuncIS + '</strFuncIS>';
-                body += '<intSequencial>' + $('#idSeqAditional').val() + '</intSequencial>';
+                body += '<intSequential>' + $('#idSeqAditional').val() + '</intSequential>';
                 body += '<strDescription>' + Desc + '</strDescription>';
                 body += '<strActivityCode>' + Activity + '</strActivityCode>';
                 body += '<dblHours>' + Hour + '</dblHours>';
@@ -707,7 +707,7 @@ stkApp.prototype = function () {
                 bodyxml += '<intMonth>' + mes + '</intMonth>';
                 bodyxml += '<intDay>' + dia + '</intDay>';
                 bodyxml += '<intAdditionalHour>1</intAdditionalHour>';
-                bodyxml += '<intSequencial>' + seq + '</intSequencial>';
+                bodyxml += '<intSequential>' + seq + '</intSequential>';
                 bodyxml += '</deleteRecordMobile>';
                 bodyxml += '</soap12:Body>';
                 var envelope = getEnvelope(bodyxml);
@@ -719,7 +719,7 @@ stkApp.prototype = function () {
                     data: envelope
                 })
                 .done(function (data) {
-                    if ($(data).find('deleteRecordMobileResult').text() == "true") {
+                    if ($(data).find('deleteRecordMobileResult').text() == "Sucesso!") {
                         if (transition) {
                             listitem
                             .addClass(transition)
@@ -778,7 +778,7 @@ stkApp.prototype = function () {
                 bodyxml += '<intMonth>' + mes + '</intMonth>';
                 bodyxml += '<intDay>' + dia + '</intDay>';
                 bodyxml += '<intAdditionalHour>0</intAdditionalHour>';
-                bodyxml += '<intSequencial>' + seq + '</intSequencial>';
+                bodyxml += '<intSequential>' + seq + '</intSequential>';
                 bodyxml += '</deleteRecordMobile>';
                 bodyxml += '</soap12:Body>';
                 var envelope = getEnvelope(bodyxml);
@@ -790,7 +790,7 @@ stkApp.prototype = function () {
                     data: envelope
                 })
                 .done(function (data) {
-                    if ($(data).find('deleteRecordMobileResult').text() == "true") {
+                    if ($(data).find('deleteRecordMobileResult').text() == "Sucesso!") {
                         if (transition) {
                             listitem
                             .addClass(transition)
@@ -869,7 +869,7 @@ stkApp.prototype = function () {
 
                         rows += '<li Seq=' + $(this).find('Sequencial').text().trim() + ' Dia=' + $(this).find('DiaMes').text().trim() + ' Validado=' + $(this).find('Validado').text().trim() + ' class="btnDelHN">';
                         rows += '<a href="#"><h3>' + getDateString($(this).find('DiaMes').text().trim(), $(this).find('Mes').text().trim(), $(this).find('Ano').text().trim()) + '</h3><p class="topic"><strong>';
-                        rows += $(this).find('CodigoAlternativo').text().trim() + '</strong> ' + $(this).find('Descricao').text().trim() + '</p><p class="ui-li-aside"><strong>' + parseInt($(this).find('Horas').text()).toString() + getMsgLang(langPref, 'LabelHours') + '</strong> - ' + ($(this).find('Validado').text().trim() == 'true' ? 'Validado' : 'Não Validado') + '</p></a>';
+                        rows += $(this).find('CodigoAlternativo').text().trim() + '</strong> ' + $(this).find('Descricao').text().trim() + '</p><p class="ui-li-aside"><strong>' + parseFloat($(this).find('Horas').text()).toString() + getMsgLang(langPref, 'LabelHours') + '</strong> - ' + ($(this).find('Validado').text().trim() == 'true' ? 'Validado' : 'Não Validado') + '</p></a>';
                         rows += '<a href="#" Seq=' + $(this).find('Sequencial').text().trim() + ' Dia=' + $(this).find('DiaMes').text().trim() + ' Validado=' + $(this).find('Validado').text().trim() + ' class="btnEditHN"></a>';
                         rows += '</li>';
 
@@ -966,7 +966,7 @@ stkApp.prototype = function () {
 
                         rows += '<li Seq=' + $(this).find('Sequencial').text().trim() + ' Dia=' + $(this).find('DiaMes').text().trim() + ' Validado=' + $(this).find('Validado').text().trim() + ' class="btnDelHA">';
                         rows += '<a href="#"><h3>' + getDateString($(this).find('DiaMes').text().trim(), $(this).find('Mes').text().trim(), $(this).find('Ano').text().trim()) + ' / ' + $(this).find('Entrada').text().trim() + '</h3><p class="topic"><strong>';
-                        rows += $(this).find('CodigoAlternativo').text().trim() + '</strong> ' + $(this).find('Descricao').text().trim() + '</p><p class="ui-li-aside"><strong>' + parseInt($(this).find('Horas').text()).toString() + getMsgLang(langPref, 'LabelHours') + '</strong> - ' + ($(this).find('Validado').text().trim() == 'true' ? 'Validado' : 'Não Validado') + '</p></a>';
+                        rows += $(this).find('CodigoAlternativo').text().trim() + '</strong> ' + $(this).find('Descricao').text().trim() + '</p><p class="ui-li-aside"><strong>' + parseFloat($(this).find('Horas').text()).toString() + getMsgLang(langPref, 'LabelHours') + '</strong> - ' + ($(this).find('Validado').text().trim() == 'true' ? 'Validado' : 'Não Validado') + '</p></a>';
                         rows += '<a href="#" Seq=' + $(this).find('Sequencial').text().trim() + ' Dia=' + $(this).find('DiaMes').text().trim() + ' Validado=' + $(this).find('Validado').text().trim() + ' class="btnEditHA"></a>';
                         rows += '</li>';
 
