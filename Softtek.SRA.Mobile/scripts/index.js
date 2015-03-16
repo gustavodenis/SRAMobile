@@ -455,7 +455,7 @@ stkApp.prototype = function () {
                     data: envelope
                 })
                 .done(function (data) {
-                    alert(($(data).find('setInsertOrderMobileResult').text() == '0' ? getMsgLang(langPref, 'DataSaveSuccess') : $(data).find('setInsertOrderMobileResult').text()));
+                    alert(($(data).find('setInsertOrderMobileResult').text() == 'Sucesso!' ? getMsgLang(langPref, 'DataSaveSuccess') : $(data).find('setInsertOrderMobileResult').text()));
                 })
                 .fail(function (jqXHR, textStatus, errorThrown) {
                     alert(getMsgLang(langPref, 'ErrorAjax'));
