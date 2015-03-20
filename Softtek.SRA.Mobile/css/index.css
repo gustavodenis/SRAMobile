@@ -1,7 +1,9 @@
 body {
 }
 
-
+.ui-icon-homebtn {
+	background-image: url("/images/home_btn.png");
+}
 
 .paragraph {
     font-size: 12px;
@@ -16,7 +18,6 @@ body {
     margin-bottom: 50px;
     text-align: center;
 }
-
 
 .logo-splash {
     float: right;
@@ -43,7 +44,7 @@ body {
     width: 100%;
     z-index: 9999;
     height: 70px;
-    background-color: #125F9D;
+    background-color: #00325D;
     border-bottom: solid 1px #ffcc1d;
 }
 
@@ -173,22 +174,23 @@ body {
 }
 
 .ui-header.ui-bar-a {
-    background: #125F9D; /* Old browsers */
-    background: -moz-linear-gradient(top, #125F9D 0%, #125F9D 100%); /* FF3.6+ */
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #125F9D), color-stop(100%, #125F9D)); /* Chrome,Safari4+ */
-    background: -webkit-linear-gradient(top, #125F9D 0%, #125F9D 100%); /* Chrome10+,Safari5.1+ */
-    background: -o-linear-gradient(top, #125F9D 0%, #125F9D 100%); /* Opera 11.10+ */
-    background: -ms-linear-gradient(top, #125F9D 0%, #125F9D 100%); /* IE10+ */
-    background: linear-gradient(to bottom, #125F9D 0%, #125F9D 100%); /* W3C */
-    border: 1px solid #125F9D;
+    background: #00325D; /* Old browsers */
+    background: -moz-linear-gradient(top, #00325D 0%, #00325D 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #00325D), color-stop(100%, #00325D)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, #00325D 0%, #00325D 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, #00325D 0%, #00325D 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, #00325D 0%, #00325D 100%); /* IE10+ */
+    background: linear-gradient(to bottom, #00325D 0%, #00325D 100%); /* W3C */
+    border: 1px solid #00325D;
     border-left-width: 0;
     border-right-width: 0;
-    border-bottom-color: #125F9D;
+    border-bottom-color: #00325D;
+    height:50px;
 }
 
-    .ui-header.ui-bar-a > .ui-title {
-        text-shadow: none;
-    }
+.ui-header.ui-bar-a > .ui-title {
+    text-shadow: none;
+}
 
 .ui-footer {
     text-align: center;

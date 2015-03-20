@@ -885,7 +885,7 @@ stkApp.prototype = function () {
                             alert(getMsgLang(langPref, 'RegValidated'));
                         }
                         else {
-                            LoadDataNormalHours($(this).attr('Seq'));
+                            LoadDataNormalHours($(this).attr('Seq'), $(this).attr('Dia'));
                         }
                     });
                 })
@@ -899,14 +899,14 @@ stkApp.prototype = function () {
         }
     },
 
-    LoadDataNormalHours = function (Seq) {
+    LoadDataNormalHours = function (Seq, Dia) {
         fauxAjax(function () {
             $('#divRepLanc').hide();
             $('#txtDt,#txtHour,#txtProj,#txtDesc,#txtDtRepNormalBegin,#txtDtRepNormalEnd').val('');
             $('#ddlActivity, #idSeq').val(0);
 
             $.each(aLancamentos, function (index, el) {
-                if (aLancamentos[index].Sequencial == Seq) {
+                if (aLancamentos[index].Sequencial == Seq && aLancamentos[index].DiaMes == Dia) {
                     $('#idSeq').val(Seq);
                     $('#txtDt').val(getDateString(aLancamentos[index].DiaMes, aLancamentos[index].Mes, aLancamentos[index].Ano));
                     $('#txtHour').val(aLancamentos[index].Horas);
@@ -982,7 +982,7 @@ stkApp.prototype = function () {
                             alert(getMsgLang(langPref, 'RegValidated'));
                         }
                         else {
-                            LoadDataAditionalHours($(this).attr('Seq'));
+                            LoadDataAditionalHours($(this).attr('Seq'), $(this).attr('Dia'));
                         }
                     });
                 })
@@ -996,14 +996,14 @@ stkApp.prototype = function () {
         }
     },
 
-    LoadDataAditionalHours = function (Seq) {
+    LoadDataAditionalHours = function (Seq, Dia) {
         fauxAjax(function () {
             $('#divRepLancAditional').hide();
             $('#txtHourBegin,#txtDtAditional,#txtHourAditional,#txtDescAditional,#txtDtRepAditionalBegin,#txtDtRepAditionalEnd').val('');
             $('#ddlActivityAditional, #idSeqAditional').val(0);
 
             $.each(aLancamentosAditional, function (index, el) {
-                if (aLancamentosAditional[index].Sequencial == Seq) {
+                if (aLancamentosAditional[index].Sequencial == Seq && aLancamentosAditional[index].DiaMes == Dia) {
                     $('#idSeqAditional').val(Seq);
                     $('#txtDtAditional').val(getDateString(aLancamentosAditional[index].DiaMes, aLancamentosAditional[index].Mes, aLancamentosAditional[index].Ano));
                     $('#txtHourAditional').val(aLancamentosAditional[index].Horas);
@@ -1645,7 +1645,7 @@ var dictionarySTKMsg = {
             { "IdMsg": "Loading", "Msg": "Loading..." },
             { "IdMsg": "Deleting", "Msg": "Deleting..." },
             { "IdMsg": "ErrorFound", "Msg": "Found errors:\n" },
-            { "IdMsg": "ErrorAjax", "Msg": "Error on proccess!" },
+            { "IdMsg": "ErrorAjax", "Msg": "Error on process!" },
             { "IdMsg": "ConfirmDelete", "Msg": "Comfirm delete this item?" },
             { "IdMsg": "ErrorDeleteReg", "Msg": "Error deleting the data!" },
             { "IdMsg": "PermissionPage", "Msg": "You don´t have permission to access this page!" },
@@ -1894,6 +1894,7 @@ function TestConnectivity() {
 function MountURLWS(operation) {
     //return 'http://intrasoft.softtek.com:8081/wsSRAPDK/cResourceHours.asmx?op=' + operation;
     return 'http://172.16.128.71:8028/wsSRAPDK/cResourceHours.asmx?op=' + operation;
+    //return 'http://172.16.128.71:8028/wsSRAPDK2/cResourceHours.asmx?op=' + operation;
 }
 
 function MountURLSWSAbs(operation) {
