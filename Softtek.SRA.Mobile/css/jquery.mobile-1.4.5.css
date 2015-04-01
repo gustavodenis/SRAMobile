@@ -1,9 +1,9 @@
 /*!
 * jQuery Mobile 1.4.5
-* Git HEAD hash: 68e55e78b292634d3991c795f06f5e37a512decc <> Date: Fri Oct 31 2014 17:33:30 UTC
+* Git HEAD hash: 3d7eaceff3292058833a110283695ed8cd9f8464 <> Date: Mon Mar 2 2015 16:24:00 UTC
 * http://jquerymobile.com
 *
-* Copyright 2010, 2014 jQuery Foundation, Inc. and othercontributors
+* Copyright 2010, 2015 jQuery Foundation, Inc. and othercontributors
 * Released under the MIT license.
 * http://jquery.org/license
 *
@@ -3045,9 +3045,9 @@ fieldset.ui-controlgroup {
 	max-width: 100%;
 }
 .ui-controlgroup-controls > label {
-	/*position: absolute !important;
+	position: absolute !important;
 	height: 1px;
-	width: 1px;*/
+	width: 1px;
 	overflow: hidden;
 	clip: rect(1px,1px,1px,1px);
 }

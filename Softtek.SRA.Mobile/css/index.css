@@ -1,177 +1,41 @@
-body {
-}
+body { }
 
-.ui-icon-homebtn {
-	background-image: url("/images/home_btn.png");
-}
+#home { background: url("../images/backmenu480.png") no-repeat center center fixed;}
+#home .ui-listview { text-align: left; }
+#home .ui-listview .ui-btn { background-color:transparent;border: none;color: #fff;margin: 20px 20px 20px 20px;}
+#home .ui-listview .ui-btn .ui-li { border: none; }
+#home .ui-listview .ui-btn .ui-li .ui-icon { display: none; }
+#home .ui-listview .ui-btn .ui-li .ui-link-inherit { font-size: .8em; font-weight: normal; padding: 80px 0px 0px 0px; text-align: center; }
+#home .ui-listview .ui-btn .ui-li .ui-icon-carat-r { background-image: url("images/Seta_24x24.png") }
+#home .ui-listview .ui-li-icon { height:32px;width:32px; font-size: 24px; }
+#home .ui-link { border: none; background-color:transparent; }
+#home .ui-listview > .ui-li-has-icon > img:first-child,
+#home .ui-listview > .ui-li-has-icon > .ui-btn > img:first-child { position: absolute; left: 5px; top: 5px; max-height: 24px; max-width: 24px; }
+#home .ui-listview .ui-btn-active { background-color: transparent; border:none; color: #fff; }
+#home .ui-listview .ui-btn.ui-btn-a:active { background-color: transparent; border:none; color: #fff; }
 
-.paragraph {
-    font-size: 12px;
-    letter-spacing: 0.8px;
-}
+#normalPage .ui-link { border: none; background-color:transparent; }
+#aditionalPage .ui-link { border: none; background-color:transparent; }
+#normalAddPage .ui-link { border: none; background-color:transparent; }
+#aditionalAddPage .ui-link { border: none; background-color:transparent; }
+#faultPage .ui-link { border: none; background-color:transparent; }
+#faultAddPage .ui-link { border: none; background-color:transparent; }
+#approvePage .ui-link { border: none; background-color:transparent; }
+#settingPage .ui-link { border: none; background-color:transparent; }
+#aboutPage .ui-link { border: none; background-color:transparent; }
 
-.content {
-    margin-top: 15px;
-}
+.ui-icon-home-menu:after { background-image: url("../images/Menu_24x24.png"); }
+.ui-li-icon-normal { background-image: url("../images/HorasNormais-24x24.png"); }
+.ui-li-icon-aditional { background-image: url("../images/HorasAdicionais_24x24.png"); }
+.ui-li-icon-absence { background-image: url("../images/Ausencia_24x24.png"); }
+.ui-li-icon-approve { background-image: url("../images/Aprovar_24x24.png"); }
+.ui-li-icon-setting { background-image: url("../images/Ajustes_24X24.png"); }
+.ui-li-icon-about { background-image: url("../images/Informacoes_24x24.png"); }
 
-.landing-copyright {
-    margin-bottom: 50px;
-    text-align: center;
-}
-
-.logo-splash {
-    float: right;
-    alignment-adjust: middle;
-    opacity: 0.95;
-}
-
-.copyright {
-    color: #252525;
-    display: block;
-    text-transform: uppercase;
-    float: none;
-    text-align: center;
-    margin-top: 20px;
-    font-size: 12px;
-}
-
-.footer {
-    margin-top: -30px;
-}
-
-.header {
-    position: fixed;
-    width: 100%;
-    z-index: 9999;
-    height: 70px;
-    background-color: #00325D;
-    border-bottom: solid 1px #ffcc1d;
-}
-
-.header-clear {
-    height: 70px;
-}
-
-.logo-home {
-    margin-left: 10px;
-    margin-top: 15px;
-    margin-bottom: 15px;
-    float: left;
-    border-style: none;
-    background-color: transparent;
-}
-
-.header-text {
-    float: right;
-    padding-top: 17px;
-}
-
-    .header-text strong {
-        letter-spacing: normal;
-        font-family: 'Lato', sans-serif;
-        font-size: 18px;
-        color: #3b4043;
-        font-weight: 600;
-        display: block;
-        text-align: right;
-        padding-right: 20px;
-    }
-
-    .header-text em {
-        font-family: 'Dosis', sans-serif;
-        font-size: 13px;
-        letter-spacing: 0.8px;
-        font-style: normal;
-        color: #3b4043;
-        display: block;
-        padding-right: 20px;
-    }
-
-.heading {
-    margin-bottom: 10px;
-}
-
-    .heading em {
-        font-family: 'Dosis', sans-serif;
-        font-style: normal;
-        font-size: 12px;
-        color: #ce1a13;
-    }
-
-    .heading h3 {
-        color: #252525;
-        font-weight: 200;
-    }
-
-.heading-left {
-    float: left;
-}
-
-.heading-right {
-    float: right;
-    margin-top: 5px;
-}
-
-.thumbs {
-    width: 110%;
-    margin-left: -5%;
-}
-
-.thumb {
-    width: 50%;
-    box-sizing: border-box;
-    padding-left: 10px;
-    padding-right: 10px;
-    float: left;
-    margin-bottom: 10px;
-}
-
-    .thumb img {
-        width: 100%;
-        display: block;
-    }
-
-.left-thumb-text {
-    color: #FFFFFF;
-    text-align: left;
-    padding-left: 10px;
-    margin-top: -30px;
-}
-
-.right-thumb-text {
-    color: #FFFFFF;
-    text-align: right;
-    padding-right: 10px;
-    margin-top: -30px;
-}
-
-.content-tab {
-    font-size: 14px;
-    color: #FFFFFF;
-    background-color: #252525;
-    width: 32%;
-    text-transform: uppercase;
-    float: left;
-    text-align: center;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    margin-left: 2px;
-    margin-bottom: 20px;
-    margin-top: 10px;
-}
-
-.ui-page {
-    /*background: url(../images/320x480px.png) no-repeat center center fixed;*/
-    /*background-size: cover;*/ /*Css padrão*/
-    /*-webkit-background-size: cover;*/ /*Css safari e chrome*/
-    /*-moz-background-size: cover;*/ /*Css firefox*/
-    /*-ms-background-size: cover;*/ /*Css IE não use mer#^@%#*/
-    /*-o-background-size: cover;*/ /*Css Opera*/
-}
-
-.ui-content {
-    padding: 1em;
-}
+.content {margin-top: 15px;}
+.footer { margin-top: -30px; }
+.header { position: fixed; width: 100%; z-index: 9999; height: 50px; background-color: #00325D; border-bottom: solid 1px #ffcc1d; }
+.ui-content { padding: 1em; }
 
 .ui-header.ui-bar-a {
     background: #00325D; /* Old browsers */
@@ -188,104 +52,27 @@ body {
     height:50px;
 }
 
-.ui-header.ui-bar-a > .ui-title {
-    text-shadow: none;
-}
-
-.ui-footer {
-    text-align: center;
-}
-
+.ui-header.ui-bar-a > .ui-title { text-shadow: none; }
+.ui-footer { text-align: center; }
 .ui-overlay-a, .ui-page-theme-a, .ui-panel-wrapper {
     color: #000;
     text-shadow: 0px 1px 0px #fff;
+    background: url("images/backmenu480.png") no-repeat center center fixed;
 }
 
-.err {
-    color: red;
-}
-
-.clear {
-    clear: both;
-}
-
-#login > .ui-btn {
-    margin-top: 20px;
-}
-
-/* BUTTON STYLES*/
-.ui-bar-a > .ui-btn-up-a {
-    border: 1px solid #2373A5;
-    margin-top: 1px;
-    background-image: -moz-linear-gradient(top, rgba(41,192,227,1) 0%, rgba(6,123,152,1) 100%); /* FF3.6+ */
-    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(41,192,227,1)), color-stop(100%,rgba(6,123,152,1))); /* Chrome,Safari4+ */
-    background-image: -webkit-linear-gradient(top, rgba(41,192,227,1) 0%,rgba(6,123,152,1) 100%); /* Chrome10+,Safari5.1+ */
-    background-image: -o-linear-gradient(top, rgba(41,192,227,1) 0%,rgba(6,123,152,1) 100%); /* Opera 11.10+ */
-    background-image: -ms-linear-gradient(top, rgba(41,192,227,1) 0%,rgba(6,123,152,1) 100%); /* IE10+ */
-    background-image: linear-gradient(to bottom, rgba(41,192,227,1) 0%,rgba(6,123,152,1) 100%); /* W3C */
-}
-
-.ui-bar-a > .ui-btn-hover-a {
-    border: 1px solid #2373A5;
-    margin-top: 1px;
-    background-image: -moz-linear-gradient(top, rgba(6, 123, 152, 1) 0%, rgba(41, 192, 227, 1) 100%); /* FF3.6+ */
-    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(6, 123, 152, 1)), color-stop(100%, rgba(41, 192, 227, 1))); /* Chrome,Safari4+ */
-    background-image: -webkit-linear-gradient(top, rgba(6, 123, 152, 1) 0%, rgba(41, 192, 227, 1) 100%); /* Chrome10+,Safari5.1+ */
-    background-image: -o-linear-gradient(top, rgba(6, 123, 152, 1) 0%, rgba(41, 192, 227, 1) 100%); /* Opera 11.10+ */
-    background-image: -ms-linear-gradient(top, rgba(6, 123, 152, 1) 0%, rgba(41, 192, 227, 1) 100%); /* IE10+ */
-    background-image: linear-gradient(to bottom, rgba(6, 123, 152, 1) 0%, rgba(41, 192, 227, 1) 100%); /* W3C */
-}
-
-.ui-bar-b {
-    border: 1px solid #456F9A;
-    color: white;
-    font-weight: bold;
-    text-shadow: 0 1px 1px rgba(255,255,255,0.2);
-    background-image: -moz-linear-gradient(top, rgba(41,192,227,1) 0%, rgba(6,123,152,1) 100%); /* FF3.6+ */
-    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(41,192,227,1)), color-stop(100%,rgba(6,123,152,1))); /* Chrome,Safari4+ */
-    background-image: -webkit-linear-gradient(top, rgba(41,192,227,1) 0%,rgba(6,123,152,1) 100%); /* Chrome10+,Safari5.1+ */
-    background-image: -o-linear-gradient(top, rgba(41,192,227,1) 0%,rgba(6,123,152,1) 100%); /* Opera 11.10+ */
-    background-image: -ms-linear-gradient(top, rgba(41,192,227,1) 0%,rgba(6,123,152,1) 100%); /* IE10+ */
-    background-image: linear-gradient(to bottom, rgba(41,192,227,1) 0%,rgba(6,123,152,1) 100%); /* W3C */
-}
-
-.ui-content .ui-listview-inset {
-    margin: 1em 5px;
+.ui-header .ui-btn,
+.ui-footer .ui-btn {
+	font-size: 9.5px;
+	display: inline-block;
+	vertical-align: middle;
+    background-color:transparent;
 }
 
 .ui-btn-active {
-    border: 1px solid rgba(255,255,255,0.2);
-    background: rgba(255,255,255,0.2);
-    font-weight: bold;
-    color: white;
-    cursor: pointer;
-    text-shadow: 0 1px 1px rgba(255,255,255,0.2);
-    text-decoration: none;
-    background-image: -moz-linear-gradient(top, rgba(6, 123, 152, 1) 0%, rgba(41, 192, 227, 1) 100%); /* FF3.6+ */
-    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(6, 123, 152, 1)), color-stop(100%, rgba(41, 192, 227, 1))); /* Chrome,Safari4+ */
-    background-image: -webkit-linear-gradient(top, rgba(6, 123, 152, 1) 0%, rgba(41, 192, 227, 1) 100%); /* Chrome10+,Safari5.1+ */
-    background-image: -o-linear-gradient(top, rgba(6, 123, 152, 1) 0%, rgba(41, 192, 227, 1) 100%); /* Opera 11.10+ */
-    background-image: -ms-linear-gradient(top, rgba(6, 123, 152, 1) 0%, rgba(41, 192, 227, 1) 100%); /* IE10+ */
-    background-image: linear-gradient(to bottom, rgba(6, 123, 152, 1) 0%, rgba(41, 192, 227, 1) 100%); /* W3C */
-    font-family: Helvetica, Arial, sans-serif;
+    border: none; background-color:transparent;
 }
 
-.ui-icon.ui-icon-arrow-r {
-    background-color: #00a3c9;
-    border: none;
-    -moz-box-shadow: inset 0px 1px 0px 0px rgba(0,0,0,0.5),0 1px 1px rgba(255,255,255,1);
-    -webkit-box-shadow: inset 0px 1px 0px 0px rgba(0, 0, 0, 0.5),0 1px 1px rgba(255,255,255,1);
-    box-shadow: inset 0px 1px 0px 0px rgba(0, 0, 0, 0.5),0 1px 1px rgba(255,255,255,1);
-}
-
-.ui-btn-active .ui-icon.ui-icon-arrow-r {
-    background-color: #666;
-    background-color: rgba(0, 0, 0, .4);
-    border: none;
-    -moz-box-shadow: inset 0px 1px 0px 0px rgba(0, 0, 0, 0.5), 0 1px 1px rgba(255, 255, 255, 1);
-    -webkit-box-shadow: inset 0px 1px 0px 0px rgba(0, 0, 0, 0.5), 0 1px 1px rgba(255, 255, 255, 1);
-    box-shadow: inset 0px 1px 0px 0px rgba(0, 0, 0, 0.5), 0 1px 1px rgba(255, 255, 255, 1);
-}
+.ui-content .ui-listview-inset { margin: 1em 5px; }
 
 .ui-loader-verbose {
     background: -moz-linear-gradient(top, rgba(6, 123, 152, 1) 0%, rgba(41, 192, 227, 1) 100%); /* FF3.6+ */
@@ -296,36 +83,6 @@ body {
     background: linear-gradient(to bottom, rgba(6, 123, 152, 1) 0%, rgba(41, 192, 227, 1) 100%); /* W3C */
 }
 
-.decoration {
-    background-color: #cacaca;
-    height: 2px;
-    background-repeat: repeat;
-    border-bottom: solid 1px #FFFFFF;
-    margin-bottom: 20px;
-    display: block;
-    width: 100%;
-    clear: both;
-}
-
-.backaditional {
-    background-color: #B0E0E6;
-    /*background: -moz-linear-gradient(top, rgba(255,0,0,1) 0%, rgba(255,218,185,1) 100%); /* FF3.6+ */
-    /*background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(255,0,0,1)), color-stop(100%, rgba(255,218,185,1))); /* Chrome,Safari4+ */
-    /*background: -webkit-linear-gradient(top, rgba(255,0,0,1) 0%, rgba(255,218,185,1) 100%); /* Chrome10+,Safari5.1+ */
-    /*background: -o-linear-gradient(top, rgba(255,0,0,1) 0%, rgba(255,218,185,1) 100%); /* Opera 11.10+ */
-    /*background: -ms-linear-gradient(top, rgba(255,0,0,1) 0%, rgba(255,218,185,1) 100%); /* IE10+ */
-    /*background: linear-gradient(to bottom, rgba(255,0,0,1) 0%, rgba(255,218,185,1) 100%); /* W3C */
-}
-
-.backfault {
-    background-color: #3CB371;
-    /*background: -moz-linear-gradient(top, rgba(70,130,180, 1) 0%, rgba(173,216,230, 1) 100%); /* FF3.6+ */
-    /*background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(70,130,180, 1)), color-stop(100%, rgba(173,216,230, 1))); /* Chrome,Safari4+ */
-    /*background: -webkit-linear-gradient(top, rgba(70,130,180, 1) 0%, rgba(173,216,230, 1) 100%); /* Chrome10+,Safari5.1+ */
-    /*background: -o-linear-gradient(top, rgba(70,130,180, 1) 0%, rgba(173,216,230, 1) 100%); /* Opera 11.10+ */
-    /*background: -ms-linear-gradient(top, rgba(70,130,180, 1) 0%, rgba(173,216,230, 1) 100%); /* IE10+ */
-    /*background: linear-gradient(to bottom, rgba(70,130,180, 1) 0%, rgba(173,216,230, 1) 100%); /* W3C */
-}
 /*Hack para WP 8*/
 @viewport
 {
@@ -380,4 +137,17 @@ display: none;
 }
 ul.touch li.ui-li-has-alt a.ui-btn {
 margin-right:0;
+}
+
+.ui-btn-icon-left:after,
+.ui-btn-icon-right:after,
+.ui-btn-icon-top:after,
+.ui-btn-icon-bottom:after,
+.ui-btn-icon-notext:after {
+	/*background-color: 					#666;*/
+	/*background-color: 					rgba(0,0,0,.3);*/
+	/*background-position: center center;*/
+	/*background-repeat: no-repeat;*/
+	/*-webkit-border-radius: 1em;
+	border-radius: 1em;*/
 }

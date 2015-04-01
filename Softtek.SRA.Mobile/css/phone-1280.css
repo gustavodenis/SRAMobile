@@ -1,8 +1,1 @@
-.ui-page {
-    /*background: url(../images/720x1280px.png) no-repeat center center fixed;*/
-    /*background-size: cover;*/ /*Css padrão*/
-    /*-webkit-background-size: cover;*/ /*Css safari e chrome*/
-    /*-moz-background-size: cover;*/ /*Css firefox*/
-    /*-ms-background-size: cover;*/ /*Css IE não use mer#^@%#*/
-    /*-o-background-size: cover;*/ /*Css Opera*/
-}
+#home { background: url("../images/backmenu1280.png") no-repeat center center fixed;}

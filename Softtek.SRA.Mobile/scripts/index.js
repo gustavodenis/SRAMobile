@@ -539,7 +539,7 @@ stkApp.prototype = function () {
         });
 
         $(document).on("swiperight", "#label_DevName", function (event) {
-            alert('Version: 1.0 - Module Online\nNotes: This application is for Softtek employees realize their appointments of hours.\nDeveloped by: Gustavo Denis \nSofttek Brazil - Application Developer Team');
+            alert('Developed by: Gustavo Denis \nSofttek Brazil - Application Developer Team');
         });
     },
 
@@ -1730,7 +1730,7 @@ var dictionarySTKControls = {
             { "Controle": "hrNormal", "Label": "Normal" },
             { "Controle": "hrAditional", "Label": "Adicionais" },
             { "Controle": "hrFault", "Label": "Ausência" },
-            { "Controle": "hrAprove", "Label": "Aprovar" },
+            { "Controle": "hrAprover", "Label": "Aprovar" },
             { "Controle": "labelIS", "Label": "IS:" },
             { "Controle": "labelPass", "Label": "Senha:" },
             { "Controle": "loginBtn", "Label": "Login" },
@@ -1771,7 +1771,7 @@ var dictionarySTKControls = {
             { "Controle": "hrNormal", "Label": "Normal" },
             { "Controle": "hrAditional", "Label": "Aditional" },
             { "Controle": "hrFault", "Label": "Vacation" },
-            { "Controle": "hrAprove", "Label": "Approve" },
+            { "Controle": "hrAprover", "Label": "Approve" },
             { "Controle": "labelIS", "Label": "IS:" },
             { "Controle": "labelPass", "Label": "Password:" },
             { "Controle": "loginBtn", "Label": "Login" },
@@ -1812,7 +1812,7 @@ var dictionarySTKControls = {
             { "Controle": "hrNormal", "Label": "Normal" },
             { "Controle": "hrAditional", "Label": "Adicional" },
             { "Controle": "hrFault", "Label": "Ausencia" },
-            { "Controle": "hrAprove", "Label": "Aprobar" },
+            { "Controle": "hrAprover", "Label": "Aprobar" },
             { "Controle": "labelIS", "Label": "IS:" },
             { "Controle": "labelPass", "Label": "Contasenã:" },
             { "Controle": "loginBtn", "Label": "Iniciar sesión" },
@@ -1893,10 +1893,11 @@ function TestConnectivity() {
 
 function MountURLWS(operation) {
     //return 'http://intrasoft.softtek.com:8081/wsSRAPDK/cResourceHours.asmx?op=' + operation;
-    return 'http://172.16.128.71:8028/wsSRAPDK/cResourceHours.asmx?op=' + operation;
+    return 'http://srvspg30.softtek.com.br:8050/wssra/cresourcehours.asmx?op=' + operation;
     //return 'http://172.16.128.71:8028/wsSRAPDK2/cResourceHours.asmx?op=' + operation;
 }
 
 function MountURLSWSAbs(operation) {
-    return 'http://172.16.128.71:8028/wsStkiAbsence/cService.asmx?op=' + operation;
+    return 'http://srvspg30.softtek.com.br:8050/wsAbsence/cService.asmx?op=' + operation;
+    //return 'http://172.16.128.71:8028/wsStkiAbsence/cService.asmx?op=' + operation;
 }

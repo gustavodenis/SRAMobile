@@ -8,33 +8,30 @@
     <link href="css/jquery.mobile-1.4.5.css" rel="stylesheet" type="text/css" />
     <!-- Phone 320x480 High DPI (aka Retina) -->
     <link rel="stylesheet" href="css/index.css" type="text/css" />
-    <link href="css/jqm-datebox-1.4.5.min.css" rel="stylesheet" />
     <!-- Phone 480x800 Medium DPI (aka Samsung Galaxy S II Skyrocket) -->
     <link rel="stylesheet" media="only screen and (min-device-width: 320px) and (max-device-width: 508px) and (-webkit-device-pixel-ratio:1.5)" href="css/phone-800.css" type="text/css" />
     <!-- Tablet 768x1024 Low DPI (aka iPad 1 & 2") -->
     <link rel="stylesheet" media="only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (-webkit-device-pixel-ratio:1)" href="css/tablet-1024-ldpi.css" type="text/css" />
     <!-- Phone 720x1280 High DPI (aka Google Nexus) -->
     <link rel="stylesheet" media="only screen and (min-device-width: 720px) and (max-device-width: 1280px) and (-webkit-device-pixel-ratio:2)" href="css/phone-1280.css" type="text/css" />
+    <link href="css/jqm-datebox-1.4.5.min.css" rel="stylesheet" />
 </head>
 <body onload="OnLoadMobile();">
     <!-- home page -->
     <div id="home" data-role="page" data-mini="true">
-        <div data-role="header" data-theme="a" data-position="fixed" data-tap-toggle="false">
-            <a href="#home" data-rel="back" style="margin-left: 10px; margin-top: 10px; margin-bottom: 15px; float: left;" class="ui-btn-left ui-btn ui-icon-home ui-btn-icon-notext ui-shadow ui-corner-all" data-role="button" role="button">Home</a>
-            <img style="margin-left: 70px; margin-top: 10px; margin-bottom: 15px; float: left;" class="logo" alt="img" src="images/logo.png" width="240px;">
-            <a href="#settingPage" data-transition="slide" style="margin-left: 10px; margin-top: 10px; margin-bottom: 15px; float: left;" class="ui-btn header-button-right ui-btn-icon-right ui-btn-icon-notext ui-shadow ui-corner-all ui-icon-gear"></a>
+        <div data-role="header" data-theme="a" data-position="fixed" data-tap-toggle="false" class="ui-nodisc-icon">
+            <a href="#home"><img style="margin-left: 5px; margin-top: 5px; margin-bottom: 5px; float: left; background:transparent; border:none;" alt="img" src="images/Menu_24x24.png"></a>
+            <img style="margin-left: 40%; margin-top: 5px; margin-bottom: 5px; float: left; height:40px; width:77px;" alt="img" src="images/Logo106x55_branco.png">
         </div>
         <div role="main" class="ui-content">
-        </div>
-        <div data-role="footer" data-theme="b" data-position="fixed" data-tap-toggle="false">
-            <div data-role="navbar" data-iconpos="bottom">
-                <ul>
-                    <li><a href="#normalPage" id="hrNormal" data-transition="slide" data-icon="clock">Normais</a></li>
-                    <li><a href="#aditionalPage" id="hrAditional" data-transition="slide" data-icon="bars">Adicionais</a></li>
-                    <li><a href="#faultPage" id="hrFault" data-transition="slide" data-icon="action">Ausência</a></li>
-                    <li><a href="#" id="hrAprove" data-transition="slide" data-icon="check">Aprovar</a></li>
-                </ul>
-            </div>
+            <ul data-role="listview" id="menuList" class="ui-listview" data-inset="true">
+                <li><a href="#normalPage" data-transition="slide"><img src="images/HorasNormais-24x24.png" alt="Horas Normais" class="ui-li-icon ui-corner-none"><span id="hrNormal">Horas Normais</span></a></li>
+                <li><a href="#aditionalPage" data-transition="slide"><img src="images/HorasAdicionais_24x24.png" alt="Horas Adicionais" class="ui-li-icon ui-corner-none"><span id="hrAditional">Horas Adicionais</span></a></li>
+                <li><a href="#faultPage" data-transition="slide"><img src="images/Ausencia_24x24.png" alt="Ausência" class="ui-li-icon ui-corner-none"><span id="hrFault">Ausência</span></a></li>
+                <li><a href="#" id="hrAprove" data-transition="slide"><img src="images/Aprovar_24x24.png" alt="Aprovação" class="ui-li-icon ui-corner-none"><span id="hrAprover">Aprovação</span></a></li>
+                <li><a href="#settingPage" data-transition="slide"><img src="images/Ajustes_24x24.png" alt="Configurações" class="ui-li-icon ui-corner-none"><span id="settings">Configurações</span></a></li>
+                <li><a href="#aboutPage" data-transition="slide"><img src="images/Informacoes_24x24.png" alt="Sobre" class="ui-li-icon ui-corner-none"><span id="about">Sobre</span></a></li>
+            </ul>
         </div>
     </div>
 
@@ -42,7 +39,7 @@
     <div id="logon" data-role="page" data-mini="true">
         <div data-role="header" data-theme="a" data-position="fixed" data-tap-toggle="false">
             <div class="header-text">
-                <img class="logo" alt="img" src="images/logo.png" width="240">
+                <img style="margin-left: 70px; margin-top: 5px; margin-bottom: 5px; float: left;" alt="img" src="images/Logo Softtek_106x55_branco.png" width="106px;">
             </div>
         </div>
         <div role="main" class="ui-content">
@@ -59,9 +56,8 @@
     <!-- Normal page -->
     <div id="normalPage" data-role="page" data-mini="true">
         <div data-role="header" data-theme="a" data-position="fixed" data-tap-toggle="false">
-            <a href="#home" data-rel="back" style="margin-left: 10px; margin-top: 10px; margin-bottom: 15px; float: left;" class="ui-btn-left ui-btn ui-icon-home ui-btn-icon-notext ui-shadow ui-corner-all" data-role="button" role="button">Home</a>
-            <img style="margin-left: 70px; margin-top: 10px; margin-bottom: 15px; float: left;" class="logo" alt="img" src="images/logo.png" width="240">
-            <a href="#settingPage" data-transition="slide" style="margin-left: 10px; margin-top: 10px; margin-bottom: 15px; float: left;" class="ui-btn header-button-right ui-btn-icon-right ui-btn-icon-notext ui-shadow ui-corner-all ui-icon-gear"></a>
+            <a href="#home"><img style="margin-left: 5px; margin-top: 5px; margin-bottom: 5px; float: left; background:transparent; border:none;" alt="img" src="images/Menu_24x24.png"></a>
+            <img style="margin-left: 40%; margin-top: 5px; margin-bottom: 5px; float: left; height:40px; width:77px;" alt="img" src="images/Logo106x55_branco.png">
         </div>
         <div role="main" class="ui-content">
             <h3 id="labelHourNormal">Horas Normais</h3>
@@ -84,9 +80,8 @@
     <!-- Normal Add page -->
     <div id="normalAddPage" data-role="page" data-mini="true">
         <div data-role="header" data-theme="a" data-position="fixed" data-tap-toggle="false">
-            <a href="#home" data-rel="back" style="margin-left: 10px; margin-top: 10px; margin-bottom: 15px; float: left;" class="ui-btn-left ui-btn ui-icon-home ui-btn-icon-notext ui-shadow ui-corner-all" data-role="button" role="button">Home</a>
-            <img style="margin-left: 70px; margin-top: 10px; margin-bottom: 15px; float: left;" class="logo" alt="img" src="images/logo.png" width="240">
-            <a href="#settingPage" data-transition="slide" style="margin-left: 10px; margin-top: 10px; margin-bottom: 15px; float: left;" class="ui-btn header-button-right ui-btn-icon-right ui-btn-icon-notext ui-shadow ui-corner-all ui-icon-gear"></a>
+            <a href="#home"><img style="margin-left: 5px; margin-top: 5px; margin-bottom: 5px; float: left; background:transparent; border:none;" alt="img" src="images/Menu_24x24.png"></a>
+            <img style="margin-left: 40%; margin-top: 5px; margin-bottom: 5px; float: left; height:40px; width:77px;" alt="img" src="images/Logo106x55_branco.png">
         </div>
         <div role="main" class="ui-content">
             <h3 id="labelHourNormal">Horas Normais</h3>
@@ -98,8 +93,7 @@
             <span id="labelProject">Projeto:</span>
             <input type="text" id="txtProj" maxlength="8" />
             <span id="labelAcitivity">Atividade:</span>
-            <select name="ddlActivity" id="ddlActivity" data-mini="true">
-            </select>
+            <select name="ddlActivity" id="ddlActivity" data-mini="true"></select>
             <span id="labelDescription">Descrição:</span>
             <input type="text" id="txtDesc" placeholder="250 caracteres" maxlength="250" class="RemoveEspecialCharacter" />
             <div id="divRepLanc" data-role="collapsible">
@@ -126,9 +120,8 @@
     <!-- Adicionais page -->
     <div id="aditionalPage" data-role="page" data-mini="true">
         <div data-role="header" data-theme="a" data-position="fixed" data-tap-toggle="false">
-            <a href="#home" data-rel="back" style="margin-left: 10px; margin-top: 10px; margin-bottom: 15px; float: left;" class="ui-btn-left ui-btn ui-icon-home ui-btn-icon-notext ui-shadow ui-corner-all" data-role="button" role="button">Home</a>
-            <img style="margin-left: 70px; margin-top: 10px; margin-bottom: 15px; float: left;" class="logo" alt="img" src="images/logo.png" width="240">
-            <a href="#settingPage" data-transition="slide" style="margin-left: 10px; margin-top: 10px; margin-bottom: 15px; float: left;" class="ui-btn header-button-right ui-btn-icon-right ui-btn-icon-notext ui-shadow ui-corner-all ui-icon-gear"></a>
+            <a href="#home"><img style="margin-left: 5px; margin-top: 5px; margin-bottom: 5px; float: left; background:transparent; border:none;" alt="img" src="images/Menu_24x24.png"></a>
+            <img style="margin-left: 40%; margin-top: 5px; margin-bottom: 5px; float: left; height:40px; width:77px;" alt="img" src="images/Logo106x55_branco.png">
         </div>
         <div role="main" class="ui-content">
             <h3 id="labelHourAditional">Horas Adicional</h3>
@@ -149,11 +142,11 @@
     </div>
 
     <!-- Aditional Add page -->
-    <div id="aditionalAddPage" data-role="page" data-mini="true"> <!--class="backaditional">-->
+    <div id="aditionalAddPage" data-role="page" data-mini="true">
+        <!--class="backaditional">-->
         <div data-role="header" data-theme="a" data-position="fixed" data-tap-toggle="false">
-            <a href="#home" data-rel="back" style="margin-left: 10px; margin-top: 10px; margin-bottom: 15px; float: left;" class="ui-btn-left ui-btn ui-icon-home ui-btn-icon-notext ui-shadow ui-corner-all" data-role="button" role="button">Home</a>
-            <img style="margin-left: 70px; margin-top: 10px; margin-bottom: 15px; float: left;" class="logo" alt="img" src="images/logo.png" width="240">
-            <a href="#settingPage" data-transition="slide" style="margin-left: 10px; margin-top: 10px; margin-bottom: 15px; float: left;" class="ui-btn header-button-right ui-btn-icon-right ui-btn-icon-notext ui-shadow ui-corner-all ui-icon-gear"></a>
+            <a href="#home"><img style="margin-left: 5px; margin-top: 5px; margin-bottom: 5px; float: left; background:transparent; border:none;" alt="img" src="images/Menu_24x24.png"></a>
+            <img style="margin-left: 40%; margin-top: 5px; margin-bottom: 5px; float: left; height:40px; width:77px;" alt="img" src="images/Logo106x55_branco.png">
         </div>
         <div role="main" class="ui-content">
             <h3 id="labelHourAditional">Horas Adicional</h3>
@@ -167,8 +160,7 @@
             <span id="labelProject">Projeto:</span>
             <input type="text" id="txtProjAditional" maxlength="8" />
             <span id="labelAcitivity">Atividade:</span>
-            <select name="ddlActivityAditional" id="ddlActivityAditional" data-mini="true">
-            </select>
+            <select name="ddlActivityAditional" id="ddlActivityAditional" data-mini="true"></select>
             <span id="labelDescription">Descrição:</span>
             <input type="text" id="txtDescAditional" placeholder="250 caracteres" maxlength="250" class="RemoveEspecialCharacter" />
             <div id="divRepLancAditional" data-role="collapsible">
@@ -195,9 +187,8 @@
     <!-- Aprovação page -->
     <div id="approvePage" data-role="page" data-mini="true">
         <div data-role="header" data-theme="a" data-position="fixed" data-tap-toggle="false">
-            <a href="#home" data-rel="back" style="margin-left: 10px; margin-top: 10px; margin-bottom: 15px; float: left;" class="ui-btn-left ui-btn ui-icon-home ui-btn-icon-notext ui-shadow ui-corner-all" data-role="button" role="button">Home</a>
-            <img style="margin-left: 70px; margin-top: 10px; margin-bottom: 15px; float: left;" class="logo" alt="img" src="images/logo.png" width="240">
-            <a href="#settingPage" data-transition="slide" style="margin-left: 10px; margin-top: 10px; margin-bottom: 15px; float: left;" class="ui-btn header-button-right ui-btn-icon-right ui-btn-icon-notext ui-shadow ui-corner-all ui-icon-gear"></a>
+            <a href="#home"><img style="margin-left: 5px; margin-top: 5px; margin-bottom: 5px; float: left; background:transparent; border:none;" alt="img" src="images/Menu_24x24.png"></a>
+            <img style="margin-left: 40%; margin-top: 5px; margin-bottom: 5px; float: left; height:40px; width:77px;" alt="img" src="images/Logo106x55_branco.png">
         </div>
         <div role="main" class="ui-content">
             <ul id="listApproveHours" class="touch" data-role="listview" data-filter="true" data-filter-placeholder="" data-split-theme="c" data-split-icon="check"></ul>
@@ -224,9 +215,8 @@
     <!-- Ausência page -->
     <div id="faultPage" data-role="page" data-mini="true">
         <div data-role="header" data-theme="a" data-position="fixed" data-tap-toggle="false">
-            <a href="#home" data-rel="back" style="margin-left: 10px; margin-top: 10px; margin-bottom: 15px; float: left;" class="ui-btn-left ui-btn ui-icon-home ui-btn-icon-notext ui-shadow ui-corner-all" data-role="button" role="button">Home</a>
-            <img style="margin-left: 70px; margin-top: 10px; margin-bottom: 15px; float: left;" class="logo" alt="img" src="images/logo.png" width="240">
-            <a href="#settingPage" data-transition="slide" style="margin-left: 10px; margin-top: 10px; margin-bottom: 15px; float: left;" class="ui-btn header-button-right ui-btn-icon-right ui-btn-icon-notext ui-shadow ui-corner-all ui-icon-gear"></a>
+            <a href="#home"><img style="margin-left: 5px; margin-top: 5px; margin-bottom: 5px; float: left; background:transparent; border:none;" alt="img" src="images/Menu_24x24.png"></a>
+            <img style="margin-left: 40%; margin-top: 5px; margin-bottom: 5px; float: left; height:40px; width:77px;" alt="img" src="images/Logo106x55_branco.png">
         </div>
         <div role="main" class="ui-content">
             <h3 id="labelHourAditional">Minhas Ausências</h3>
@@ -243,11 +233,11 @@
     </div>
 
     <!-- Ausência page -->
-    <div id="faultAddPage" data-role="page" data-mini="true"> <!--class="backfault">-->
+    <div id="faultAddPage" data-role="page" data-mini="true">
+        <!--class="backfault">-->
         <div data-role="header" data-theme="a" data-position="fixed" data-tap-toggle="false">
-            <a href="#home" data-rel="back" style="margin-left: 10px; margin-top: 10px; margin-bottom: 15px; float: left;" class="ui-btn-left ui-btn ui-icon-home ui-btn-icon-notext ui-shadow ui-corner-all" data-role="button" role="button">Home</a>
-            <img style="margin-left: 70px; margin-top: 10px; margin-bottom: 15px; float: left;" class="logo" alt="img" src="images/logo.png" width="240">
-            <a href="#settingPage" data-transition="slide" style="margin-left: 10px; margin-top: 10px; margin-bottom: 15px; float: left;" class="ui-btn header-button-right ui-btn-icon-right ui-btn-icon-notext ui-shadow ui-corner-all ui-icon-gear"></a>
+            <a href="#home"><img style="margin-left: 5px; margin-top: 5px; margin-bottom: 5px; float: left; background:transparent; border:none;" alt="img" src="images/Menu_24x24.png"></a>
+            <img style="margin-left: 40%; margin-top: 5px; margin-bottom: 5px; float: left; height:40px; width:77px;" alt="img" src="images/Logo106x55_branco.png">
         </div>
         <div role="main" class="ui-content">
             <h3 id="labelFault">Ausência</h3>
@@ -276,9 +266,8 @@
     <!-- Ajustes page -->
     <div id="settingPage" data-role="page" data-mini="true">
         <div data-role="header" data-theme="a" data-position="fixed" data-tap-toggle="false">
-            <a href="#home" data-rel="back" style="margin-left: 10px; margin-top: 10px; margin-bottom: 15px; float: left;" class="ui-btn-left ui-btn ui-icon-home ui-btn-icon-notext ui-shadow ui-corner-all" data-role="button" role="button">Home</a>
-            <img style="margin-left: 70px; margin-top: 10px; margin-bottom: 15px; float: left;" class="logo" alt="img" src="images/logo.png" width="240">
-            <a href="#settingPage" data-transition="slide" style="margin-left: 10px; margin-top: 10px; margin-bottom: 15px; float: left;" class="ui-btn header-button-right ui-btn-icon-right ui-btn-icon-notext ui-shadow ui-corner-all ui-icon-gear"></a>
+            <a href="#home"><img style="margin-left: 5px; margin-top: 5px; margin-bottom: 5px; float: left; background:transparent; border:none;" alt="img" src="images/Menu_24x24.png"></a>
+            <img style="margin-left: 40%; margin-top: 5px; margin-bottom: 5px; float: left; height:40px; width:77px;" alt="img" src="images/Logo106x55_branco.png">
         </div>
         <div role="main" class="ui-content">
             <p><span id="labelIS">ID colaborador:</span></p>
@@ -299,6 +288,18 @@
         </div>
     </div>
 
+    <div id="aboutPage" data-role="page" data-mini="true">
+        <div data-role="header" data-theme="a" data-position="fixed" data-tap-toggle="false">
+            <a href="#home"><img style="margin-left: 5px; margin-top: 5px; margin-bottom: 5px; float: left; background:transparent; border:none;" alt="img" src="images/Menu_24x24.png"></a>
+            <img style="margin-left: 40%; margin-top: 5px; margin-bottom: 5px; float: left; height:40px; width:77px;" alt="img" src="images/Logo106x55_branco.png">
+        </div>
+        <div role="main" class="ui-content">
+            <p>Version: 1.0 - Module Online</p>
+            <p>Notes:</p>
+            <p>This application is for Softtek employees realize their appointments of hours.</p>
+            <p><a class="ui-btn ui-icon-mail ui-btn-icon-left" href="mailto:gustavo.denis@softtek.com">Support!</a></p>
+        </div>
+    </div>
     <script src="cordova.js"></script>
     <script src="scripts/jquery-1.11.2.min.js"></script>
     <script src="scripts/jquery.mobile-1.4.5.js"></script>
