@@ -12,7 +12,7 @@
   </author>
   <content src="index.html" />
   <access origin="*" />
-  <preference name="phonegap-version" value="3.6.3" />
+  <preference name="phonegap-version" value="3.7.0" />
   <preference name="splashScreen" value="screen" />
   <preference name="fullscreen" value="true" />
   <preference name="orientation" value="portrait" />
