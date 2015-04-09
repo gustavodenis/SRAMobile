@@ -132,7 +132,6 @@ stkApp.prototype = function () {
             deleteFault(listitem, transition);
         });
 
-
         if (!$.mobile.support.touch) {
             $("#listHours").removeClass("touch");
             $("#listHours li.btnDelHN").on("click", function () {
@@ -666,8 +665,10 @@ stkApp.prototype = function () {
             $('#ddlWeek, #ddlWeekAditional').append("<option value=" + Weeks[index].WeekNumber + ">" + Weeks[index].WeekNumber + ' - ' + Weeks[index].DateStartWeek + ' - ' + Weeks[index].DateFinishWeek + "</option>");
             lastWeek = index;
         });
-        firstWeekDisp = Weeks[0].DateStartWeek;
-        lastWeekDisp = Weeks[lastWeek].DateFinishWeek;
+        if (Weeks.length > 0) {
+            firstWeekDisp = Weeks[0].DateStartWeek;
+            lastWeekDisp = Weeks[lastWeek].DateFinishWeek;
+        }
     },
 
     MountActivityCombo = function MountActivityCombo() {
@@ -1892,12 +1893,9 @@ function TestConnectivity() {
 }
 
 function MountURLWS(operation) {
-    //return 'http://intrasoft.softtek.com:8081/wsSRAPDK/cResourceHours.asmx?op=' + operation;
-    return 'http://srvspg30.softtek.com.br:8050/wssra/cresourcehours.asmx?op=' + operation;
-    //return 'http://172.16.128.71:8028/wsSRAPDK2/cResourceHours.asmx?op=' + operation;
+    return 'http://istkbr03338.softtek.com.br/wssra/cresourcehours.asmx?op=' + operation;
 }
 
 function MountURLSWSAbs(operation) {
-    return 'http://srvspg30.softtek.com.br:8050/wsAbsence/cService.asmx?op=' + operation;
-    //return 'http://172.16.128.71:8028/wsStkiAbsence/cService.asmx?op=' + operation;
+    return 'http://istkbr03338.softtek.com.br/wsAbsence/cService.asmx?op=' + operation;
 }
