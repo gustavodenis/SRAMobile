@@ -1467,6 +1467,18 @@ stkApp.prototype = function () {
         }
     },
 
+    ShowError = function ShowError(msg)
+    {
+        if (onLinePhone)
+            alert(msg);
+        else {
+            if(!AlertOffline)
+                alert(getMsgLang(langPref, 'ErrorOnline'));
+
+            AlertOffline = true;
+        }
+    },
+
     fauxAjax = function fauxAjax(func, text, thisObj) {
         $.mobile.loading('show', { theme: 'a', textVisible: true, text: text });
         window.setTimeout(function () {
@@ -1886,22 +1898,10 @@ function GetWeekDay(day) {
     }
 }
 
-function ShowError(msg)
-{
-    if (onLinePhone)
-        alert(msg);
-    else {
-        if(!AlertOffline)
-            alert(getMsgLang(langPref, 'ErrorOnline'));
-
-        AlertOffline = true;
-    }
-}
-
 function TestConnectivity() {
     $.ajax({
         type: "GET",
-        url: "http://istkbr03338.softtek.com.br/wssra/products.json",
+        url: "https://intrasoft.softtek.com/wssra/products.json", //url: "http://istkbr03338.softtek.com.br/wssra/products.json",
         dataType: "json",
         timeout: 5000
     }).done(function (data) {
@@ -1912,9 +1912,11 @@ function TestConnectivity() {
 }
 
 function MountURLWS(operation) {
-    return 'http://istkbr03338.softtek.com.br/wssra/cresourcehours.asmx?op=' + operation;
+    //return 'http://istkbr03338.softtek.com.br/wssra/cresourcehours.asmx?op=' + operation;
+    return 'https://intrasoft.softtek.com/wssra/cresourcehours.asmx?op=' + operation;
 }
 
 function MountURLSWSAbs(operation) {
-    return 'http://istkbr03338.softtek.com.br/wsAbsence/cService.asmx?op=' + operation;
+    //return 'http://istkbr03338.softtek.com.br/wsAbsence/cService.asmx?op=' + operation;
+    return 'https://intrasoft.softtek.com/wsabs/cService.asmx?op=' + operation;
 }
