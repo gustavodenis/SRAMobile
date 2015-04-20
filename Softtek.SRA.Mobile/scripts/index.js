@@ -1,4 +1,5 @@
 ﻿var onLinePhone = false;
+var AlertOffline = false;
 var stkApp = function () { }
 
 stkApp.prototype = function () {
@@ -36,6 +37,8 @@ stkApp.prototype = function () {
         $('#aditionalAddPage').on('pageshow', $.proxy(_initaditionalAddPage, that));
 
         ApplyLangStart();
+
+        TestConnectivity();
 
         if (window.localStorage.getItem("userInfo") != null) {
             _login = true;
@@ -105,7 +108,7 @@ stkApp.prototype = function () {
                             }
                         })
                         .fail(function (jqXHR, textStatus, errorThrown) {
-                            alert(getMsgLang(langPref, 'ErrorAjax'));
+                            ShowError(getMsgLang(langPref, 'ErrorAjax'));
                         });
                     }, getMsgLang(langPref, 'Authenticating'), this);
                 }
@@ -177,7 +180,7 @@ stkApp.prototype = function () {
                     }
                 })
                 .fail(function (jqXHR, textStatus, errorThrown) {
-                    alert(getMsgLang(langPref, 'ErrorAjax'));
+                    ShowError(getMsgLang(langPref, 'ErrorAjax'));
                 });
             }, getMsgLang(langPref, 'Loading'), this);
         });
@@ -282,7 +285,7 @@ stkApp.prototype = function () {
                         alert($(data).find('addRecordHoraRecursoMobileResult').text());
                 })
                 .fail(function (jqXHR, textStatus, errorThrown) {
-                    alert(getMsgLang(langPref, 'ErrorAjax'));
+                    ShowError(getMsgLang(langPref, 'ErrorAjax'));
                 });
             }
         });
@@ -385,7 +388,7 @@ stkApp.prototype = function () {
                         alert($(data).find('addRecordHoraRecursoMobileResult').text());
                 })
                 .fail(function (jqXHR, textStatus, errorThrown) {
-                    alert(getMsgLang(langPref, 'ErrorAjax'));
+                    ShowError(getMsgLang(langPref, 'ErrorAjax'));
                 });
             }
         });
@@ -457,7 +460,7 @@ stkApp.prototype = function () {
                     alert(($(data).find('setInsertOrderMobileResult').text() == 'Sucesso!' ? getMsgLang(langPref, 'DataSaveSuccess') : $(data).find('setInsertOrderMobileResult').text()));
                 })
                 .fail(function (jqXHR, textStatus, errorThrown) {
-                    alert(getMsgLang(langPref, 'ErrorAjax'));
+                    ShowError(getMsgLang(langPref, 'ErrorAjax'));
                 });
             }
         });
@@ -533,7 +536,7 @@ stkApp.prototype = function () {
                 LoadApproveGrid();
             })
             .fail(function (jqXHR, textStatus, errorThrown) {
-                alert(getMsgLang(langPref, 'ErrorAjax'));
+                ShowError(getMsgLang(langPref, 'ErrorAjax'));
             });
         });
 
@@ -567,6 +570,7 @@ stkApp.prototype = function () {
             body += '<getRangeSRADaysMobile xmlns="http://tempuri.org/">';
             body += '<strSegmentId>' + IdSegment + '</strSegmentId>';
             body += '<intWeek>-666</intWeek>'; // -666 traz todas disponíveis;
+            body += '<strFuncIS>' + FuncIS + '</strFuncIS>';
             body += '</getRangeSRADaysMobile>';
             body += "</soap12:Body>";
             var envelope = getEnvelope(body);
@@ -584,7 +588,7 @@ stkApp.prototype = function () {
                 MountWeekCombo();
             })
             .fail(function (jqXHR, textStatus, errorThrown) {
-                alert(getMsgLang(langPref, 'ErrorAjax'));
+                ShowError(getMsgLang(langPref, 'ErrorAjax'));
             });
         }
         else {
@@ -614,7 +618,7 @@ stkApp.prototype = function () {
                 MountActivityCombo();
             })
             .fail(function (jqXHR, textStatus, errorThrown) {
-                alert(getMsgLang(langPref, 'ErrorAjax'));
+                ShowError(getMsgLang(langPref, 'ErrorAjax'));
             });
         }
         else {
@@ -651,7 +655,7 @@ stkApp.prototype = function () {
                 window.localStorage.setItem("colabInfo", JSON.stringify(colabdata));
             })
             .fail(function (jqXHR, textStatus, errorThrown) {
-                alert(getMsgLang(langPref, 'ErrorAjax'));
+                ShowError(getMsgLang(langPref, 'ErrorAjax'));
             });
         }
     },
@@ -742,7 +746,7 @@ stkApp.prototype = function () {
                     }
                 })
                 .fail(function (jqXHR, textStatus, errorThrown) {
-                    alert(getMsgLang(langPref, 'ErrorAjax'));
+                    ShowError(getMsgLang(langPref, 'ErrorAjax'));
                 });
             }, getMsgLang(langPref, 'Deleting'), this);
         }
@@ -814,7 +818,7 @@ stkApp.prototype = function () {
                     }
                 })
                 .fail(function (jqXHR, textStatus, errorThrown) {
-                    alert(getMsgLang(langPref, 'ErrorAjax'));
+                    ShowError(getMsgLang(langPref, 'ErrorAjax'));
                 });
             }, getMsgLang(langPref, 'Deleting'), this);
         }
@@ -891,7 +895,7 @@ stkApp.prototype = function () {
                     });
                 })
                 .fail(function (jqXHR, textStatus, errorThrown) {
-                    alert(getMsgLang(langPref, 'ErrorAjax'));
+                    ShowError(getMsgLang(langPref, 'ErrorAjax'));
                 });
             }, getMsgLang(langPref, 'Loading'), this);
         }
@@ -988,7 +992,7 @@ stkApp.prototype = function () {
                     });
                 })
                 .fail(function (jqXHR, textStatus, errorThrown) {
-                    alert(getMsgLang(langPref, 'ErrorAjax'));
+                    ShowError(getMsgLang(langPref, 'ErrorAjax'));
                 });
             }, getMsgLang(langPref, 'Loading'), this);
         }
@@ -1071,7 +1075,7 @@ stkApp.prototype = function () {
                 });
             })
             .fail(function (jqXHR, textStatus, errorThrown) {
-                alert(getMsgLang(langPref, 'ErrorAjax'));
+                ShowError(getMsgLang(langPref, 'ErrorAjax'));
             });
         }, getMsgLang(langPref, 'Loading'), this);
     },
@@ -1143,7 +1147,7 @@ stkApp.prototype = function () {
                 });
             })
             .fail(function (jqXHR, textStatus, errorThrown) {
-                alert(getMsgLang(langPref, 'ErrorAjax'));
+                ShowError(getMsgLang(langPref, 'ErrorAjax'));
             });
         }, getMsgLang(langPref, 'Loading'), this);
     },
@@ -1302,7 +1306,7 @@ stkApp.prototype = function () {
                 MountActivityFaultCombo();
             })
             .fail(function (jqXHR, textStatus, errorThrown) {
-                alert(getMsgLang(langPref, 'ErrorAjax'));
+                ShowError(getMsgLang(langPref, 'ErrorAjax'));
             });
         }
         else {
@@ -1350,7 +1354,7 @@ stkApp.prototype = function () {
                 MountTypeofDiscountCombo();
             })
             .fail(function (jqXHR, textStatus, errorThrown) {
-                alert(getMsgLang(langPref, 'ErrorAjax'));
+                ShowError(getMsgLang(langPref, 'ErrorAjax'));
             });
         } else { MountTypeofDiscountCombo(); }
     },
@@ -1426,7 +1430,7 @@ stkApp.prototype = function () {
                     }
                 })
                 .fail(function (jqXHR, textStatus, errorThrown) {
-                    alert(getMsgLang(langPref, 'ErrorAjax'));
+                    ShowError(getMsgLang(langPref, 'ErrorAjax'));
                 });
             }, getMsgLang(langPref, 'Deleting'), this);
         }
@@ -1640,7 +1644,8 @@ var dictionarySTKMsg = {
             { "IdMsg": "DateWeekFinishInvalid", "Msg": "- Data Final não liberada para lançamento.\n" },
             { "IdMsg": "ValidMaxNormalHour", "Msg": "- Máximo 8 horas permitido.\n" },
             { "IdMsg": "ValidMaxAditionalHour", "Msg": "- Máximo 16 horas permitido.\n" },
-            { "IdMsg": "ErrorLogin", "Msg": "Usuário ou senha inválidos!" }
+            { "IdMsg": "ErrorLogin", "Msg": "Usuário ou senha inválidos!" },
+            { "IdMsg": "ErrorOnline", "Msg": "Você está sem conexão!" }
         ],
         "EN": [
             { "IdMsg": "Loading", "Msg": "Loading..." },
@@ -1680,7 +1685,8 @@ var dictionarySTKMsg = {
             { "IdMsg": "DateWeekFinishInvalid", "Msg": "- Finish Date don´t avaliable.\n" },
             { "IdMsg": "ValidMaxNormalHour", "Msg": "- Max 8 hours allowed.\n" },
             { "IdMsg": "ValidMaxAditionalHour", "Msg": "- Max 16 hours allowed.\n" },
-            { "IdMsg": "ErrorLogin", "Msg": "Invalid user or password!" }
+            { "IdMsg": "ErrorLogin", "Msg": "Invalid user or password!" },
+            { "IdMsg": "ErrorOnline", "Msg": "You´re offline!" }
         ],
         "ES": [
             { "IdMsg": "Loading", "Msg": "Carregando..." },
@@ -1720,7 +1726,8 @@ var dictionarySTKMsg = {
             { "IdMsg": "DateWeekFinishInvalid", "Msg": "- Fecha Final sin despachar para la liberación.\n" },
             { "IdMsg": "ValidMaxNormalHour", "Msg": "- Máximo 8 horas permitido.\n" },
             { "IdMsg": "ValidMaxAditionalHour", "Msg": "- Máximo 16 horas permitido.\n" },
-            { "IdMsg": "ErrorLogin", "Msg": "Usuário o contraseña no válidos!" }
+            { "IdMsg": "ErrorLogin", "Msg": "Usuário o contraseña no válidos!" },
+            { "IdMsg": "ErrorOnline", "Msg": "Usted no se ha conectado!" }
         ]
     }
 };
@@ -1879,10 +1886,22 @@ function GetWeekDay(day) {
     }
 }
 
+function ShowError(msg)
+{
+    if (onLinePhone)
+        alert(msg);
+    else {
+        if(!AlertOffline)
+            alert(getMsgLang(langPref, 'ErrorOnline'));
+
+        AlertOffline = true;
+    }
+}
+
 function TestConnectivity() {
     $.ajax({
         type: "GET",
-        url: "http://shopname.myshopify.com/products.json",
+        url: "http://istkbr03338.softtek.com.br/wssra/products.json",
         dataType: "json",
         timeout: 5000
     }).done(function (data) {

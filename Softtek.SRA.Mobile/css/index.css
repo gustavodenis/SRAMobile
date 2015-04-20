@@ -57,7 +57,6 @@ body { }
 .ui-overlay-a, .ui-page-theme-a, .ui-panel-wrapper {
     color: #000;
     text-shadow: 0px 1px 0px #fff;
-    background: url("images/backmenu480.png") no-repeat center center fixed;
 }
 
 .ui-header .ui-btn,
