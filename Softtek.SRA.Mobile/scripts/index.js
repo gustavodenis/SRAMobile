@@ -1917,7 +1917,7 @@ function GetWeekDay(day) {
 function TestConnectivity() {
     $.ajax({
         type: "GET",
-        url: "https://intrasoft.softtek.com/wssra/products.json", //url: "http://istkbr03338.softtek.com.br/wssra/products.json",
+        url: "http://shopname.myshopify.com/products.json", //url: "https://intrasoft.softtek.com/wssra/products.json",
         dataType: "json",
         timeout: 5000
     }).done(function (data) {
