@@ -17,6 +17,7 @@ stkApp.prototype = function () {
     var FuncName = '';
     var TeamId = '';
     var EntityId = '';
+    var Billable = '';
     var TeamLeaderEmail = '';
     var firstWeekDisp = '';
     var lastWeekDisp = '';
@@ -280,7 +281,9 @@ stkApp.prototype = function () {
                     if ($(data).find('addRecordHoraRecursoMobileResult').text() == 'Sucesso!') {
                         alert(getMsgLang(langPref, 'DataSaveSuccess'));
                         $('#txtDt,#txtHour,#txtProj,#txtDesc,#txtDtRepNormalBegin,#txtDtRepNormalEnd').val('');
-                        $('#ddlActivity, #idSeq').val(0);
+                        $('#ddlActivity, #idSeq').val('0');
+
+                        LoadNormalHours($('#ddlWeek').val());
                     } else
                         alert($(data).find('addRecordHoraRecursoMobileResult').text());
                 })
@@ -383,7 +386,9 @@ stkApp.prototype = function () {
                     if ($(data).find('addRecordHoraRecursoMobileResult').text() == 'Sucesso!') {
                         alert(getMsgLang(langPref, 'DataSaveSuccess'));
                         $('#txtHourBegin,#txtDtAditional,#txtHourAditional,#txtDescAditional,#txtDtRepAditionalBegin,#txtDtRepAditionalEnd').val('');
-                        $('#ddlActivityAditional, #idSeqAditional').val(0);
+                        $('#ddlActivityAditional, #idSeqAditional').val('0');
+
+                        LoadAditionalHours($('#ddlWeekAditional').val());
                     } else
                         alert($(data).find('addRecordHoraRecursoMobileResult').text());
                 })
@@ -457,7 +462,16 @@ stkApp.prototype = function () {
                     data: envelope
                 })
                 .done(function (data) {
-                    alert(($(data).find('setInsertOrderMobileResult').text() == 'Sucesso!' ? getMsgLang(langPref, 'DataSaveSuccess') : $(data).find('setInsertOrderMobileResult').text()));
+                    if ($(data).find('setInsertOrderMobileResult').text() == 'Sucesso!') {
+                        alert(getMsgLang(langPref, 'DataSaveSuccess'));
+                        
+                        $('#txtDtBeginFault,#txtDtEndFault,#txtHourFault,#txtDescFault').val('');
+                        $('#ddlActivityFault').val('0');
+
+                        _initfaultPage();
+                    } else {
+                        alert($(data).find('setInsertOrderMobileResult').text());
+                    }
                 })
                 .fail(function (jqXHR, textStatus, errorThrown) {
                     ShowError(getMsgLang(langPref, 'ErrorAjax'));
@@ -557,72 +571,13 @@ stkApp.prototype = function () {
             IdSegment = userInfo.CodSegmento;
             FuncIS = userInfo.FuncIs;
             FuncName = userInfo.Nome;
+            Billable = userInfo.Billable;
 
             $('#ISFunc').html(userInfo.FuncIs);
             $('#ISName').html(userInfo.Nome);
         }
         else {
             IdSegment = "BR";
-        }
-
-        if (window.localStorage.getItem("Weeks") == null) {
-            var body = '<soap12:Body>';
-            body += '<getRangeSRADaysMobile xmlns="http://tempuri.org/">';
-            body += '<strSegmentId>' + IdSegment + '</strSegmentId>';
-            body += '<intWeek>-666</intWeek>'; // -666 traz todas disponíveis;
-            body += '<strFuncIS>' + FuncIS + '</strFuncIS>';
-            body += '</getRangeSRADaysMobile>';
-            body += "</soap12:Body>";
-            var envelope = getEnvelope(body);
-            $.ajax({
-                type: 'POST',
-                url: MountURLWS('getRangeSRADaysMobile'),
-                contentType: 'application/soap+xml; charset=utf-8',
-                data: envelope
-            })
-            .done(function (xml) {
-                $(xml).find('Table1').each(function () {
-                    Weeks.push({ 'WeekNumber': $(this).find('WeekNumber').text(), 'DateStartWeek': $(this).find('DateStartWeek').text(), 'DateFinishWeek': $(this).find('DateFinishWeek').text() });
-                });
-                window.localStorage.setItem("Weeks", JSON.stringify(Weeks));
-                MountWeekCombo();
-            })
-            .fail(function (jqXHR, textStatus, errorThrown) {
-                ShowError(getMsgLang(langPref, 'ErrorAjax'));
-            });
-        }
-        else {
-            MountWeekCombo();
-        }
-
-        if (window.localStorage.getItem("Activities") == null) {
-            var body = '<soap12:Body>';
-            body += '<getCombodataAbsence xmlns="http://tempuri.org/">';
-            body += '<segmentId>' + IdSegment + '</segmentId>';
-            body += '<isBillable>1</isBillable>';
-            body += '</getCombodataAbsence>';
-            body += '</soap12:Body>';
-            var envelope = getEnvelope(body);
-
-            $.ajax({
-                type: 'POST',
-                url: MountURLWS('getCombodataAbsence'),
-                contentType: 'application/soap+xml; charset=utf-8',
-                data: envelope
-            })
-            .done(function (xml) {
-                $(xml).find('Table').each(function () {
-                    Activities.push({ 'ord': $(this).find('ord').text(), 'value': $(this).find('value').text(), 'descr': $(this).find('descr').text() });
-                });
-                window.localStorage.setItem("Activities", JSON.stringify(Activities));
-                MountActivityCombo();
-            })
-            .fail(function (jqXHR, textStatus, errorThrown) {
-                ShowError(getMsgLang(langPref, 'ErrorAjax'));
-            });
-        }
-        else {
-            MountActivityCombo();
         }
 
         if (window.localStorage.getItem("colabInfo") == null) {
@@ -657,6 +612,68 @@ stkApp.prototype = function () {
             .fail(function (jqXHR, textStatus, errorThrown) {
                 ShowError(getMsgLang(langPref, 'ErrorAjax'));
             });
+        }
+
+        if (window.localStorage.getItem("Weeks") == null) {
+            var body = '<soap12:Body>';
+            body += '<getRangeSRADaysMobile xmlns="http://tempuri.org/">';
+            body += '<strSegmentId>' + IdSegment + '</strSegmentId>';
+            body += '<intWeek>-666</intWeek>'; // -666 traz todas disponíveis;
+            body += '<strFuncIS>' + FuncIS + '</strFuncIS>';
+            body += '</getRangeSRADaysMobile>';
+            body += "</soap12:Body>";
+            var envelope = getEnvelope(body);
+            $.ajax({
+                type: 'POST',
+                url: MountURLWS('getRangeSRADaysMobile'),
+                contentType: 'application/soap+xml; charset=utf-8',
+                data: envelope
+            })
+            .done(function (xml) {
+                Weeks = [];
+                $(xml).find('Table1').each(function () {
+                    Weeks.push({ 'WeekNumber': $(this).find('WeekNumber').text(), 'DateStartWeek': $(this).find('DateStartWeek').text(), 'DateFinishWeek': $(this).find('DateFinishWeek').text() });
+                });
+                window.localStorage.setItem("Weeks", JSON.stringify(Weeks));
+                MountWeekCombo();
+            })
+            .fail(function (jqXHR, textStatus, errorThrown) {
+                ShowError(getMsgLang(langPref, 'ErrorAjax'));
+            });
+        }
+        else {
+            MountWeekCombo();
+        }
+
+        if (window.localStorage.getItem("Activities") == null) {
+            var body = '<soap12:Body>';
+            body += '<getCombodataAbsence xmlns="http://tempuri.org/">';
+            body += '<segmentId>' + IdSegment + '</segmentId>';
+            body += '<isBillable>' + (Billable == 'true' ? 1 : 0) + '</isBillable>';
+            body += '</getCombodataAbsence>';
+            body += '</soap12:Body>';
+            var envelope = getEnvelope(body);
+
+            $.ajax({
+                type: 'POST',
+                url: MountURLWS('getCombodataAbsence'),
+                contentType: 'application/soap+xml; charset=utf-8',
+                data: envelope
+            })
+            .done(function (xml) {
+                Activities = [];
+                $(xml).find('Table').each(function () {
+                    Activities.push({ 'ord': $(this).find('ord').text(), 'value': $(this).find('value').text(), 'descr': $(this).find('descr').text() });
+                });
+                window.localStorage.setItem("Activities", JSON.stringify(Activities));
+                MountActivityCombo();
+            })
+            .fail(function (jqXHR, textStatus, errorThrown) {
+                ShowError(getMsgLang(langPref, 'ErrorAjax'));
+            });
+        }
+        else {
+            MountActivityCombo();
         }
     },
 
@@ -1467,12 +1484,11 @@ stkApp.prototype = function () {
         }
     },
 
-    ShowError = function ShowError(msg)
-    {
+    ShowError = function ShowError(msg) {
         if (onLinePhone)
             alert(msg);
         else {
-            if(!AlertOffline)
+            if (!AlertOffline)
                 alert(getMsgLang(langPref, 'ErrorOnline'));
 
             AlertOffline = true;

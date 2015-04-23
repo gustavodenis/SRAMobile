@@ -25,12 +25,12 @@ body { }
 #aboutPage .ui-link { border: none; background-color:transparent; }
 
 .ui-icon-home-menu:after { background-image: url("../images/Menu_24x24.png"); }
-.ui-li-icon-normal { background-image: url("../images/HorasNormais-24x24.png"); }
+/*.ui-li-icon-normal { background-image: url("../images/HorasNormais-24x24.png"); }
 .ui-li-icon-aditional { background-image: url("../images/HorasAdicionais_24x24.png"); }
 .ui-li-icon-absence { background-image: url("../images/Ausencia_24x24.png"); }
 .ui-li-icon-approve { background-image: url("../images/Aprovar_24x24.png"); }
 .ui-li-icon-setting { background-image: url("../images/Ajustes_24X24.png"); }
-.ui-li-icon-about { background-image: url("../images/Informacoes_24x24.png"); }
+.ui-li-icon-about { background-image: url("../images/Informacoes_24x24.png"); }*/
 
 .content {margin-top: 15px;}
 .footer { margin-top: -30px; }
