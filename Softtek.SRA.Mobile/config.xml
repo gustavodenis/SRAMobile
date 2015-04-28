@@ -45,7 +45,7 @@
   <gap:platform name="winphone" />
 
   <icon src="images/icon.png" />
-  <!-- 64x64 -->
+  <gap:splash src="images/splash.png" />
 
   <platform name="android">
     <icon src="App_Resources/Android/drawable-ldpi/icon.png"          gap:platform="android"  gap:qualifier="ldpi" />
