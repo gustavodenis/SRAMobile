@@ -1801,6 +1801,8 @@ var dictionarySTKControls = {
             { "Controle": "label_Lang", "Label": "Idioma:" },
             { "Controle": "label_Platform", "Label": "Plataforma:" },
             { "Controle": "btnLogoff", "Label": "Sair" },
+            { "Controle": "configs", "Label": "Configurações" },
+            { "Controle": "about", "Label": "Sobre" },
             { "Controle": "labelApprovation", "Label": "Aprovação" }
         ],
         "EN": [
@@ -1842,6 +1844,8 @@ var dictionarySTKControls = {
             { "Controle": "label_Lang", "Label": "Language:" },
             { "Controle": "label_Platform", "Label": "Plataform:" },
             { "Controle": "btnLogoff", "Label": "Logoff" },
+            { "Controle": "configs", "Label": "Settings" },
+            { "Controle": "about", "Label": "About" },
             { "Controle": "labelApprovation", "Label": "Approvation" }
         ],
         "ES": [
@@ -1883,6 +1887,8 @@ var dictionarySTKControls = {
             { "Controle": "label_Lang", "Label": "Lengua:" },
             { "Controle": "label_Platform", "Label": "Plataforma:" },
             { "Controle": "btnLogoff", "Label": "Desconectar" },
+            { "Controle": "configs", "Label": "Ajustes" },
+            { "Controle": "about", "Label": "Sobre" },
             { "Controle": "labelApprovation", "Label": "Aprobacion" }
         ]
     }

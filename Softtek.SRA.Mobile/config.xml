@@ -82,7 +82,7 @@
     <!-- iPhone 6 / 6+ -->
     <icon src="App_Resources/iOS/icon-60.png"                          width="60" height="60" />
     <!-- iPhone / iPod Touch  -->
-    <icon src="App_Resources/iOS/icon-60@2x.png"                       width="120" height="120" />
+    <icon src="App_Resources/iOS/Icon-Small-60@2x.png"                 width="120" height="120" />
     <!-- iPhone / iPod Touch  -->
     <icon src="App_Resources/iOS/icon-76.png"                          width="76" height="76" />
     <!-- iPad -->
