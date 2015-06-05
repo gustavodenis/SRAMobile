@@ -12,7 +12,7 @@ stkApp.prototype = function () {
     var Activities = [];
     var TypeofDiscount = [];
     var IdSegment = '';
-    var langPref = '';
+    var langPref = 'PT';
     var FuncIS = '';
     var FuncName = '';
     var TeamId = '';
@@ -37,8 +37,10 @@ stkApp.prototype = function () {
         $('#normalAddPage').on('pageshow', $.proxy(_initnormalAddPage, that));
         $('#aditionalAddPage').on('pageshow', $.proxy(_initaditionalAddPage, that));
 
-        ApplyLangStart();
+        //Reset all mondays
+        _clearOffData();
 
+        ApplyLangStart();
         TestConnectivity();
 
         if (window.localStorage.getItem("userInfo") != null) {
@@ -53,7 +55,7 @@ stkApp.prototype = function () {
         $('.ForceNumeric').ForceNumericOnly();
 
         $('#btnLogoff').on('click', function () {
-            window.localStorage.clear();
+            _clearOffData();
             $.mobile.changePage('#logon', { transition: 'flip' });
         });
 
@@ -193,7 +195,7 @@ stkApp.prototype = function () {
 
         $('#btnAddNormalHour').on('click', function () {
             var Dt = $('#txtDt').val();
-            var Hour = $('#txtHour').val();
+            var Hour = $('#txtHour').val().replace(',','.');
             var Proj = $('#txtProj').val().toUpperCase();
             var Activity = $('#ddlActivity  option:selected').val();
             var Desc = $('#txtDesc').val();
@@ -296,7 +298,7 @@ stkApp.prototype = function () {
         $('#btnAddAditionalHour').on('click', function () {
             var HourBegin = $('#txtHourBegin').val();
             var Dt = $('#txtDtAditional').val();
-            var Hour = $('#txtHourAditional').val();
+            var Hour = $('#txtHourAditional').val().replace(',', '.');
             var Activity = $('#ddlActivityAditional option:selected').val();
             var Desc = $('#txtDescAditional').val();
             var DtRepBegin = $('#txtDtRepAditionalBegin').val();
@@ -401,7 +403,7 @@ stkApp.prototype = function () {
         $('#btnSaveFaultHours').on('click', function () {
             var DtBegin = $('#txtDtBeginFault').val();
             var DtEnd = $('#txtDtEndFault').val();
-            var Hour = $('#txtHourFault').val();
+            var Hour = $('#txtHourFault').val().replace(',', '.');
             var Activity = $('#ddlActivityFault option:selected').val();
             var TypeofActivity = $('#ddlActivityFault option:selected').attr('typeofact');
             var Desc = $('#txtDescFault').val().RemoveEspecialCharacter();
@@ -557,6 +559,21 @@ stkApp.prototype = function () {
         $(document).on("swiperight", "#label_DevName", function (event) {
             alert('Developed by: Gustavo Denis \nSofttek Brazil - Application Developer Team');
         });
+    },
+
+    _clearOffData = function () {
+        var dt = new Date();
+        if (dt.getDay() == 1) {
+            aLancamentos = [];
+            aLancamentosAditional = [];
+            aAbsence = [];
+            AcitivityFaults = [];
+            Weeks = [];
+            Activities = [];
+            TypeofDiscount = [];
+            window.localStorage.clear();
+            _login = false;
+        }
     },
 
     _initHome = function () {
@@ -1404,6 +1421,11 @@ stkApp.prototype = function () {
     },
 
     deleteFault = function deleteFault(listitem, transition) {
+        if (listitem.attr('Validado') == 'true') {
+            alert(getMsgLang(langPref, 'RegValidated'));
+            return;
+        }
+
         listitem.children(".ui-btn").addClass("ui-btn-active");
 
         if (confirm(getMsgLang(langPref, 'ConfirmDelete'))) {
