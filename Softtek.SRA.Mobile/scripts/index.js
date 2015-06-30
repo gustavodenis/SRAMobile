@@ -1510,12 +1510,12 @@ stkApp.prototype = function () {
     ShowError = function ShowError(msg) {
         if (onLinePhone)
             alert(msg);
-        //else {
-        //    if (!AlertOffline)
-        //        alert(getMsgLang(langPref, 'ErrorOnline'));
+        else {
+            if (!AlertOffline)
+                alert(getMsgLang(langPref, 'ErrorOnline'));
 
-        //    AlertOffline = true;
-        //}
+            AlertOffline = true;
+        }
     },
 
     fauxAjax = function fauxAjax(func, text, thisObj) {
@@ -1787,6 +1787,7 @@ var dictionarySTKControls = {
     "lang": {
         "PT": [
             { "Controle": "hrNormal", "Label": "Normal" },
+            { "Controle": "hrBusca", "Label": "Horas Lançadas" },            
             { "Controle": "hrAditional", "Label": "Adicionais" },
             { "Controle": "hrFault", "Label": "Ausência" },
             { "Controle": "hrAprover", "Label": "Aprovar" },
@@ -1798,8 +1799,6 @@ var dictionarySTKControls = {
             { "Controle": "labelHours", "Label": "Hora:" },
             { "Controle": "labelHourNormal", "Label": "Horas Normais" },
             { "Controle": "labelWeek", "Label": "Semana:" },
-            { "Controle": "btnAddHours", "Label": "Adicionar" },
-            { "Controle": "btnCancelHour", "Label": "Cancelar" },
             { "Controle": "labelProject", "Label": "Projeto:" },
             { "Controle": "labelAcitivity", "Label": "Atividade" },
             { "Controle": "labelDescription", "Label": "Descrição" },
@@ -1807,8 +1806,6 @@ var dictionarySTKControls = {
             { "Controle": "btnAddNormalHour", "Label": "Salvar" },
             { "Controle": "btnCancelNormalHour", "Label": "Cancelar" },
             { "Controle": "labelHourAditional", "Label": "Horas Adicionais" },
-            { "Controle": "btnAddAditionalHours", "Label": "Adicionar" },
-            { "Controle": "btnCancelHour", "Label": "Cancelar" },
             { "Controle": "labelDate", "Label": "Data:" },
             { "Controle": "labelHourBegin", "Label": "Hora Entrada:" },
             { "Controle": "btnAddAditionalHour", "Label": "Salvar" },
@@ -1830,6 +1827,7 @@ var dictionarySTKControls = {
         ],
         "EN": [
             { "Controle": "hrNormal", "Label": "Normal" },
+            { "Controle": "hrBusca", "Label": "Hours Inputed" },
             { "Controle": "hrAditional", "Label": "Aditional" },
             { "Controle": "hrFault", "Label": "Vacation" },
             { "Controle": "hrAprover", "Label": "Approve" },
@@ -1841,8 +1839,6 @@ var dictionarySTKControls = {
             { "Controle": "labelHours", "Label": "Hour:" },
             { "Controle": "labelHourNormal", "Label": "Normal Hours" },
             { "Controle": "labelWeek", "Label": "Week:" },
-            { "Controle": "btnAddHours", "Label": "Add" },
-            { "Controle": "btnCancelHour", "Label": "Cancel" },
             { "Controle": "labelProject", "Label": "Project:" },
             { "Controle": "labelAcitivity", "Label": "Activity" },
             { "Controle": "labelDescription", "Label": "Description" },
@@ -1850,8 +1846,6 @@ var dictionarySTKControls = {
             { "Controle": "btnAddNormalHour", "Label": "Save" },
             { "Controle": "btnCancelNormalHour", "Label": "Cancel" },
             { "Controle": "labelHourAditional", "Label": "Aditional Hours" },
-            { "Controle": "btnAddAditionalHours", "Label": "Add" },
-            { "Controle": "btnCancelHour", "Label": "Cancel" },
             { "Controle": "labelDate", "Label": "Date:" },
             { "Controle": "labelHourBegin", "Label": "Hour Entrance:" },
             { "Controle": "btnAddAditionalHour", "Label": "Save" },
@@ -1873,6 +1867,7 @@ var dictionarySTKControls = {
         ],
         "ES": [
             { "Controle": "hrNormal", "Label": "Normal" },
+            { "Controle": "hrBusca", "Label": "Horas Publicadas" },
             { "Controle": "hrAditional", "Label": "Adicional" },
             { "Controle": "hrFault", "Label": "Ausencia" },
             { "Controle": "hrAprover", "Label": "Aprobar" },
@@ -1884,8 +1879,6 @@ var dictionarySTKControls = {
             { "Controle": "labelHours", "Label": "Hora:" },
             { "Controle": "labelHourNormal", "Label": "Horas Normales" },
             { "Controle": "labelWeek", "Label": "Semana:" },
-            { "Controle": "btnAddHours", "Label": "Anãdir" },
-            { "Controle": "btnCancelHour", "Label": "Cancelar" },
             { "Controle": "labelProject", "Label": "Proyecto:" },
             { "Controle": "labelAcitivity", "Label": "Actividad" },
             { "Controle": "labelDescription", "Label": "Descripción" },
@@ -1893,8 +1886,6 @@ var dictionarySTKControls = {
             { "Controle": "btnAddNormalHour", "Label": "Guardar" },
             { "Controle": "btnCancelNormalHour", "Label": "Cancelar" },
             { "Controle": "labelHourAditional", "Label": "Horas Adicionales" },
-            { "Controle": "btnAddAditionalHours", "Label": "Anãdir" },
-            { "Controle": "btnCancelHour", "Label": "Cancelar" },
             { "Controle": "labelDate", "Label": "Fecha:" },
             { "Controle": "labelHourBegin", "Label": "Hora de llegada:" },
             { "Controle": "btnAddAditionalHour", "Label": "Guardar" },
