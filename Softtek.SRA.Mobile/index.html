@@ -25,8 +25,9 @@
         </div>
         <div role="main" class="ui-content">
             <ul data-role="listview" id="menuList" class="ui-listview" data-inset="true">
-                <li><a href="#normalPage" data-transition="slide"><img src="images/HorasNormais-24x24.png" alt="Horas Normais" class="ui-li-icon ui-corner-none"><span id="hrNormal">Horas Normais</span></a></li>
-                <li><a href="#aditionalPage" data-transition="slide"><img src="images/HorasAdicionais_24x24.png" alt="Horas Adicionais" class="ui-li-icon ui-corner-none"><span id="hrAditional">Horas Adicionais</span></a></li>
+                <li><a href="#searchPage" data-transition="slide"><img src="images/Lupa_32x32.png" alt="Busca" class="ui-li-icon ui-corner-none"><span id="hrBusca">Horas Lançadas</span></a></li>
+                <li><a href="#normalAddPage" data-transition="slide"><img src="images/HorasNormais-24x24.png" alt="Horas Normais" class="ui-li-icon ui-corner-none"><span id="hrNormal">Horas Normais</span></a></li>
+                <li><a href="#aditionalAddPage" data-transition="slide"><img src="images/HorasAdicionais_24x24.png" alt="Horas Adicionais" class="ui-li-icon ui-corner-none"><span id="hrAditional">Horas Adicionais</span></a></li>
                 <li><a href="#faultPage" data-transition="slide"><img src="images/Ausencia_24x24.png" alt="Ausência" class="ui-li-icon ui-corner-none"><span id="hrFault">Ausência</span></a></li>
                 <li><a href="#" id="hrAprove" data-transition="slide"><img src="images/Aprovar_24x24.png" alt="Aprovação" class="ui-li-icon ui-corner-none"><span id="hrAprover">Aprovação</span></a></li>
                 <li><a href="#configPage" data-transition="slide"><img src="images/Ajustes_32X32.png" alt="Configurações" class="ui-li-icon ui-corner-none"><span id="configs">Configurações</span></a></li>
@@ -52,25 +53,31 @@
     </div>
 
     <!-- Normal page -->
-    <div id="normalPage" data-role="page" data-mini="true">
+    <div id="searchPage" data-role="page" data-mini="true">
         <div data-role="header" data-theme="a" data-position="fixed" data-tap-toggle="false">
             <a href="#home"><img style="margin-left: 5px; margin-top: 5px; margin-bottom: 5px; float: left; background:transparent; border:none;" alt="img" src="images/Menu_24x24.png"></a>
             <img style="margin-left: 40%; margin-top: 5px; margin-bottom: 5px; float: left; height:40px; width:77px;" alt="img" src="images/Logo106x55_branco.png">
         </div>
         <div role="main" class="ui-content">
-            <h3 id="labelHourNormal">Horas Normais</h3>
-            <span id="labelWeek">Semana:</span>
-            <select name="ddlWeek" id="ddlWeek" class="ddlWeek" data-mini="true"></select>
-            <hr />
-            <ul id="listHours" class="touch" data-role="listview" data-icon="false" data-split-icon="edit"></ul>
-        </div>
-
-        <div data-role="footer" data-theme="b" data-position="fixed" data-tap-toggle="false">
-            <div data-role="navbar" data-iconpos="bottom">
-                <ul>
-                    <li><a id="btnAddHours" href="#normalAddPage" data-transition="pop" data-icon="plus">Adicionar</a></li>
-                    <li><a id="btnCancelHour" href="#" data-rel="back" data-transition="pop" data-icon="back">Cancelar</a></li>
-                </ul>
+            <div id="tabsSearch" data-role="tabs">
+                <div data-role="navbar">
+                    <ul>
+                        <li><a href="#normalSearch" data-theme="a" data-ajax="false"><span id="labelHourNormal">Normal</span></a></li>
+                        <li><a href="#aditionalSearch" data-theme="a" data-ajax="false"><span id="labelHourAditional">Adicional</span></a></li>
+                    </ul>
+                </div>
+                <div id="normalSearch" class="ui-content">
+                    <span id="labelWeek">Semana:</span>
+                    <select name="ddlWeek" id="ddlWeek" class="ddlWeek" data-mini="true"></select>
+                    <hr />
+                    <ul id="listHours" class="touch" data-role="listview" data-icon="false" data-split-icon="edit"></ul>
+                </div>
+                <div id="aditionalSearch" class="ui-content">
+                    <span id="labelWeek">Semana:</span>
+                    <select name="ddlWeekAditional" id="ddlWeekAditional" class="ddlWeek" data-mini="true"></select>
+                    <hr />
+                    <ul id="listAditionalHours" class="touch" data-role="listview" data-icon="false" data-split-icon="edit"></ul>
+                </div>
             </div>
         </div>
     </div>
@@ -115,33 +122,8 @@
         </div>
     </div>
 
-    <!-- Adicionais page -->
-    <div id="aditionalPage" data-role="page" data-mini="true">
-        <div data-role="header" data-theme="a" data-position="fixed" data-tap-toggle="false">
-            <a href="#home"><img style="margin-left: 5px; margin-top: 5px; margin-bottom: 5px; float: left; background:transparent; border:none;" alt="img" src="images/Menu_24x24.png"></a>
-            <img style="margin-left: 40%; margin-top: 5px; margin-bottom: 5px; float: left; height:40px; width:77px;" alt="img" src="images/Logo106x55_branco.png">
-        </div>
-        <div role="main" class="ui-content">
-            <h3 id="labelHourAditional">Horas Adicional</h3>
-            <span id="labelWeek">Semana:</span>
-            <select name="ddlWeekAditional" id="ddlWeekAditional" class="ddlWeek" data-mini="true"></select>
-            <hr />
-            <ul id="listAditionalHours" class="touch" data-role="listview" data-icon="false" data-split-icon="edit"></ul>
-        </div>
-        <div data-role="footer" data-theme="b" data-position="fixed" data-tap-toggle="false">
-            <div data-role="navbar" data-iconpos="bottom">
-                <ul>
-                    <li><a id="btnAddAditionalHours" href="#aditionalAddPage" data-transition="pop" data-icon="plus">Adicionar</a></li>
-                    <li><a id="btnCancelHour" href="#" data-rel="back" data-transition="pop" data-icon="back">Cancelar</a></li>
-                </ul>
-            </div>
-        </div>
-
-    </div>
-
     <!-- Aditional Add page -->
     <div id="aditionalAddPage" data-role="page" data-mini="true">
-        <!--class="backaditional">-->
         <div data-role="header" data-theme="a" data-position="fixed" data-tap-toggle="false">
             <a href="#home"><img style="margin-left: 5px; margin-top: 5px; margin-bottom: 5px; float: left; background:transparent; border:none;" alt="img" src="images/Menu_24x24.png"></a>
             <img style="margin-left: 40%; margin-top: 5px; margin-bottom: 5px; float: left; height:40px; width:77px;" alt="img" src="images/Logo106x55_branco.png">

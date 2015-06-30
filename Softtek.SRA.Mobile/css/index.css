@@ -1,5 +1,4 @@
 body { }
-
 #home { background: url("../images/backmenu480.png") no-repeat center center fixed;}
 #home .ui-listview { text-align: left; }
 #home .ui-listview .ui-btn { background-color:transparent;border: none;color: #fff;margin: 20px 20px 20px 20px;}
@@ -21,17 +20,18 @@ body { }
 #faultPage .ui-link { border: none; background-color:transparent; }
 #faultAddPage .ui-link { border: none; background-color:transparent; }
 #approvePage .ui-link { border: none; background-color:transparent; }
-#settingPage .ui-link { border: none; background-color:transparent; }
+#configPage .ui-link { border: none; background-color:transparent; }
+#searchPage .ui-link { border: none; background-color:transparent; }
 #aboutPage .ui-link { border: none; background-color:transparent; }
 
-.ui-icon-home-menu:after { background-image: url("../images/Menu_24x24.png"); }
-/*.ui-li-icon-normal { background-image: url("../images/HorasNormais-24x24.png"); }
-.ui-li-icon-aditional { background-image: url("../images/HorasAdicionais_24x24.png"); }
-.ui-li-icon-absence { background-image: url("../images/Ausencia_24x24.png"); }
-.ui-li-icon-approve { background-image: url("../images/Aprovar_24x24.png"); }
-.ui-li-icon-setting { background-image: url("../images/Ajustes_24X24.png"); }
-.ui-li-icon-about { background-image: url("../images/Informacoes_24x24.png"); }*/
+#tabsSearch { background: transparent; border: none; } 
+#tabsSearch .ui-widget-header { background: transparent; border: none; border-bottom: 1px solid #c0c0c0; -moz-border-radius: 0px; -webkit-border-radius: 0px; border-radius: 0px; } 
+#tabsSearch .ui-tabs-nav .ui-state-default { background: transparent; border: none; } 
+#tabsSearch .ui-tabs-nav .ui-state-active { border: none; } 
+#tabsSearch .ui-tabs-nav .ui-state-default a { color: #000; } 
+#tabsSearch .ui-tabs-nav .ui-state-active a { color: #00325D; }
 
+.ui-icon-home-menu:after { background-image: url("../images/Menu_24x24.png"); }
 .content {margin-top: 15px;}
 .footer { margin-top: -30px; }
 .header { position: fixed; width: 100%; z-index: 9999; height: 50px; background-color: #00325D; border-bottom: solid 1px #ffcc1d; }

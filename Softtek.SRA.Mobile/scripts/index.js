@@ -28,12 +28,10 @@ stkApp.prototype = function () {
         var that = this;
         $('#home').on('pagebeforecreate', $.proxy(_initHome, that));
         $('#home').on('pageshow', $.proxy(_initLoadHome, that));
-        $('#normalPage').on('pageshow', $.proxy(_initnormalPage, that));
-        $('#aditionalPage').on('pageshow', $.proxy(_initaditionalPage, that));
         $('#approvePage').on('pageshow', $.proxy(_initapprovePage, that));
         $('#faultPage').on('pageshow', $.proxy(_initfaultPage, that));
         $('#faultAddPage').on('pageshow', $.proxy(_initfaultAddPage, that));
-        $('#settingPage').on('pageshow', $.proxy(_initsettingPage, that));
+        $('#configPage').on('pageshow', $.proxy(_initsettingPage, that));
         $('#normalAddPage').on('pageshow', $.proxy(_initnormalAddPage, that));
         $('#aditionalAddPage').on('pageshow', $.proxy(_initaditionalAddPage, that));
 
@@ -285,7 +283,7 @@ stkApp.prototype = function () {
                         $('#txtDt,#txtHour,#txtProj,#txtDesc,#txtDtRepNormalBegin,#txtDtRepNormalEnd').val('');
                         $('#ddlActivity, #idSeq').val('0');
 
-                        LoadNormalHours($('#ddlWeek').val());
+                        //LoadNormalHours($('#ddlWeek').val());
                     } else
                         alert($(data).find('addRecordHoraRecursoMobileResult').text());
                 })
@@ -390,7 +388,7 @@ stkApp.prototype = function () {
                         $('#txtHourBegin,#txtDtAditional,#txtHourAditional,#txtDescAditional,#txtDtRepAditionalBegin,#txtDtRepAditionalEnd').val('');
                         $('#ddlActivityAditional, #idSeqAditional').val('0');
 
-                        LoadAditionalHours($('#ddlWeekAditional').val());
+                        //LoadAditionalHours($('#ddlWeekAditional').val());
                     } else
                         alert($(data).find('addRecordHoraRecursoMobileResult').text());
                 })
@@ -583,6 +581,9 @@ stkApp.prototype = function () {
     },
 
     _initLoadHome = function () {
+        if (!_login) {
+            $.mobile.changePage("#logon", { transition: "flip" });
+        }
         var userInfo = JSON.parse(window.localStorage.getItem("userInfo"));
         if (userInfo != null) {
             IdSegment = userInfo.CodSegmento;
