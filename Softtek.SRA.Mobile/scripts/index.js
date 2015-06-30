@@ -1510,12 +1510,12 @@ stkApp.prototype = function () {
     ShowError = function ShowError(msg) {
         if (onLinePhone)
             alert(msg);
-        else {
-            if (!AlertOffline)
-                alert(getMsgLang(langPref, 'ErrorOnline'));
+        //else {
+        //    if (!AlertOffline)
+        //        alert(getMsgLang(langPref, 'ErrorOnline'));
 
-            AlertOffline = true;
-        }
+        //    AlertOffline = true;
+        //}
     },
 
     fauxAjax = function fauxAjax(func, text, thisObj) {
